@@ -1,5 +1,4 @@
 from django.db import models
-from utils.models import JSONField
 
 class ProblemDifficulty(object):
     Hard = "Hard"
@@ -8,6 +7,9 @@ class ProblemDifficulty(object):
 
 class ProblemTag(models.Model):
     tagName = models.TextField()
+
+    class Meta:
+        db_table = "problemtag"
 
 
 class Problem(models.Model):
@@ -27,7 +29,7 @@ class Problem(models.Model):
     tags = models.ManyToManyField(ProblemTag)
     source = models.TextField(null=True)
 
-    sample_test = JSONField()
+    sample_test = models.JSONField()
     ### [{input: "hello", output: "world"}, {input: "i am", output: "django"}]
 
     #== The Problem tests location
@@ -42,7 +44,7 @@ class Problem(models.Model):
     #== Statistics
     total_submission = models.BigIntegerField(default=0)
     correct_submission = models.BigIntegerField(default=0)
-    statistic_info = JSONField()
+    statistic_info = models.JSONField()
     ### {_.ACCEPTED: 5, _.WRONG_ANSWER: 4, ...}
 
     class Meta:
