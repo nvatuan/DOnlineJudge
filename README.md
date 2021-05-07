@@ -1,2 +1,5 @@
 # PBL_DOnlineJudge
-An online judge written in ReactJS, Django REST API framework.
+
+## Integration branch
+Test how frontend and 2 backend intergrate.
+
