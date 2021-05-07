@@ -6,6 +6,6 @@ urlpatterns = [
     path('', include('example.urls')),
     path('', include('announcement.urls')),
     path('', include('accounts.urls')),
-    # path('', include('problem.urls')),
+    path('', include('problem.urls')),
     # path('', include('submission.urls')),
 ]

@@ -5,6 +5,7 @@ class ProblemDifficulty(object):
     hard = "Hard"
     medium = "Medium"
     easy = "Easy"
+    DIFF = [hard, medium, easy]
     choices = [(easy, easy), (medium, medium), (hard, hard)]
 
 class ProblemTag(models.Model):
@@ -27,16 +28,16 @@ class Problem(models.Model):
     statement = models.TextField() ## TODO RichTextField support
 
     #== Tag, Difficulty, Source
-    difficulty = models.CharField(choices=ProblemDifficulty.choices, max_length=50)
+    difficulty = models.CharField(choices=ProblemDifficulty.choices, max_length=50, default=ProblemDifficulty.easy)
     tags = models.ManyToManyField(ProblemTag)
     source = models.TextField(null=True)
 
-    sample_test = models.JSONField()
+    sample_test = models.JSONField(default=dict, null=True)
     ### [{input: "hello", output: "world"}, {input: "i am", output: "django"}]
 
     #== The Problem tests location
-    testset_dir = models.TextField()
-    testset_count = models.PositiveIntegerField()
+    testset_dir = models.TextField(null=True)
+    testset_count = models.PositiveIntegerField(default=0)
 
     #== Problem constraints
     time_limit = models.IntegerField(default=1000)      ## millisecond
@@ -46,7 +47,7 @@ class Problem(models.Model):
     #== Statistics
     total_submission = models.BigIntegerField(default=0)
     correct_submission = models.BigIntegerField(default=0)
-    statistic_info = models.JSONField()
+    statistic_info = models.JSONField(default=dict)
     ### {_.ACCEPTED: 5, _.WRONG_ANSWER: 4, ...}
 
     class Meta:
