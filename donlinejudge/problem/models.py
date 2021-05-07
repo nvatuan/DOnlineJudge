@@ -1,9 +1,10 @@
 from django.db import models
 
 class ProblemDifficulty(object):
-    Hard = "Hard"
-    Medium = "Medium"
-    Easy = "Easy"
+    hard = "Hard"
+    medium = "Medium"
+    easy = "Easy"
+    choices = [(easy, easy), (medium, medium), (hard, hard)]
 
 class ProblemTag(models.Model):
     tagName = models.TextField()
@@ -13,11 +14,11 @@ class ProblemTag(models.Model):
 
 
 class Problem(models.Model):
-    _id = models.TextField(db_index=True)
+    display_id = models.TextField(db_index=True)
     created = models.DateTimeField(auto_now_add=True)
-    visible = models.BooleanField()
+    visible = models.BooleanField(default=True)
 
-    # author = models.OneToOneField()
+    # author = models.OneToOneField() ## TODO: Foreign key to user
     author = models.TextField()
 
     #== Content to be displayed
@@ -25,7 +26,7 @@ class Problem(models.Model):
     statement = models.TextField() ## TODO RichTextField support
 
     #== Tag, Difficulty, Source
-    difficulty = models.TextField()
+    difficulty = models.CharField(choices=ProblemDifficulty.choices, max_length=50)
     tags = models.ManyToManyField(ProblemTag)
     source = models.TextField(null=True)
 
@@ -37,8 +38,8 @@ class Problem(models.Model):
     testset_count = models.PositiveIntegerField()
 
     #== Problem constraints
-    time_limit = models.IntegerField()      ## millisecond
-    memory_limit = models.IntegerField()    ## MB
+    time_limit = models.IntegerField(default=1000)      ## millisecond
+    memory_limit = models.IntegerField(default=256)    ## MB
 
 
     #== Statistics
