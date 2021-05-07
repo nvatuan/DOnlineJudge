@@ -1,0 +1,38 @@
+.sidebar-container{
+    border-right: 1px solid #e6e6e6;
+    list-style: none;
+    position: relative;
+    margin: 0;
+    padding-left: 0;
+    
+}
+
+.menu-sidebar{
+    overflow: auto;
+    width: 205  px;
+    height: 100%;
+    position: fixed!important;
+    display: flex;
+    z-index: 100;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    
+    .logo{
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    img{
+        margin: 20px 0;
+        z-index: 102;
+        width: 150px;
+        height: 150px;
+    }
+
+    .pro-sidebar-layout{
+        width: 12rem;
+    }
+
+}

@@ -1,0 +1,24 @@
+.navbar {
+  background: #1c2237;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+    .btn-item{
+    display: inline-block;
+    position: absolute;
+    color: #606266;
+    font-size: 14px;
+    right: 12px;
+    top: 20px;
+  }
+
+}
+
+
+
