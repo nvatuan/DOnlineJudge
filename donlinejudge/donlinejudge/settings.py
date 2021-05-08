@@ -38,6 +38,8 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = [
+    'django_extensions',  ## python manage.py reset_db ## extension
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

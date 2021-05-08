@@ -4,9 +4,8 @@ from rest_framework import serializers
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Problem
-        ## TODO: Add Author to fields
         fields = [
-            'display_id', 'created', 'visible',
+            'display_id', 'created', 'visible', 'author',
 
             'title', 'statement',
             'difficulty', 'tags', 'source',

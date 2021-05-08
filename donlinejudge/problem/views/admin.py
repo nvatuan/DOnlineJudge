@@ -64,7 +64,7 @@ class ProblemAPI(APIView):
 
             return Response(ProblemSerializer(problem).data, status=status.HTTP_201_CREATED)
         except KeyError as ke:
-            return Response({str(ke): "is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({str(ke).replace("'", ""): "is required."}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProblemDetailAPI(APIView):
     """
@@ -72,9 +72,9 @@ class ProblemDetailAPI(APIView):
     """
     def get(self, request, id):
         try:
-            problem = Problem.objects.get(display_id=id)
+            problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
-            return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Problem does not exist.", status=status.HTTP_404_NOT_FOUND)
         
         ## TODO delete testset directory
         return Response(ProblemSerializer(problem).data)
@@ -83,11 +83,10 @@ class ProblemDetailAPI(APIView):
     Update a problem
     """
     def put(self, request, id):
-
         try:
-            problem = Problem.objects.get(display_id=id)
+            problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
-            return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Problem does not exist.", status=status.HTTP_404_NOT_FOUND)
         data = request.data
 
         ## TODO get request user
@@ -148,7 +147,7 @@ class ProblemDetailAPI(APIView):
     def delete(self, request, id):
         ## TODO permission all, own
         try:
-            problem = Problem.objects.get(display_id=id)
+            problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
             return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
         
