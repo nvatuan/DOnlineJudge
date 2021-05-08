@@ -1,5 +1,9 @@
 # PBL_DOnlineJudge
 
-## Integration branch
-Test how frontend and 2 backend intergrate.
+## Judge server 
+Receive code, compile and execute them.
+Report back exitcode, and output.
 
+## Dependencies
+- dockerjudge
+- Docker Engine
