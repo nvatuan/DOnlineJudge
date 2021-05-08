@@ -72,7 +72,7 @@ class ProblemDetailAPI(APIView):
     """
     def get(self, request, id):
         try:
-            problem = Problem.objects.get(display_id=id)
+            problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
             return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
         
@@ -85,7 +85,7 @@ class ProblemDetailAPI(APIView):
     def put(self, request, id):
 
         try:
-            problem = Problem.objects.get(display_id=id)
+            problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
             return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
         data = request.data
@@ -148,7 +148,7 @@ class ProblemDetailAPI(APIView):
     def delete(self, request, id):
         ## TODO permission all, own
         try:
-            problem = Problem.objects.get(display_id=id)
+            problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
             return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
         
