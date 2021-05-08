@@ -1,11 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import { Card, Button , Form} from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import '../../Table.scss';
+import EditAnnoucement from './EditAnnoucement';
 function Annoucement(props) {
+    const [showModal, setShowModal] = useState(false);
     const Annoucements = [
         {
             id: 1,
@@ -16,6 +18,10 @@ function Annoucement(props) {
             visible: true,
         }
     ]
+
+    const openModal = () => {
+        setShowModal(!showModal);
+    }
     return (
         <div>
             <AdminNavbar />
@@ -56,8 +62,9 @@ function Annoucement(props) {
                                                         <div className="option-cell">
                                                             <div className="option-button">
                                                                 <div className="option-button">
-                                                                    <Button variant="light">
+                                                                    <Button variant="light" onClick={openModal}>
                                                                         <AiOutlineEdit />
+                                                                        <EditAnnoucement showModal={showModal} setShowModal={setShowModal}/>
                                                                     </Button>
                                                                 </div>
                                                                 <div className="option-button">

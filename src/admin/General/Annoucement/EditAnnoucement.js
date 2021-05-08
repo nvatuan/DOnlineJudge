@@ -3,13 +3,14 @@ import {Modal, ListGroup, Button} from 'react-bootstrap';
 import Editor from '../../editor/Editor';
 import './EditAnnoucement.scss';
 function EditAnnoucement(props) {
-    const [show, setShow] = useState(true);
+    const {showModal, setShowModal} = props;
+    // const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
     return (
         <div>
-            <Modal show={show} onHide={handleClose} size="lg">
+            <Modal show={showModal} onHide={handleClose} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Edit annoucement</Modal.Title>
                 </Modal.Header>
