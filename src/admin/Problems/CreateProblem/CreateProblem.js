@@ -7,14 +7,14 @@ import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 function Createproblem(props) {
     return (
-        <div className="">
+        <div className="Edit-container">
             <AdminNavbar />
             <Sidebar />
             <div className="cp">
                 <ListGroup>
-                    <ListGroup.Item className="cp-header cp-list">
-                        Add Problem
-                </ListGroup.Item>
+                    <ListGroup.Item className="cp-header cp-list" >
+                        <h3>Add problem</h3>
+                    </ListGroup.Item>
                     <ListGroup.Item className="cp-list">
                         <table>
                             <tr>

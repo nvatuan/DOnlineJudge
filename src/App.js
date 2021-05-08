@@ -13,6 +13,8 @@ import User from './admin/General/User/User';
 import Annoucement from './admin/General/Annoucement/Annoucement';
 import Dashboard from './admin/Dashboard/Dashboard';
 import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
+//test 
+import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
 const usersData = [
   { id: 1, name: 'Tania', username: 'floppydiskette' },
   { id: 2, name: 'Craig', username: 'siliconeidolon' },
@@ -41,6 +43,8 @@ function App() {
         <Route path='/admin/user' exact> <User/> </Route>
         <Route path='/admin/annoucement' exact component={Annoucement}></Route>
         <Route path='/admin/problem/create' exact component={CreateProblem}></Route>
+
+        <Route path='/123' exact component={EditAnnoucement}></Route>
       </Switch>
     </Router>
   );

@@ -33,7 +33,10 @@ function Sidebar(props) {
               Problem List
               <Link to="/admin/problems"/>
             </MenuItem>
-            <MenuItem>Create Problem</MenuItem>
+            <MenuItem>
+              Create Problem
+              <Link to='/admin/problem/create'/>
+            </MenuItem>
           </SubMenu>
         </Menu>
       </ProSidebar>

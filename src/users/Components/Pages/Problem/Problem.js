@@ -5,6 +5,7 @@ import Coin from './Coin.js';
 import Pagination from '../../Pagination/Pagination';
 import {Card} from 'react-bootstrap';
 import coin from './Coin.js';
+import './Problem.scss';
 function Problem() {
     const [coins, setCoins] = useState([]);
     const [search, setSearch] = useState('');
@@ -50,43 +51,45 @@ function Problem() {
     //page change
     const paginate = pageNumber => setCurrentPage(pageNumber);
     return (
-        <div className="pages-container">
+        <div>
             <Navbar />
-            <div className="card-container">
+            <div className="pages-container">
                 <div className="problems-container">
-                    <Card>
-                        <Card.Header>Featured</Card.Header>
-                        <Card.Body>
-                            <div className="coin-app">
-                                <div className="coin-search">
-                                    <div className="coin-text">Search</div>
-                                    <form action="">
-                                        <input type="text" className="coin-input" placeholder="Search"
-                                            onChange={handleChange} />
+                    <div className="card-container">
+                        <Card>
+                            <Card.Header as="h3">Problem</Card.Header>
+                            <Card.Body>
+                                <div className="coin-app">
+                                    <div className="coin-search">
+                                        <div className="coin-text">Search</div>
+                                        <form action="">
+                                            <input type="text" className="coin-input" placeholder="Search"
+                                                onChange={handleChange} />
 
-                                    </form>
+                                        </form>
+                                    </div>
+                                    {currentCoin.map(coin => {
+                                        return (
+                                            <Coin
+                                                key={coin.id}
+                                                name={coin.name}
+                                                image={coin.image}
+                                                symbol={coin.symbol}
+                                                price={coin.current_price}
+                                                volume={coin.market_cap} />
+                                        )
+                                    })}
+                                    <Pagination
+                                        pagination={pagination}
+                                        onPageChange={handlePageChange}
+                                        paginate={paginate}
+                                        coinPerPage={coinsPerPage}
+                                        totalCoins={coins.length}
+                                    />
                                 </div>
-                                {currentCoin.map(coin => {
-                                    return (
-                                        <Coin
-                                            key={coin.id}
-                                            name={coin.name}
-                                            image={coin.image}
-                                            symbol={coin.symbol}
-                                            price={coin.current_price}
-                                            volume={coin.market_cap} />
-                                    )
-                                })}
-                                <Pagination
-                                    pagination={pagination}
-                                    onPageChange={handlePageChange}
-                                    paginate={paginate}
-                                    coinPerPage={coinsPerPage}
-                                    totalCoins={coins.length}
-                                />
-                            </div>
-                        </Card.Body>
-                    </Card>
+                            </Card.Body>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </div>
