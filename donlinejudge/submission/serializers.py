@@ -5,8 +5,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission 
         fields = [
-            'problem', 'author',
-            'submit_time',
+            'id',
+
+            'problem', 'author', 'submit_time',
 
             'content', 'language',
 
