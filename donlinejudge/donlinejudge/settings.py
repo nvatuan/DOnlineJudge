@@ -26,7 +26,7 @@ SECRET_KEY = '!(@vvs7z33kzg89h19y!913@q&x@(4%#kcunpadrh7l_4u-m5t'
 DEBUG = True
 
 ALLOWED_HOSTS = [                                
-    'nvatazure.southeastasia.cloudapp.azure.com',
+    '*',
 ]
 
 # Application definition
