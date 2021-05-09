@@ -9,6 +9,8 @@ from problem.serializers import ProblemSerializer
 
 from rest_framework.views import APIView
 
+
+from accounts.decorators import super_admin_required
 from accounts.decorators import admin_required, super_admin_required
 from utils.make_response import *
 
@@ -18,7 +20,8 @@ class ProblemAPI(APIView):
         seris = ProblemSerializer(probs, many=True)
         return response_ok(seris.data)
     
-    @admin_required
+
+    @super_admin_required
     def post(self, request, format=None):
         resperror = ""
         respdata = ""
@@ -90,7 +93,8 @@ class ProblemDetailAPI(APIView):
     """
     Update a problem
     """
-    @admin_required
+
+    @super_admin_required
     def put(self, request, id):
         try:
             problem = Problem.objects.get(id=id)
@@ -155,7 +159,7 @@ class ProblemDetailAPI(APIView):
     """
     Delete a problem
     """
-    @admin_required
+    @super_admin_required
     def delete(self, request, id):
         try:
             problem = Problem.objects.get(id=id)
