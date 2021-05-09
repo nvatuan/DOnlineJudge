@@ -8,36 +8,40 @@ from submission.models import SubmissionVerdict
 from problem.serializers import ProblemSerializer
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+
 
 from accounts.decorators import super_admin_required
+from accounts.decorators import admin_required, super_admin_required
+from utils.make_response import *
 
 class ProblemAPI(APIView):
     def get(self, request, format=None):
         probs = Problem.objects.all()
         seris = ProblemSerializer(probs, many=True)
-        return Response(seris.data)
+        return response_ok(seris.data)
     
+
     @super_admin_required
     def post(self, request, format=None):
+        resperror = ""
+        respdata = ""
+
         data = request.data
-        ## TODO get request user
 
         try:
             ## Display ID
             disp_id = data["display_id"]
             if not disp_id:
-                return Response({"display_id": "is required."}, status=status.HTTP_400_BAD_REQUEST)
+                raise KeyError("display_id")
             if Problem.objects.filter(display_id=disp_id).exists():
-                return Response({"display_id": ""+disp_id+" has already exists."}, status=status.HTTP_400_BAD_REQUEST)
+                return response_bad_request("Problem with display_id=%s already exists" % disp_id)
         
             ## Tags, Difficulty, Source
             tags = data.pop("tags")
             if not tags:
-                return Response({"tags": "is required."}, status=status.HTTP_400_BAD_REQUEST)
+                raise KeyError("tags")
             if type(tags) != list:
-                return Response({"tags": "should be a list."}, status=status.HTTP_400_BAD_REQUEST)
+                return response_bad_request("'tags' should be a list.")
 
             for item in tags:
                 try:
@@ -49,6 +53,9 @@ class ProblemAPI(APIView):
             if data["difficulty"] not in ProblemDifficulty.DIFF:
                 data["difficulty"] = ProblemDifficulty.easy
         
+            ## Author
+            data["author"] = request.user
+
             ## Testdir
             data["testset_dir"] = disp_id
             data["testset_count"] = data.get("testset_count", 0)
@@ -64,9 +71,11 @@ class ProblemAPI(APIView):
                 tag = ProblemTag.objects.get(tagName=item)
                 problem.tags.add(tag)
 
-            return Response(ProblemSerializer(problem).data, status=status.HTTP_201_CREATED)
+            return response_ok(ProblemSerializer(problem).data)
         except KeyError as ke:
-            return Response({str(ke).replace("'", ""): "is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return response_bad_request(str(ke) + " is required.")
+        except:
+            return response_bad_request("Unexpected error has occurred")
 
 class ProblemDetailAPI(APIView):
     """
@@ -76,24 +85,27 @@ class ProblemDetailAPI(APIView):
         try:
             problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
-            return Response("Problem does not exist.", status=status.HTTP_404_NOT_FOUND)
+            return response_not_found("Problem with id=%s does not exist." % str(id))
         
         ## TODO delete testset directory
-        return Response(ProblemSerializer(problem).data)
+        return response_ok(ProblemSerializer(problem).data)
     
     """
     Update a problem
     """
+
     @super_admin_required
     def put(self, request, id):
         try:
             problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
-            return Response("Problem does not exist.", status=status.HTTP_404_NOT_FOUND)
-        data = request.data
+            return response_not_found("Problem with id=%s does not exist." % str(id))
+        
+        if not request.user.can_mgmt_all_problem():
+            if (problem.author is None) or (not request.user == problem.author):
+                return response_unauthorized("You don't have permission to the problem")
 
-        ## TODO get request user
-        ## TODO permission all, own
+        data = request.data
 
         #== Content to be displayed
         if data.get("title") != None:
@@ -105,7 +117,7 @@ class ProblemDetailAPI(APIView):
         if data.get("tags") != None:
             tags = data["tags"]
             if type(tags) != list:
-                return Response({"tags": "should be a list."}, status=status.HTTP_400_BAD_REQUEST)
+                return response_bad_request("'tags' should be a list.")
             else:
                 for item in tags:
                     try:
@@ -140,8 +152,8 @@ class ProblemDetailAPI(APIView):
             if mlimit < 0: mlimit = 256
             problem.memory_limit = mlimit
 
-        
-        return Response(ProblemSerializer(problem).data, status=status.HTTP_202_ACCEPTED)
+        problem.save()
+        return response_ok(ProblemSerializer(problem).data)
 
     
     """
@@ -149,12 +161,16 @@ class ProblemDetailAPI(APIView):
     """
     @super_admin_required
     def delete(self, request, id):
-        ## TODO permission all, own
         try:
             problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
-            return Response("Problem does not exist.", status=status.HTTP_400_BAD_REQUEST)
+            return response_not_found("Problem with id=%s does not exist." % str(id))
+        
+        data = request.data
+
+        if not data.user.can_mgmt_all_problem and not data.user == problem.author:
+            return response_unauthorized("You don't have permission to the problem")
         
         ## TODO delete testset directory
         problem.delete()
-        return Response({"Xoa thanh cong."}, status=status.HTTP_204_NO_CONTENT)
+        return response_no_content("Delete successful")

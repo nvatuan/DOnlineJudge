@@ -55,6 +55,10 @@ class login_required(BasePermissionDecorator):
     def check_permission(self):
         return self.request.user.is_authenticated
 
+class admin_required(BasePermissionDecorator):
+    def check_permission(self):
+        user = self.request.user
+        return user.is_authenticated and user.is_admin_role()
 
 class super_admin_required(BasePermissionDecorator):
     def check_permission(self):

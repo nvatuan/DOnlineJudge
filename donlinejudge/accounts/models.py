@@ -3,7 +3,6 @@ from django.conf import settings
 from django.db import models
 
 
-
 class AdminType(object):
     REGULAR_USER = "Regular User"
     ADMIN = "Admin"
@@ -28,11 +27,15 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, username, email, password=None):
+    def create_superuser(self, username, email=None, password=None):
+        if username is None:
+            raise TypeError('User should have a Username!')
         if password is None:
             raise TypeError('Password should not be None!')
 
-        user = self.create_user(username, email, password)
+        user = self.model(username=username, email=self.normalize_email(email))
+        user.set_password(password)
+        user.admin_type = AdminType.SUPER_ADMIN
         user.is_superuser = True
         user.is_staff = True
         user.save()
@@ -54,6 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
+    DISPLAY_FIELD = ["username", "email", "create_time", "admin_type", "problem_permission", "is_active"]
+
     objects = UserManager()
 
     def is_admin(self):
@@ -68,6 +73,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def can_mgmt_all_problem(self):
         return self.problem_permission == ProblemPermission.ALL
 
-    def is_contest_admin(self, contest):
-        return self.is_authenticated and (contest.created_by == self or self.admin_type == AdminType.SUPER_ADMIN)
+    def can_mgmt_own_problem(self):
+        return self.problem_permission == ProblemPermission.OWN
 
+    def __repr__(self):
+        d = {}
+        for field in self.DISPLAY_FIELD:
+            d[field] = getattr(self, field)
+        return str(d)

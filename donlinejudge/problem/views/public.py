@@ -10,26 +10,27 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from utils.make_response import response_bad_request, response_created, response_no_content, response_not_found, response_ok
 
 class ProblemAPI(APIView):
     """
-    Get a list of Problem
+    Get all problem
     """
     def get(self, request, format=None):
         probs = Problem.objects.all()
         seris = ProblemSerializer(probs, many=True)
-        return Response(seris.data)
-
+        return response_ok(seris.data)
 
 class ProblemDetailAPI(APIView):
     """
-    View a specific problem
+    Get a specific problem
     """
     def get(self, request, id):
         try:
             problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
-            return Response("Problem does not exist.", status=status.HTTP_404_NOT_FOUND)
+            return response_not_found("Problem with id=%s does not exist." % str(id))
         
-        return Response(ProblemSerializer(problem).data)
+        ## TODO delete testset directory
+        return response_ok(ProblemSerializer(problem).data)
     

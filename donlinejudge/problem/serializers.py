@@ -5,14 +5,13 @@ class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Problem
         fields = [
+            'id',
             'display_id', 'created', 'visible', 'author',
 
             'title', 'statement',
             'difficulty', 'tags', 'source',
 
             'sample_test',
-
-            'testset_dir', 'testset_count',
 
             'time_limit', 'memory_limit',
 
