@@ -18,12 +18,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-
-        if User.objects.get(username=validated_data["username"]).exist():
-            raise ValueError("User with this username already exists.")
-        if User.objects.get(email=validated_data["email"]).exist():
-            raise ValueError("User with this username already exists.")
-
         return User.objects.create_user(**validated_data)
 
 class UserSerializer(serializers.ModelSerializer):

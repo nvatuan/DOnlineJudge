@@ -34,3 +34,24 @@ class ProblemDetailAPI(APIView):
         ## TODO delete testset directory
         return response_ok(ProblemSerializer(problem).data)
     
+class ProblemTagAPI(APIView):
+    """
+    Get all tags
+    """
+    def get(self, request, format=None):
+        probs = Problem.objects.all()
+        seris = ProblemSerializer(probs, many=True)
+        return response_ok(seris.data)
+
+class ProblemTagDetailAPI(APIView):
+    """
+    Get a specific tag 
+    """
+    def get(self, request, id):
+        try:
+            tag = ProblemTag.objects.get(id=id)
+        except ProblemTag.DoesNotExist:
+            return response_not_found("Tag with id=%s does not exist." % str(id))
+        
+        ## TODO delete testset directory
+        return response_ok(ProblemTagSerializer(tag).data)
