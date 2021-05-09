@@ -6,8 +6,8 @@ urlpatterns = [
     path('problem/', public.ProblemAPI.as_view()),
     path('problem/<int:id>/', public.ProblemDetailAPI.as_view()),
 
-    path('problem/', public.ProblemAPI.as_view()),
-    path('problem/<int:id>/', public.ProblemDetailAPI.as_view()),
+    path('problem_tag/', public.ProblemTagAPI.as_view()),
+    path('problem_tag/<int:id>/', public.ProblemTagDetailAPI.as_view()),
 
     path('admin/problem/', admin.ProblemAPI.as_view()),
     path('admin/problem/<int:id>/', admin.ProblemDetailAPI.as_view()),

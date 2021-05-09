@@ -4,7 +4,7 @@ from django.db.models import JSONField
 from problem.models import Problem, ProblemTag
 from problem.models import ProblemDifficulty
 
-from problem.serializers import ProblemSerializer
+from problem.serializers import ProblemSerializer, ProblemTagSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -39,8 +39,8 @@ class ProblemTagAPI(APIView):
     Get all tags
     """
     def get(self, request, format=None):
-        probs = Problem.objects.all()
-        seris = ProblemSerializer(probs, many=True)
+        probs = ProblemTag.objects.all()
+        seris = ProblemTagSerializer(probs, many=True)
         return response_ok(seris.data)
 
 class ProblemTagDetailAPI(APIView):
