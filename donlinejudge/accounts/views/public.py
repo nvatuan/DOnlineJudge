@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 
 from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer
 from accounts.models import User
-from accounts.decorators import unauthenticated_user
+from accounts.decorators import unauthenticated_user, login_required
 
 from django.contrib.auth import login, logout
 
@@ -39,4 +39,10 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user,context=self.get_serializer_context()).data,
             "token": str(token)
         })
-    
+
+
+class LogoutAPI(APIView):
+    @login_required
+    def get(self,request):
+        logout(request)
+        return Response({"User logger out!"})

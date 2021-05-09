@@ -1,25 +1,20 @@
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import login, logout
-from django.db import transaction, IntegrityError
-
 from rest_framework.views import APIView
-from rest_framework import generics, serializers, status 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.authtoken.models import Token
-
+from rest_framework import status
 from accounts.models import User
-from accounts.serializers import UserSerializer, RegisterSerializer, UserLoginSerializer
+from rest_framework.response import Response
+from accounts.serializers import UserSerializer
 from accounts.decorators import super_admin_required
 from accounts.models import *
+from django.contrib.auth.hashers import make_password
+from django.db import transaction, IntegrityError
 from submission.models import Submission
-from utils.make_response import *
-
 
 class UserAPI(APIView):
+
     @super_admin_required
     def get(self, request):
         user = User.objects.all()
-        return response_ok(UserSerializer(user, many=True).data)
+        return Response(UserSerializer(user, many=True).data)
 
     # @admin_required
     # def post(self, request):
@@ -31,11 +26,11 @@ class UserAPI(APIView):
         try:
             user = User.objects.get(id=data["id"])
         except User.DoesNotExist:
-            return response_not_found("User does not exist")
+            return Response("User does not exist", status=status.HTTP_404_NOT_FOUND)
         if User.objects.filter(username=data["username"].lower()).exclude(id=user.id).exists():
-            return reponse_bad_request("Username already exists")
+            return Response("Username already exists", status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(email=data["email"].lower()).exclude(id=user.id).exists():
-            return reponse_bad_request("Email already exists")
+            return Response("Email already exists", status=status.HTTP_400_BAD_REQUEST)
 
         pre_username = user.username
         user.username = data["username"].lower()
@@ -59,25 +54,8 @@ class UserAPI(APIView):
         if pre_username != user.username:
             Submission.objects.filter(username=pre_username).update(username=user.username)
 
-        return response_ok(UserSerializer(user).data)
+        return Response(UserSerializer(user).data)
 
-class LoginAPI(generics.GenericAPIView):
-    serializer_class = UserLoginSerializer
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-
-        if not user.is_staff:
-            return response_forbidden("Forbidden")
-
-        login(request, user)
-
-        user_data = User.objects.get(username=request.data['username'])
-        token, created = Token.objects.get_or_create(user=user_data)
-        return response_ok({
-            "user": UserSerializer(user,context=self.get_serializer_context()).data,
-            "token": str(token)
-        })
+class LoginAPI(APIView):
+    pass
+    

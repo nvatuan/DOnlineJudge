@@ -22,7 +22,6 @@ class BasePermissionDecorator(object):
         else:
             return self.error("Please login first")
 
-
     def check_permission(self):
         raise NotImplementedError()
 
@@ -44,8 +43,6 @@ class BaseAuthenticatedDecorator(object):
             if self.request.user.is_active:
                 return self.error("Please logout first")
         return self.func(*args, **kwargs)
-      
-            
 
     def check_unauthenticated_user(self):
         raise UserWarning()
@@ -55,10 +52,12 @@ class login_required(BasePermissionDecorator):
     def check_permission(self):
         return self.request.user.is_authenticated
 
+
 class admin_required(BasePermissionDecorator):
     def check_permission(self):
         user = self.request.user
         return user.is_authenticated and user.is_admin_role()
+
 
 class super_admin_required(BasePermissionDecorator):
     def check_permission(self):
