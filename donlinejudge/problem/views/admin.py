@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from accounts.decorators import super_admin_required
 
 class ProblemAPI(APIView):
     def get(self, request, format=None):
@@ -18,6 +19,7 @@ class ProblemAPI(APIView):
         seris = ProblemSerializer(probs, many=True)
         return Response(seris.data)
     
+    @super_admin_required
     def post(self, request, format=None):
         data = request.data
         ## TODO get request user
@@ -82,6 +84,7 @@ class ProblemDetailAPI(APIView):
     """
     Update a problem
     """
+    @super_admin_required
     def put(self, request, id):
         try:
             problem = Problem.objects.get(id=id)
@@ -144,6 +147,7 @@ class ProblemDetailAPI(APIView):
     """
     Delete a problem
     """
+    @super_admin_required
     def delete(self, request, id):
         ## TODO permission all, own
         try:

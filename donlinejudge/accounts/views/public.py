@@ -1,16 +1,19 @@
 from rest_framework.views import APIView
-from rest_framework import generics
-from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.authtoken.models import Token
+
+from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer
 from accounts.models import User
+from accounts.decorators import unauthenticated_user
+
 from django.contrib.auth import login, logout
 
 class RegisterAPI(APIView):
     serializer = RegisterSerializer
 
+    @unauthenticated_user
     def post(self, request):
         user = request.data
         serializer = self.serializer(data=user)
@@ -24,6 +27,7 @@ class LoginAPI(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
     authentication_classes = [SessionAuthentication, BasicAuthentication]
 
+    @unauthenticated_user
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -35,3 +39,4 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user,context=self.get_serializer_context()).data,
             "token": str(token)
         })
+    
