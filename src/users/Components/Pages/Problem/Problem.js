@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../../Navbar';
-import Coin from './Coin.js';
 import Pagination from '../../Pagination/Pagination';
 import {Card} from 'react-bootstrap';
-import coin from './Coin.js';
 import './Problem.scss';
+import oj_problemAPI from '../../../../api/oj_problemAPI';
+import { Link } from 'react-router-dom';
 function Problem() {
-    const [coins, setCoins] = useState([]);
+    const [problems, setProblems] = useState([]);
     const [search, setSearch] = useState('');
     const [pagination, setPagination] = useState({
         page: 1
     })
-    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [coinsPerPage, setcoinsPerPage] = useState(9);
 
-    //
+    
     const [filters, setFilters] = useState({
         page: 1
     })
     useEffect(() => {
-        const fectchCoins = async () =>{
-            setLoading(true);
-            const res = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=150&page=1&sparkline=false`);
-            setCoins(res.data);
-            setLoading(false);
+        const fectchProblems = async () =>{
+            const response = await oj_problemAPI.getAll();
+            console.log(response);
+            setProblems(response.data);
             setPagination(filters);
         }
-        fectchCoins();
+        fectchProblems();
     }, [filters])
     const handleChange = (e) => {
         setSearch(e.target.value);
@@ -41,59 +39,55 @@ function Problem() {
         })
     }
     //serach feature
-    const filteredCoins = coins.filter(coin => (
-        coin.name.toLowerCase().includes(search.toLowerCase())
-    ))
+            // const filteredProblem = problems.filter(problem => (
+            //     problem.name.toLowerCase().includes(search.toLowerCase())
+            // ))
     //get current page 
-    const indexOfLastCoin = currentPage * coinsPerPage;
-    const indexOfFirstCoin = indexOfLastCoin - coinsPerPage;
-    const currentCoin = coins.slice(indexOfFirstCoin, indexOfLastCoin);
+            // const indexOfLastProblem = currentPage * problemsPerPage;
+            // const indexOfFirstProblem = indexOfLastProblem - problemsPerPage;
+            // const currentProblem = problems.slice(indexOfFirstProblem, indexOfLastProblem);
     //page change
     const paginate = pageNumber => setCurrentPage(pageNumber);
     return (
         <div>
             <Navbar />
-            <div className="pages-container">
-                <div className="problems-container">
-                    <div className="card-container">
-                        <Card>
-                            <Card.Header as="h3">Problem</Card.Header>
-                            <Card.Body>
-                                <div className="coin-app">
-                                    <div className="coin-search">
-                                        <div className="coin-text">Search</div>
-                                        <form action="">
-                                            <input type="text" className="coin-input" placeholder="Search"
-                                                onChange={handleChange} />
-
-                                        </form>
-                                    </div>
-                                    {currentCoin.map(coin => {
-                                        return (
-                                            <Coin
-                                                key={coin.id}
-                                                name={coin.name}
-                                                image={coin.image}
-                                                symbol={coin.symbol}
-                                                price={coin.current_price}
-                                                volume={coin.market_cap} />
+            <div >
+                <Card>
+                    <Card.Header as="h4">Problem List</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                            < table >
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tille</th>
+                                        <th>Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        problems.length > 0 ? (
+                                            problems.map((problem) => (
+                                                <tr key={problem.id}>
+                                                    <td>{problem.id}</td>
+                                                    <Link to={`/problem/${problem.id}`}>{problem.title}</Link>
+                                                    <td>{problem.difficulty}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={5}>Nothing</td>
+                                            </tr>
                                         )
-                                    })}
-                                    <Pagination
-                                        pagination={pagination}
-                                        onPageChange={handlePageChange}
-                                        paginate={paginate}
-                                        coinPerPage={coinsPerPage}
-                                        totalCoins={coins.length}
-                                    />
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    </div>
-                </div>
+                                    }
+                                </tbody>
+                            </table >
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             </div>
         </div>
             );
 }
 
-export default Problem
+export default Problem;

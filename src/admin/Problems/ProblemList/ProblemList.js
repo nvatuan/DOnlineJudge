@@ -1,21 +1,25 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import '../../Table.scss';
 import { Card, Button, Form, Navbar} from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDownload, AiOutlineDelete} from 'react-icons/ai';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
+import admin_problemAPI from '../../../api/admin_problemAPI';
 function ProblemList(props) {
-    const problems = [
-        {
-            id: 4,
-            display: 4,
-            title: "BDKNOJ_Bắn chim",
-            author: "root",
-            create_time: "2021-5-1 15:25:54",
-            visible: true,
-        }
-    ]
+    const [problems, setProblems] = useState([]);
+    useEffect(() =>{
+        const fetchProblemList = async () =>{
+            try {
+                const response = await admin_problemAPI.getAll();
+                console.log(response);
+                setProblems(response.data);
+            } catch (error) {
+                console.log("Fail to fetch problem list: ", error);
+            }
+        };
+        fetchProblemList();
+    },[])
     return (
         <div>
             <AdminNavbar/>
@@ -43,10 +47,10 @@ function ProblemList(props) {
                                             problems.map((problem) => (
                                                 <tr key={problem.id}>
                                                     <td>{problem.id}</td>
-                                                    <td>{problem.display}</td>
+                                                    <td>{problem.display_id}</td>
                                                     <td>{problem.author}</td>
                                                     <td>{problem.title}</td>
-                                                    <td>{problem.create_time}</td>
+                                                    <td>{problem.created}</td>
                                                     <td>
                                                         <Form.Check
                                                             type="switch"

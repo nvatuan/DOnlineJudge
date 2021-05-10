@@ -15,6 +15,7 @@ import Dashboard from './admin/Dashboard/Dashboard';
 import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
+import Problem_detail from './users/Components/Pages/Problem/Problem_detail';
 const usersData = [
   { id: 1, name: 'Tania', username: 'floppydiskette' },
   { id: 2, name: 'Craig', username: 'siliconeidolon' },
@@ -31,7 +32,9 @@ function App() {
         <Route path='/' exact component={Home}></Route>
         <Route path='/home' exact component={Home}></Route>
         <Route path='/about' exact component={About}></Route>
-        <Route path='/problem' exact component={Problem}></Route>
+        <Route path='/problem/' exact component={Problem}></Route>
+        <Route path='/problem/:id' exact component={Problem_detail}></Route>
+        
         <Route path='/status' exact component={Status}></Route>
         <Route path='/login' exact component={Login}></Route>
         <Route path='/Register' exact component={Register}></Route>

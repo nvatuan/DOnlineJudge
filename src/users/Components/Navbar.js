@@ -37,7 +37,7 @@ function Navbar() {
                             <Link to='/home' className='nav-links'> Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to='/problem' className='nav-links'> Problem</Link>
+                            <Link to='/problem/' className='nav-links'> Problem</Link>
                         </li>
                         <li className="nav-item">
                             <Link to='/status' className='nav-links'> Status</Link>

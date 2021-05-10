@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
@@ -6,22 +6,38 @@ import { Card, Button , Form} from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import '../../Table.scss';
 import EditAnnoucement from './EditAnnoucement';
+import admin_annoucementAPI from '../../../api/annoucementAPI';
+import axios from 'axios';
 function Annoucement(props) {
     const [showModal, setShowModal] = useState(false);
-    const Annoucements = [
-        {
-            id: 1,
-            title: "Alo",
-            create_time: "2021-5 - 1 15: 35: 50",
-            last_update_time: "2021-5-1 15:35:50",
-            author: "root",
-            visible: true,
-        }
-    ]
+    const [annoucements, setAnnoucements] = useState([]);
+    // const Annoucements = [
+    //     {
+    //         id: 1,
+    //         title: "Alo",
+    //         create_time: "2021-5 - 1 15: 35: 50",
+    //         last_update_time: "2021-5-1 15:35:50",
+    //         author: "root",
+    //         visible: true,
+    //     }
+    // ]
 
     const openModal = () => {
         setShowModal(!showModal);
     }
+    useEffect(() =>{
+        const fetchAnnoucement = async () => {
+            try {
+                const response = await admin_annoucementAPI.getAll();
+                console.log(response);
+                setAnnoucements(response);
+            } catch (error) {
+                console.log('Fail to fetch annoucements: ', error);
+
+            }
+        }
+        fetchAnnoucement();
+    },[])
     return (
         <div>
             <AdminNavbar />
@@ -44,14 +60,14 @@ function Annoucement(props) {
                                 </thead>
                                 <tbody>
                                     {
-                                        Annoucements.length > 0 ? (
-                                            Annoucements.map((Annoucement) => (
-                                                <tr key={Annoucement.id}>
-                                                    <td>{Annoucement.id}</td>
-                                                    <td>{Annoucement.title}</td>
-                                                    <td>{Annoucement.create_time}</td>
-                                                    <td>{Annoucement.last_update_time}</td>
-                                                    <td>{Annoucement.author}</td>
+                                        annoucements.length > 0 ? (
+                                            annoucements.map((annoucement) => (
+                                                <tr key={annoucement.id}>
+                                                    <td>{annoucement.id}</td>
+                                                    <td>{annoucement.title}</td>
+                                                    <td>{annoucement.creation_time}</td>
+                                                    <td>{annoucement.last_update_time}</td>
+                                                    <td>{annoucement.author}</td>
                                                     <td>
                                                         <Form.Check
                                                             type="switch"
