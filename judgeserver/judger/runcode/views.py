@@ -5,7 +5,7 @@ from django.shortcuts import render
 from .forms import CodeForm 
 from django_q.tasks import async_task, result 
 from .coderunner import send_submission
-
+from .coderunner import Tester
 
 def handle(request):
     rss = {}
@@ -16,8 +16,13 @@ def handle(request):
             # process the data in form.cleaned_data as required
             data = form.cleaned_data
 
-            t_id = async_task(send_submission, data)
-            rs = result(t_id, 100000)
+            #t_id = async_task(send_submission, data)
+            tester = Tester({
+                "arr" : [5, 3, 1, 4, 2],
+                "id": 69
+            })
+            t_id = async_task(tester.run)
+            rs = result(t_id, 1000)
 
             src = data["source_code"]
             lang = data["lang"]
@@ -32,11 +37,11 @@ def handle(request):
                     "inputs" : inp,
                     "answer" : ans,
 
-                    "verdict" : rs[0][0][0].value,
-                    "output" : rs[0][0][1],
-                    "time" : rs[0][0][2],
+                    # "verdict" : rs[0][0][0].value,
+                    # "output" : rs[0][0][1],
+                    # "time" : rs[0][0][2],
 
-                    # "rss" : rs,
+                    "rss" : rs,
                 }
             }
         else:
