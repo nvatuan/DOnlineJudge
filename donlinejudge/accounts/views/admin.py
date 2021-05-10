@@ -16,9 +16,9 @@ class UserAPI(APIView):
         user = User.objects.all()
         return Response(UserSerializer(user, many=True).data)
 
-    # @admin_required
-    # def post(self, request):
-    #     pass
+    @super_admin_required
+    def post(self, request):
+        pass
 
     @super_admin_required
     def put(self, request):
