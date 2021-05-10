@@ -41,6 +41,7 @@ class JudgeSubmissionTask:
         except:
             self.sub.verdict = "System Error"
             self.sub.save()
+            raise
         return True
 
 class SubmissionAPI(APIView):
