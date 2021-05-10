@@ -74,8 +74,8 @@ class ProblemAPI(APIView):
             return response_ok(ProblemSerializer(problem).data)
         except KeyError as ke:
             return response_bad_request(str(ke) + " is required.")
-        except:
-            return response_bad_request("Unexpected error has occurred")
+        # except:
+        #     return response_bad_request("Unexpected error has occurred")
 
 class ProblemDetailAPI(APIView):
     """

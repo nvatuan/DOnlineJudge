@@ -11,8 +11,37 @@ from rest_framework import status
 
 from accounts.decorators import login_required
 
+from django_q.tasks import async_task
+
 from utils.make_response import *
 import sys
+
+class JudgeSubmissionTask:
+    def __init__(self, sub : Submission, prob: Problem):
+        self.sub = sub
+        self.prob = prob
+    
+    def judge_and_update(self):
+        src = self.sub.content
+        lang = self.sub.language
+
+        inputs = []
+        answers = []
+
+        for kv in self.prob.sample_test:       
+            inputs.append(kv["input"])
+            answers.append(kv["output"])
+
+        from .coderunner import send_submission_multi_test
+        try:
+            judge_result = send_submission_multi_test(src, lang, inputs, answers)
+            self.sub.verdict = judge_result.pop("verdict")
+            self.sub.output = judge_result
+            self.sub.save()
+        except:
+            self.sub.verdict = "System Error"
+            self.sub.save()
+        return True
 
 class SubmissionAPI(APIView):
     """
@@ -50,14 +79,16 @@ class SubmissionAPI(APIView):
             data["language"] = lang
 
             ## Content
-            content = data["content"]
-            if not content: 
+            src = data["content"]
+            if not src: 
                 raise KeyError("content")
 
             ## == Create object
             submission = Submission.objects.create(**data)
+            problem = Problem.objects.get(id=prob_id)
+            jstask = JudgeSubmissionTask(submission, problem)
 
-            ## TODO Judge the submission and change update its verdict and output
+            async_task(jstask.judge_and_update)
 
             return response_created(SubmissionSerializer(submission).data)
         except KeyError as ke:

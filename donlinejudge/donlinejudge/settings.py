@@ -40,6 +40,7 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = [
     'django_extensions',  ## python manage.py reset_db ## extension
+    'django_q', ## multiprocessing
     'corsheaders',
 
     'django.contrib.admin',
@@ -151,3 +152,21 @@ REST_FRAMEWORK = {
     ]
 }
 
+# == DJANGO_Q settings
+Q_CLUSTER = {
+    'name': 'donlinejudge',
+    #'workers': 8,
+    'max_attempt': 1,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'cpu_affinity': 1,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'label': 'Django Q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0,
+    }
+}
