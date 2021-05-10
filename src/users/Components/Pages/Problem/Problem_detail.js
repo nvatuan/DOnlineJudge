@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Form } from 'react-bootstrap';
 import styled from 'styled-components';
+import {useForm} from 'react-hook-form';
+import './Problem_detail.scss';
+import oj_statusAPI from '../../../../api/oj_statusAPI';
 import oj_problemAPI from '../../../../api/oj_problemAPI';
 const Flex_container = styled.div`
     display: flex;
@@ -27,11 +30,23 @@ const Submit_container = styled.div`
 `;
 function Problem_detail({ match }) {
     const id = match.params.id;
-    const [problem, setProblem] = useState([]);
+    const [problem, setProblem] = useState([]);    
+    const {register, handleSubmit, error} = useForm();
+
+    const onSubmit = async (data) => {
+        console.log(data);
+        try {
+            const response = await oj_statusAPI.postProblem();
+        } catch (error) {
+            console.log("Fail to post problem: ", error);
+        }
+
+    };
+
+
     useEffect(() => {
         const fetchProblem_detail = async () => {
             const response = await oj_problemAPI.getById(id);
-            console.log(response.data);
             setProblem(response.data);
         };
         fetchProblem_detail();
@@ -50,30 +65,35 @@ function Problem_detail({ match }) {
                 <Submit_container>
                     <Card>
                         <Card.Body>
-                            <Form>
+                            <Form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="mb-3" className='submit-nav'>
                                     <div className="dropdown-languege">
-                                        <form action>
                                             <label htmlFor="languege">Language:</label>
-                                            <select name="languege" id="languege">
+                                            <select name="languege" id="languege" {...register("language")}>
                                                 <option value="Python3">Python3</option>
                                                 <option value="Python2">Python2</option>
                                                 <option value="Java">Java</option>
                                                 <option value="C">C</option>
                                             </select>
                                             <br /><br />
-                                        </form>
                                     </div>
-
+                                    <div className="problem-id">
+                                        <label>Problem id: </label>
+                                        <input type="text" placeholder="Problem id"  value={id} {...register("problem_id")} />
+                                    </div>
                                     <Form.File id="formcheck-api-regular">
                                         <Form.File.Input />
                                     </Form.File>
-                                    <div className="submit-textarea">
-                                        <Form.Group controlId="exampleForm.ControlTextarea1">
-                                            <Form.Control as="textarea" rows={4} />
-                                        </Form.Group>
-                                    </div>
+
                                 </div>
+                                <div className="submit-textarea">
+                                    <textarea rows="4" cols="150" {...register("content")}>
+
+                                    </textarea>
+                                </div>
+                                <Button variant="primary" type="submit">
+                                    Submit
+                                </Button>
                             </Form>
                         </Card.Body>
                     </Card>

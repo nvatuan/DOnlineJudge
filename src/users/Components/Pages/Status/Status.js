@@ -37,7 +37,7 @@ function Status(props) {
                     {
                         status.map(stat => {
                             return (
-                                <tr>
+                                <tr key={stat.id}>
                                     <th>{stat.when}</th>
                                     <th>{stat.id}</th>
                                     <th>{stat.status}</th>
