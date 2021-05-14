@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.admin-content {
+    background-color: rgb(238, 238, 238);
+}
+.dashboard {
+    position: relative;
+    top: 10px;
+    left: 210px;
+    width: 30%;
+    height: 450px;
+    background-color: #fff;
+    border-radius: 4px;
+    .admin-img {
+        width: 40%;
+        height: 40%;
+        margin: 0 auto;
+        padding-top: 8px;
+    }
+    .admin-name {
+        font-size: 24px;
+        font-weight: 700;
+        margin-top: 48px;
+        margin-left: 150px;
+        color: #409eff;
+    }
+    .admin-role {
+        font-size: 20px;
+        font-weight: 400;
+        margin-left: 150px;
+    }
+}

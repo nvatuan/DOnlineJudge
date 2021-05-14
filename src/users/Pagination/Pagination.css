@@ -1,0 +1,12 @@
+.page-container{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.page-item {
+    margin: 10px 2px;
+}
+
+

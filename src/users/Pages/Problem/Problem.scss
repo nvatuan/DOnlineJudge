@@ -1,0 +1,19 @@
+.problems-container {
+    // display: flex;
+    // flex-direction: row;
+    // align-content: center;
+    // justify-content: space-around;
+    // align-items: normal;
+    position: absolute;
+    margin-top: 30px;
+    width: 100%;
+
+    .card-container {
+        width: 100%;
+    }
+}
+table {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}

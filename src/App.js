@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import About from './users/Components/Pages/About/About';
-import Home from './users/Components/Pages/Home/Home';
-import Problem from './users/Components/Pages/Problem/Problem';
-import Status from './users/Components/Pages/Status/Status';
-import Login from './users/Components/Pages/Login/Login';
-import Register from './users/Components/Pages/Register/Register'
+import About from './users/Pages/About/About';
+import Home from './users/Pages/Home/Home';
+import Problem from './users/Pages/Problem/Problem';
+import Status from './users/Pages/Status/Status';
+import Login from './users/Pages/Login/Login';
+import Register from './users/Pages/Register/Register'
 import ProblemList from './admin/Problems/ProblemList/ProblemList';
 import User from './admin/General/User/User';
 import Annoucement from './admin/General/Annoucement/Annoucement';
@@ -15,7 +15,7 @@ import Dashboard from './admin/Dashboard/Dashboard';
 import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
-import Problem_detail from './users/Components/Pages/Problem/Problem_detail';
+import Problem_detail from './users/Pages/Problem/Problem_detail';
 const usersData = [
   { id: 1, name: 'Tania', username: 'floppydiskette' },
   { id: 2, name: 'Craig', username: 'siliconeidolon' },
