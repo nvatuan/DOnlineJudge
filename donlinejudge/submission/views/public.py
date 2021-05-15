@@ -58,6 +58,8 @@ class SubmissionAPI(APIView):
     """
     @login_required
     def post(self, request, format=None):
+        print(request.headers)
+
         data = request.data
         ## TODO limit the amount of submission an user can make
 
