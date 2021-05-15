@@ -5,8 +5,11 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { userSelector, clearState, loginUser } from '../../UserSlice';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Signin(props) {
-
+    //toast 
+    toast.configure();
     //for Modal
     const [show, setShow] = useState(false);
     const [showRegis, setShowRegis] = useState(false);
@@ -20,7 +23,7 @@ function Signin(props) {
     //for redux
     const dispatch = useDispatch();
     const history = useHistory();
-    const { isSuccess, isError } = useSelector(userSelector);
+    const { isSuccess, isError, errorMessage } = useSelector(userSelector);
 
 
     const { register, handleSubmit } = useForm();
@@ -36,49 +39,60 @@ function Signin(props) {
 
     useEffect(() => {
         if (isError) {
-            console.log("login fail");
+            toast.error(errorMessage, {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 1500
+            });
             dispatch(clearState());
         }
         if (isSuccess){
-            console.log("login success");
+            toast.success('Ohayo onii-chan', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 1500 
+            });
             dispatch(clearState());
             history.push('/problem/');
         }
     }, [isError, isSuccess]);
 
-    return (
-        showRegis ? <Register /> :
-            <div>
-                <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Login</Button>
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Login</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Username </Form.Label>
-                                <Form.Control type="text" placeholder="Username" {...register("username")} />
-                                <Form.Text className="text-muted">
-                                </Form.Text>
-                            </Form.Group>
+    const LoginModal = (
+        <div>
 
-                            <Form.Group controlId="formBasicPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" placeholder="Password" {...register("password")} />
-                            </Form.Group>
-                            <Button variant="primary" type="submit">
-                                Login
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Login</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Username </Form.Label>
+                            <Form.Control type="text" placeholder="Username" {...register("username")} />
+                            <Form.Text className="text-muted">
+                            </Form.Text>
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" {...register("password")} />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Login
                             </Button>
-                        </Form>
-                    </Modal.Body>
+                    </Form>
+                </Modal.Body>
 
-                    <Modal.Footer>
-                        <Button onClick={handleOnClickRegister}>No account? Register now!</Button>
-                    </Modal.Footer>
-                </Modal>
+                <Modal.Footer>
+                    <Button onClick={handleOnClickRegister}>No account? Register now!</Button>
+                </Modal.Footer>
+            </Modal>
 
-            </div>
+        </div>
+    );
+    return (
+        <>
+            <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Login</Button>
+            {showRegis ? <Register /> : LoginModal}
+        </>
     );
 }
 

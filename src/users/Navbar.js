@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import {FaBars, FaTimes} from 'react-icons/fa';
 import {FcNightPortrait} from 'react-icons/fc'
-import {Button, ButtonGroup} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Login from './Pages/Login/Login';
 import './Navbar.css';
 import { useHistory } from 'react-router-dom';
-import { userSelector } from './UserSlice'; 
-import { useSelector } from 'react-redux';
+import { clearState, userSelector, logoutUser } from './UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import Register from './Pages/Register/Register';
 function Navbar() {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
@@ -20,11 +22,17 @@ function Navbar() {
         }
     }
     window.addEventListener('resize', showButton)
-
+    //logout process
+    const dispatch = useDispatch();
     const history = useHistory();
-    // const { username } = useSelector(userSelector);
     const onLogout = () => {
+        dispatch(logoutUser());
+        dispatch(clearState());
         localStorage.removeItem('token');
+        toast.success('bai baii', {
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 1500
+        });
         history.push('/');
     }
 
@@ -53,13 +61,14 @@ function Navbar() {
                             <Link to='/about' className='nav-links'> About</Link>
                         </li>
                         <li className="nav-btn">
-                            {localStorage.getItem('token') === null ? <Login/> : 
+                            {localStorage.getItem('token') === null ? <Login/> :
                             <Button
                             variant="outline-dark" size="lg" variant="dark"
                             onClick={onLogout}>
                                     Logout
                             </Button>}
                         </li>
+
                     </ul>
                 </div>
             </div>

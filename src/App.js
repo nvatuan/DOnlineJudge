@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import About from './users/Pages/About/About';
 import Home from './users/Pages/Home/Home';
 import Problem from './users/Pages/Problem/Problem';
@@ -16,6 +17,8 @@ import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
 import Problem_detail from './users/Pages/Problem/Problem_detail';
+//Private Route
+import { PrivateRoute } from './helpers/PrivateRoute';
 const usersData = [
   { id: 1, name: 'Tania', username: 'floppydiskette' },
   { id: 2, name: 'Craig', username: 'siliconeidolon' },
@@ -39,15 +42,12 @@ function App() {
         <Route path='/login' exact component={Login}></Route>
         <Route path='/Register' exact component={Register}></Route>
         //admin
-        <Route path='/admin/' exact> <Dashboard users={users} /> </Route>
-        <Route path='/admin/dashboard' exact> <Dashboard users={users} /> </Route>
-        <Route path='/admin/user' exact> <User /> </Route>
-        <Route path='/admin/problems' exact> <ProblemList users={users} /> </Route>
-        <Route path='/admin/user' exact> <User/> </Route>
-        <Route path='/admin/annoucement' exact component={Annoucement}></Route>
-        <Route path='/admin/problem/create' exact component={CreateProblem}></Route>
-
-        <Route path='/123' exact component={EditAnnoucement}></Route>
+        <PrivateRoute exact component={Dashboard} path='/admin/'/>
+        <PrivateRoute exact component={Dashboard} path='/admin/dashboard'/>
+        <PrivateRoute exact component={User} path='/admin/user'/>
+        <PrivateRoute exact component={ProblemList} path='/admin/problems'/>
+        <PrivateRoute exact component={Annoucement} path='/admin/annoucement'/>
+        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create'/>
       </Switch>
     </Router>
   );
