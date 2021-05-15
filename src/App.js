@@ -13,7 +13,7 @@ import ProblemList from './admin/Problems/ProblemList/ProblemList';
 import User from './admin/General/User/User';
 import Annoucement from './admin/General/Annoucement/Annoucement';
 import Dashboard from './admin/Dashboard/Dashboard';
-import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
+import CreateProblem from './admin/Problems/CreateProblem/CreateProblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
 import Problem_detail from './users/Pages/Problem/Problem_detail';
