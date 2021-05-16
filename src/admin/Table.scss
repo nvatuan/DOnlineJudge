@@ -54,14 +54,15 @@ table {
 
   th {
     padding: 1rem 2rem;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     letter-spacing: 0.1rem;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 900;
   }
 
   td {
     padding: 1rem 2rem;
+    border-bottom: 1px solid hsla(0,0%,73%,.5);
   }
 
   a {
@@ -75,20 +76,6 @@ table {
     padding: 0.2rem 1rem;
     text-align: center;
 
-    // &-pending {
-    //   background-color: $clr-pending;
-    //   color: $clr-pending-font;
-    // }
-
-    // &-paid {
-    //   background-color: $clr-paid;
-    //   color: $clr-paid-font;
-    // }
-
-    // &-unpaid {
-    //   background-color: $clr-unpaid;
-    //   color: $clr-unpaid-font;
-    // }
   }
   .custom-switch{
     padding-left: 3.25rem;
@@ -104,7 +91,7 @@ table {
     margin-left: 0.1rem;
   }
   //Color alternating rows
-  tr:nth-child(even) {
-    background-color: $clr-gray150;
-  }
+  // tr:nth-child(even) {
+  //   background-color: $clr-gray150;
+  // }
 }

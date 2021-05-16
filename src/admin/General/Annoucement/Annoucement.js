@@ -11,16 +11,6 @@ import axios from 'axios';
 function Annoucement(props) {
     const [showModal, setShowModal] = useState(false);
     const [annoucements, setAnnoucements] = useState([]);
-    // const Annoucements = [
-    //     {
-    //         id: 1,
-    //         title: "Alo",
-    //         create_time: "2021-5 - 1 15: 35: 50",
-    //         last_update_time: "2021-5-1 15:35:50",
-    //         author: "root",
-    //         visible: true,
-    //     }
-    // ]
 
     const openModal = () => {
         setShowModal(!showModal);

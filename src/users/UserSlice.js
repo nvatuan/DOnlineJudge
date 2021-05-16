@@ -5,12 +5,10 @@ import logoutAPI from '../api/logoutAPI';
 export const loginUser = createAsyncThunk(
     '/login',
     async ({username, password }, thunkAPI) => {
-        console.log('access to redux thunk');
         try {
             const response = await loginAPI.login({username, password});
-            console.log(response);
+            // console.log(response);
             if(response.token !== null){
-                console.log('set Token');
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('role', response.user.admin_type);
                 return response;
@@ -28,7 +26,7 @@ export const registerUser = createAsyncThunk(
     '/register',
     async (data, thunkAPI) => {
         try {
-            console.log(data);
+            // console.log(data);
             const response = await registerAPI.register(data);
             console.log('register: ', response);
         } catch (error) {

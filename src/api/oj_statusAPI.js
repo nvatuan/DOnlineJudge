@@ -6,10 +6,14 @@ const oj_statusAPI = {
         return axiosClient.get(url);
     },
     postProblem: (data) =>{
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
         const url = 'status/';
-        return axiosClient.post(url, {
-            body: JSON.stringify(data)
-        })
+        return axiosClient.post(url, data, config);
     }
 }
 

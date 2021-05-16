@@ -5,6 +5,7 @@ import {useForm} from 'react-hook-form';
 import './Problem_detail.scss';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import oj_problemAPI from '../../../api/oj_problemAPI';
+import Navbar from '../../Navbar'
 const Flex_container = styled.div`
     display: flex;
     width: 100%;
@@ -34,9 +35,9 @@ function Problem_detail({ match }) {
     const {register, handleSubmit, error} = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data);
+        data.problem_id = parseInt(data.problem_id);
         try {
-            const response = await oj_statusAPI.postProblem();
+            const response = await oj_statusAPI.postProblem(data);
         } catch (error) {
             console.log("Fail to post problem: ", error);
         }
@@ -52,22 +53,24 @@ function Problem_detail({ match }) {
         fetchProblem_detail();
     }, [])
     return (
-        <Flex_container>
-            <Problem_main>
-                <Problem_imformation>
-                    <Card>
-                        <Card.Header as="h3">{problem.title}</Card.Header>
-                        <Card.Body>
-                            {problem.statement}
-                        </Card.Body>
-                    </Card>
-                </Problem_imformation>
-                <Submit_container>
-                    <Card>
-                        <Card.Body>
-                            <Form onSubmit={handleSubmit(onSubmit)}>
-                                <div className="mb-3" className='submit-nav'>
-                                    <div className="dropdown-languege">
+        <div>
+            <Navbar/>
+            <Flex_container>
+                <Problem_main>
+                    <Problem_imformation>
+                        <Card>
+                            <Card.Header as="h3">{problem.title}</Card.Header>
+                            <Card.Body>
+                                {problem.statement}
+                            </Card.Body>
+                        </Card>
+                    </Problem_imformation>
+                    <Submit_container>
+                        <Card>
+                            <Card.Body>
+                                <Form onSubmit={handleSubmit(onSubmit)}>
+                                    <div className="mb-3" className='submit-nav'>
+                                        <div className="dropdown-languege">
                                             <label htmlFor="languege">Language:</label>
                                             <select name="languege" id="languege" {...register("language")}>
                                                 <option value="Python3">Python3</option>
@@ -76,30 +79,31 @@ function Problem_detail({ match }) {
                                                 <option value="C">C</option>
                                             </select>
                                             <br /><br />
-                                    </div>
-                                    <div className="problem-id">
-                                        <label>Problem id: </label>
-                                        <input type="text" placeholder="Problem id"  value={id} {...register("problem_id")} />
-                                    </div>
-                                    <Form.File id="formcheck-api-regular">
-                                        <Form.File.Input />
-                                    </Form.File>
+                                        </div>
+                                        <div className="problem-id">
+                                            <label>Problem id: </label>
+                                            <input type="text" placeholder="Problem id" value={id} {...register("problem_id")} />
+                                        </div>
+                                        <Form.File id="formcheck-api-regular">
+                                            <Form.File.Input />
+                                        </Form.File>
 
-                                </div>
-                                <div className="submit-textarea">
-                                    <textarea rows="4" cols="150" {...register("content")}>
+                                    </div>
+                                    <div className="submit-textarea">
+                                        <textarea rows="4" cols="150" {...register("content")}>
 
-                                    </textarea>
-                                </div>
-                                <Button variant="primary" type="submit">
-                                    Submit
+                                        </textarea>
+                                    </div>
+                                    <Button variant="primary" type="submit">
+                                        Submit
                                 </Button>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </Submit_container>
-            </Problem_main>
-        </Flex_container>
+                                </Form>
+                            </Card.Body>
+                        </Card>
+                    </Submit_container>
+                </Problem_main>
+            </Flex_container>
+        </div>
     )
 }
 

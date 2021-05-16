@@ -22,7 +22,6 @@ function Problem() {
     useEffect(() => {
         const fectchProblems = async () => {
             const response = await oj_problemAPI.getAll();
-            console.log(response);
             setProblems(response.data);
             setPagination(filters);
         }
@@ -62,6 +61,8 @@ function Problem() {
                                         <th>ID</th>
                                         <th>Tille</th>
                                         <th>Level</th>
+                                        <th>Total</th>
+                                        <th>AC Rate</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,8 +71,10 @@ function Problem() {
                                             problems.map((problem) => (
                                                 <tr key={problem.id}>
                                                     <td>{problem.id}</td>
-                                                    <Link to={`/problem/${problem.id}`}>{problem.title}</Link>
+                                                    <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
                                                     <td>{problem.difficulty}</td>
+                                                    <td>{problem.total_submission}</td>
+                                                    <td>{problem.correct_submission}</td>
                                                 </tr>
                                             ))
                                         ) : (

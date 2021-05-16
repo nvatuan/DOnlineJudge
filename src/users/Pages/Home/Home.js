@@ -1,9 +1,23 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../../Navbar';
 import '../Page.scss';
 import './Home.scss';
 import {Card} from 'react-bootstrap';
+import oj_announcementAPI from '../../../api/oj_announcementAPI';
+
 function Home() {
+    const [announcement, setAnnouncement] = useState([]);
+    useEffect(() => {
+        const fetchAnnouncement = async () =>{
+            try {
+                const response = await oj_announcementAPI.getAll();
+                setAnnouncement(response);
+            } catch (error) {
+                console.log('fail to announcement: ', error);
+            }
+        }
+        fetchAnnouncement();
+    },[])
     return (
         <div>
             <Navbar/>
@@ -13,13 +27,24 @@ function Home() {
                         <Card>
                             <Card.Header as="h3">Annoucement</Card.Header>
                             <Card.Body>
-                                <blockquote className="blockquote mb-0">
-                                    <p>
-                                    </p>
-                                    <footer className="blockquote-footer">
-                                        Someone famous in <cite title="Source Title">Source Title</cite>
-                                    </footer>
-                                </blockquote>
+                                <table>
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            announcement.map(annou => {
+                                                return (
+                                                    <tr key={annou.id}>
+                                                        <td>{annou.title}</td>
+                                                        <td>{annou.creation_time}</td>
+                                                        <td>{annou.author}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        } 
+                                    </tbody>
+                                </table>
                             </Card.Body>
                         </Card>
                     </div>

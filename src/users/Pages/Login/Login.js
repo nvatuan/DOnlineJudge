@@ -57,7 +57,6 @@ function Signin(props) {
 
     const LoginModal = (
         <div>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Login</Modal.Title>
