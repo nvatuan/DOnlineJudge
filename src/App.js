@@ -28,6 +28,7 @@ const usersData = [
 
 function App() {
   const [users, setUsers] = useState(usersData);
+
   return (
     <Router>
       <Switch>
@@ -37,17 +38,17 @@ function App() {
         <Route path='/about' exact component={About}></Route>
         <Route path='/problem/' exact component={Problem}></Route>
         <Route path='/problem/:id' exact component={Problem_detail}></Route>
-        
+
         <Route path='/status' exact component={Status}></Route>
         <Route path='/login' exact component={Login}></Route>
         <Route path='/Register' exact component={Register}></Route>
         //admin
-        <PrivateRoute exact component={Dashboard} path='/admin/'/>
-        <PrivateRoute exact component={Dashboard} path='/admin/dashboard'/>
-        <PrivateRoute exact component={User} path='/admin/user'/>
-        <PrivateRoute exact component={ProblemList} path='/admin/problems'/>
-        <PrivateRoute exact component={Annoucement} path='/admin/annoucement'/>
-        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create'/>
+        <PrivateRoute exact component={Dashboard} path='/admin/' />
+        <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
+        <PrivateRoute exact component={User} path='/admin/user' />
+        <PrivateRoute exact component={ProblemList} path='/admin/problems' />
+        <PrivateRoute exact component={Annoucement} path='/admin/annoucement' />
+        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
       </Switch>
     </Router>
   );
