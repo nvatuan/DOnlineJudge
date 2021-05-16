@@ -45,9 +45,13 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.TextField(unique=True, db_index=True)
     email = models.EmailField(null=True)
+    first_name = models.CharField(max_length=100,null=True)
+    last_name = models.CharField(max_length=100, null=True)
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     update_time = models.DateTimeField(auto_now=True, null=True)
     # One of UserType
+    profile_pic = models.ImageField(
+        default='profile1.png', null=True, blank=True)
     admin_type = models.TextField(default=AdminType.REGULAR_USER)
     problem_permission = models.TextField(default=ProblemPermission.NONE)
     is_verified = models.BooleanField(default=False)
@@ -57,7 +61,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
-    DISPLAY_FIELD = ["username", "email", "create_time", "admin_type", "problem_permission", "is_active"]
+    DISPLAY_FIELD = ["username", "email", "first_name", "last_name",
+                     "create_time", "admin_type", "problem_permission", "is_active"]
 
     objects = UserManager()
 

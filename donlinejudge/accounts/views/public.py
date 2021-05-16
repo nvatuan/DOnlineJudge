@@ -4,11 +4,12 @@ from rest_framework import status, generics
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.authtoken.models import Token
 
-from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer
+from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, UpdateUserSerializer
 from accounts.models import User
 from accounts.decorators import unauthenticated_user, login_required
 
 from django.contrib.auth import login, logout
+
 
 class RegisterAPI(APIView):
     serializer = RegisterSerializer
@@ -36,13 +37,38 @@ class LoginAPI(generics.GenericAPIView):
         user_data = User.objects.get(username=request.data['username'])
         token, created = Token.objects.get_or_create(user=user_data)
         return Response({
-            "user": UserSerializer(user,context=self.get_serializer_context()).data,
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": str(token)
         })
 
 
+class UpdateAPI(APIView):
+    serializer = UpdateUserSerializer
+
+    @login_required
+    def get(self, request):
+        user = request.user
+        return Response(UpdateUserSerializer(user).data)
+
+    @login_required
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        serializer = UpdateUserSerializer(instance=user)
+
+        if User.objects.filter(email=data["email"].lower()).exclude(id=user.id).exists():
+            return Response("Email already exists", status=status.HTTP_400_BAD_REQUEST)
+
+        user.email = data["email"].lower()
+        user.first_name = data["first_name"]
+        user.last_name = data["last_name"]
+        user.profile_pic = data["profile_pic"]
+        user.save()
+        return Response(UpdateUserSerializer(user).data)
+
+
 class LogoutAPI(APIView):
     @login_required
-    def get(self,request):
+    def get(self, request):
         logout(request)
         return Response({"User logger out!"})
