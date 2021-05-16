@@ -42,13 +42,13 @@ class LoginAPI(generics.GenericAPIView):
         })
 
 
-class UpdateAPI(APIView):
-    serializer = UpdateUserSerializer
+class UpdateAPI(generics.GenericAPIView):
+    serializer_class = UpdateUserSerializer
 
     @login_required
     def get(self, request):
         user = request.user
-        return Response(UpdateUserSerializer(user).data)
+        return Response(UpdateUserSerializer(user, context=self.get_serializer_context()).data)
 
     @login_required
     def put(self, request, *args, **kwargs):
@@ -62,9 +62,11 @@ class UpdateAPI(APIView):
         user.email = data["email"].lower()
         user.first_name = data["first_name"]
         user.last_name = data["last_name"]
-        user.profile_pic = data["profile_pic"]
+        if data["profile_pic"]:
+            user.profile_pic = data["profile_pic"]
+        else: user.profile_pic = user.profile_pic
         user.save()
-        return Response(UpdateUserSerializer(user).data)
+        return Response(UpdateUserSerializer(user, context=self.get_serializer_context()).data)
 
 
 class LogoutAPI(APIView):

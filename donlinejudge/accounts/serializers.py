@@ -41,6 +41,9 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.ImageField(
+        default='profile1.png')
+
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name', 'profile_pic']
