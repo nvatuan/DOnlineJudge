@@ -79,13 +79,30 @@ def judge(processor, source, tests, config=None, client=None):
     """
     config = config or {}
     client = client or docker.from_env(version="auto")
-    try:
-        processor = getattr(_processor, processor[0])(**processor[1])
-    except TypeError:
+
+    if isinstance(processor, str):
+        processor = {
+            "PyPy": _processor.PyPy(),
+            "Python": _processor.Python(),
+            "PyPy3": _processor.PyPy(),
+            "Python3": _processor.Python(),
+            "PyPy2": _processor.PyPy(version=2),
+            "Python2": _processor.Python(version=2),
+
+            "C++": _processor.GCC(language=_processor.GCC.Language.cpp),
+            "C": _processor.GCC(language=_processor.GCC.Language.c),
+            "Java": _processor.OpenJDK(),
+        }[processor]
+    else:
         try:
-            processor = getattr(_processor, processor[0])(*processor[1])
+            processor = getattr(_processor, processor[0])(**processor[1])
         except TypeError:
-            pass
+            try:
+                processor = getattr(_processor, processor[0])(*processor[1])
+            except TypeError:
+                pass
+
+
     container = client.containers.run(
         processor.image,
         detach=True,

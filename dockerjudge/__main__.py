@@ -12,8 +12,10 @@ import websockets
 from .main import judge
 from .status import Status
 
-executor = ThreadPoolExecutor()  # pylint: disable = E0012, consider-using-with
+import logging
+logging.basicConfig(level=logging.INFO)  
 
+executor = ThreadPoolExecutor()  # pylint: disable = E0012, consider-using-with
 
 class JSONEncoder(_JSONEncoder):
     "TypeError: Object is not JSON serializable"
@@ -31,6 +33,10 @@ async def server(websocket, path):  # pylint: disable = W0613
     "WebSocket server"
     loop = get_event_loop()
     kwargs = loads(await websocket.recv())
+
+    logging.info("Received a connection " + repr(websocket.remote_address))
+    logging.info("Kwargs: " + repr(kwargs))
+
     await websocket.send(dumps(["judge", kwargs]))
     kwargs["source"] = kwargs["source"].encode()
     kwargs["tests"] = [(i.encode(), o.encode()) for i, o in kwargs["tests"]]
@@ -41,6 +47,7 @@ async def server(websocket, path):  # pylint: disable = W0613
     }
     res = await loop.run_in_executor(executor, partial(judge, **kwargs))
     await websocket.send(dumps(["done", res], cls=JSONEncoder))
+    logging.info("Closing connection on " + repr(websocket.remote_address))
 
 
 def main(*args):
@@ -49,6 +56,7 @@ def main(*args):
 
     start_server = websockets.serve(server, *args)
 
+    logging.info("Server is starting..")
     get_event_loop().run_until_complete(start_server)
     get_event_loop().run_forever()
 

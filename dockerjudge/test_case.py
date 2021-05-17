@@ -31,9 +31,8 @@ def _get_io_file_path(ioro, processor, i, config):
 def judge(container, processor, i, ioput, config):
     "Judge one of the test cases"
     put_bin(container, _get_io_file_path("in", processor, i, config), ioput[0])
-    res = container.exec_run(
-        "bash -c "
-        + shlex.quote(
+    
+    command = "bash -c " + shlex.quote(
             "TIMEFORMAT=$'\\n%3lR' && time timeout -sKILL "
             + str(config.get("limit", {}).get("time", 1))
             + " sh -c "
@@ -45,15 +44,20 @@ def judge(container, processor, i, ioput, config):
                 if not config["iofilename"].get("in")
                 else ""
             )
-        ),
+        )
+    
+    res = container.exec_run(
+        command,
         workdir=f"{processor.workdir}/{i}",
         demux=True,
     )
+
     duration = re.search(
         "\n([0-9]+)m([0-9]+\\.[0-9]{3})s\n$", res.output[1].decode()
     )
     stderr = res.output[1][: duration.span()[0]]
     duration = int(duration.group(1)) * 60 + float(duration.group(2))
+
     if res.exit_code == 137:
         return Status.TLE, (None, stderr), duration
     if res.exit_code:
