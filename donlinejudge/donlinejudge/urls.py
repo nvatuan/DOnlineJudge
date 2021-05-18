@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('', include('problem.urls')),
     path('', include('submission.urls')),
+    path('', include('judgeserver.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

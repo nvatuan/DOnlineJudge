@@ -72,7 +72,6 @@ class SubmissionAPI(APIView):
                 return response_not_found("Problem with id=%s does not exist." % str(id))
         
             ## Author ID
-            ## TODO get request.user
             data["author"] = request.user
 
             ## Compile Language
@@ -96,7 +95,7 @@ class SubmissionAPI(APIView):
             return response_created(SubmissionSerializer(submission).data)
         except KeyError as ke:
             return response_bad_request(str(ke) + " is required.")
-        # except: 
+        # except: # TODO Uncomment these
         #     return response_bad_request("Something went wrong.")
 
 class SubmissionDetailAPI(APIView):

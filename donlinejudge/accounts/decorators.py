@@ -11,7 +11,7 @@ class BasePermissionDecorator(object):
         return functools.partial(self.__call__, obj)
 
     def error(self, data):
-        return response_unauthorized({"error": "Permission-denied", "data": data})
+        return response_unauthorized(data)
 
     def __call__(self, *args, **kwargs):
         self.request = args[1]
@@ -35,7 +35,7 @@ class BaseAuthenticatedDecorator(object):
         return functools.partial(self.__call__, obj)
 
     def error(self, data):
-        return response_unauthorized({"error": "Permission-denied", "data": data})
+        return response_unauthorized(data)
 
     def __call__(self, *args, **kwargs):
         self.request = args[1]

@@ -49,13 +49,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=100, null=True)
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     update_time = models.DateTimeField(auto_now=True, null=True)
+
     # One of UserType
     profile_pic = models.ImageField(
         default='profile1.png', null=True, blank=True)
+
     admin_type = models.TextField(default=AdminType.REGULAR_USER)
     problem_permission = models.TextField(default=ProblemPermission.NONE)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = "username"

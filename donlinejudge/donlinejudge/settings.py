@@ -37,6 +37,7 @@ LOCAL_APPS = [
     'announcement',
     'submission',
     'problem',
+    'judgeserver',
 ]
 
 INSTALLED_APPS = [
