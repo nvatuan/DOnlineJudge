@@ -13,22 +13,16 @@ import ProblemList from './admin/Problems/ProblemList/ProblemList';
 import User from './admin/General/User/User';
 import Annoucement from './admin/General/Annoucement/Annoucement';
 import Dashboard from './admin/Dashboard/Dashboard';
-import CreateProblem from './admin/Problems/CreateProblem/CreateProblem'
+import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
 import Problem_detail from './users/Pages/Problem/Problem_detail';
 //Private Route
 import { PrivateRoute } from './helpers/PrivateRoute';
-const usersData = [
-  { id: 1, name: 'Tania', username: 'floppydiskette' },
-  { id: 2, name: 'Craig', username: 'siliconeidolon' },
-  { id: 3, name: 'Ben', username: 'benisphere' },
-];
+import Status_detail from './users/Pages/Status/Status_detail';
 
 
 function App() {
-  const [users, setUsers] = useState(usersData);
-
   return (
     <Router>
       <Switch>
@@ -38,17 +32,16 @@ function App() {
         <Route path='/about' exact component={About}></Route>
         <Route path='/problem/' exact component={Problem}></Route>
         <Route path='/problem/:id' exact component={Problem_detail}></Route>
-
         <Route path='/status' exact component={Status}></Route>
-        <Route path='/login' exact component={Login}></Route>
-        <Route path='/Register' exact component={Register}></Route>
+        <Route path='/status/:id' exact component={Status_detail}></Route>
+  
         //admin
-        <PrivateRoute exact component={Dashboard} path='/admin/' />
-        <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
-        <PrivateRoute exact component={User} path='/admin/user' />
-        <PrivateRoute exact component={ProblemList} path='/admin/problems' />
-        <PrivateRoute exact component={Annoucement} path='/admin/annoucement' />
-        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
+        <PrivateRoute exact component={Dashboard} path='/admin/'/>
+        <PrivateRoute exact component={Dashboard} path='/admin/dashboard'/>
+        <PrivateRoute exact component={User} path='/admin/user'/>
+        <PrivateRoute exact component={ProblemList} path='/admin/problems'/>
+        <PrivateRoute exact component={Annoucement} path='/admin/annoucement'/>
+        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create'/>
       </Switch>
     </Router>
   );

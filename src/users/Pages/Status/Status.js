@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
@@ -54,6 +55,7 @@ function Status(props) {
                                                 <td>{stat.memory}</td>
                                                 <td>{stat.language}</td>
                                                 <td>{stat.author}</td>
+                                                <td><Link to={`status/${stat.id}`}>detail</Link></td>
                                             </tr>
                                         )
                                     })

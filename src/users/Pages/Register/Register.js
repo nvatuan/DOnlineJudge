@@ -9,8 +9,9 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 
 function Register(props) {
+    const { setShowRegis } = props;
     //Modal handling
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -19,12 +20,11 @@ function Register(props) {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const { isSuccess, isError, errorMessage } = useSelector(userSelector);
+    const { isRegisterSuccess, isRegisterError, errorMessage } = useSelector(userSelector);
 
     //form handling
     const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
-        console.log(data);
         dispatch(registerUser(data));
     }
 
@@ -35,22 +35,24 @@ function Register(props) {
     }, []);
 
     useEffect(() => {
-        if (isError) {
+        if (isRegisterError) {
             toast.error(errorMessage, {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             });
             dispatch(clearState());
         }
-        if (isSuccess) {
+        if (isRegisterSuccess) {
             toast.success('kanseishitayoo onii-chan', {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             });
-            dispatch(clearState());
+            handleClose();
             history.push('/');
+            dispatch(clearState());
+            
         }
-    }, [isError, isSuccess]);
+    }, [isRegisterError, isRegisterSuccess]);
     const registerModal = (<div>
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -58,7 +60,7 @@ function Register(props) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group controlId="formBasicUsername">
                         <Form.Control type="text" placeholder="Username" {...register("username")} />
                         <Form.Text className="text-muted">
                         </Form.Text>
@@ -72,7 +74,7 @@ function Register(props) {
                     <Form.Group controlId="formBasicPassword">
                         <Form.Control type="password" placeholder="Password" {...register("password")} />
                     </Form.Group>
-                    <Form.Group controlId="formBasicPassword">
+                    <Form.Group controlId="formBasicPassword1">
                         <Form.Control type="password" placeholder="Password Again" />
                     </Form.Group>
                     <Button variant="primary" type="submit">
@@ -83,15 +85,15 @@ function Register(props) {
 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="outline-primary" >
+                <Button variant="outline-primary" onClick={() => (setShowRegis(false))} >
                     Already registed? Login now!
-                    </Button>
+                </Button>
             </Modal.Footer>
         </Modal>
     </div>);
     return (
         <>
-            {/* <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Register</Button> */}
+            <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Register</Button>
             {registerModal}
         </>
     );

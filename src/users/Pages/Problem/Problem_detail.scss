@@ -1,3 +1,85 @@
-.submit-nav{
-    display: inline;
+.problem_detail-flex-container{
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-flow: row nowrap;
+    background-color: #eee;
+    
 }
+
+.problem-main{
+    width: 80%;
+}
+
+.problem-main__item{
+    margin: 35px 0;
+}
+
+
+.submit-nav{
+    display: flex;
+    justify-content: space-between;
+    label{
+        padding-right: 10px;
+    }
+    .submit-nav__item{
+        padding: 0 10px;
+    }
+}
+#submit-button{
+    background-color: #1c2237;
+}
+#submit-button:hover{
+    background-color: rgba(35, 38, 54, 0.815);
+    box-shadow: none;
+    
+}
+.right-column{
+    flex: none;
+    margin: 35px 0;
+}
+
+.submit-card{
+    text-align: center;
+    align-items: flex-start;
+}
+
+.right-column h7{
+    margin-left: 10px;
+}
+.to_statusPage_card{
+    font-weight: 600;   
+}
+.to_statusPage_card:hover{
+    text-decoration: none;
+}
+.right-column__item{
+    margin-bottom: 60px;
+    width: 15rem;
+}
+
+.problem-information__item{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    height: 3rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+.problem-main__footer{
+    display: flex;
+    justify-content: flex-end;
+}
+
+

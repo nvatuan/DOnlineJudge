@@ -53,16 +53,19 @@ export const userSlice = createSlice({
     initialState: {
         username: '',
         email: '',
-        isSuccess: false,
-        isError: false,
+        isLoginSuccess: false,
+        isLoginError: false,
+        isRegisterSuccess: false,
+        isRegisterError: false,
         isFeching: false,
         errorMessage: '',
     },
     reducers:{
         clearState: (state) => {
-            state.isError = false;
-            state.isSuccess = false;
-
+            state.isLoginSuccess = false;
+            state.isLoginError = false;
+            state.isRegisterSuccess = false;
+            state.isRegisterError = false;      
             return state;
         }
     },
@@ -72,14 +75,14 @@ export const userSlice = createSlice({
         [loginUser.fulfilled]: (state, { payload }) =>{
             state.username = payload.user.username;
             state.isFeching = false;
-            state.isSuccess = true;
+            state.isLoginSuccess = true;
             return state;
         },
         [loginUser.pending]: (state) =>{
             state.isFeching = true;
         },
         [loginUser.rejected]: (state, {payload}) => {
-            state.isError = true;
+            state.isLoginError = true;
             state.isFeching = false;
             state.errorMessage = 'Username or password is wrong';
         },
@@ -87,19 +90,19 @@ export const userSlice = createSlice({
         [registerUser.fulfilled]: (state , {payload}) => {
             console.log('payload: ', payload);
             state.isFeching = false;
-            state.isSuccess = true;
+            state.isRegisterSuccess = true;
         },
         [registerUser.rejected]: (state, { payload }) => {
             console.log('payload:', payload);
             state.isFeching = false;
-            state.isError = true;
+            state.isRegisterError = true;
             state.errorMessage = 'Register fail';
         },
         [registerUser.pending]: (state) => {
             state.isFeching = true;
         },
         //logout
-        [registerUser.fulfilled]: (state) => {
+        [logoutUser.fulfilled]: (state) => {
             state.isFeching = false;
             state.isSuccess = true;
         },

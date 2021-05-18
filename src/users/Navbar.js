@@ -69,7 +69,7 @@ function Navbar() {
                         </li>
                         <li className="nav-btn">
                             {!check ? (
-                                    <Login />
+                                    <Login/>
                             ) :
                                 <Button
                                     variant="outline-dark" size="lg" variant="dark"
@@ -77,7 +77,11 @@ function Navbar() {
                                     Logout
                             </Button>}
                         </li>
-
+                        <li className="nav-btn">
+                            {!check ? (
+                                <Register />
+                            ) : <></>}
+                        </li>
                     </ul>
                 </div>
             </div>

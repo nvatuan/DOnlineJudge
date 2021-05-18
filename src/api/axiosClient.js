@@ -10,7 +10,6 @@ headers: {
 paramsSerializer: params => queryString.stringify(params),
 });
 
-console.log(process.env.REACT_APP_API_URL);
 axiosClient.interceptors.request.use(async (config) => {
 // Handle token here ...
 return config;

@@ -14,16 +14,18 @@ function Signin(props) {
     const [show, setShow] = useState(false);
     const [showRegis, setShowRegis] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => { 
+        console.log(show);
+        setShow(true);
+    };
     const handleOnClickRegister = () => {
         setShowRegis(!showRegis);
-        console.log(showRegis);
     };
 
     //for redux
     const dispatch = useDispatch();
     const history = useHistory();
-    const { isSuccess, isError, errorMessage } = useSelector(userSelector);
+    const { isLoginSuccess, isLoginError, errorMessage } = useSelector(userSelector);
 
 
     const { register, handleSubmit } = useForm();
@@ -33,19 +35,20 @@ function Signin(props) {
 
     useEffect(() => {
         return () => {
+            console.log('login unmount');
             dispatch(clearState());
         }
     }, []);
 
     useEffect(() => {
-        if (isError) {
+        if (isLoginError) {
             toast.error(errorMessage, {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             });
             dispatch(clearState());
         }
-        if (isSuccess){
+        if (isLoginSuccess){
             toast.success('Ohayo onii-chan', {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500 
@@ -53,7 +56,7 @@ function Signin(props) {
             dispatch(clearState());
             history.push('/problem/');
         }
-    }, [isError, isSuccess]);
+    }, [isLoginSuccess, isLoginError]);
 
     const LoginModal = (
         <div>
@@ -90,7 +93,7 @@ function Signin(props) {
     return (
         <>
             <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Login</Button>
-            {showRegis ? <Register /> : LoginModal}
+            {showRegis ? <Register setShowRegis={setShowRegis}/> : LoginModal}
         </>
     );
 }
