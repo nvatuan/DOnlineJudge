@@ -13,7 +13,8 @@ class JudgeServer(models.Model):
     token = models.CharField(max_length=32)
 
     is_disabled = models.BooleanField(default=False)
-    judging_sub_id = models.IntegerField(null=True, default=None)
+    pending_tasks = models.IntegerField(default=0)
+    max_pending_tasks = models.IntegerField(default=8) # should be increased according to the server number of CPU cores
 
     last_heartbeat = models.DateTimeField(null=True)
     added_time = models.DateTimeField(auto_now_add=True)
@@ -21,6 +22,9 @@ class JudgeServer(models.Model):
     class Meta:
         db_table = "judge_server"
         ordering = ["-is_disabled", "-added_time"]
+
+    def __str__(self):
+        return f"Hostname=[{self.hostname}], Socket address=[{self.socketaddress}], Token=[{self.token}]"
     
     def status(self):
         if (timezone.now() - self.last_heartbeat).total_seconds() > 10:

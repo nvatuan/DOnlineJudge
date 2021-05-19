@@ -6,6 +6,4 @@ class JudgeServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JudgeServer 
-        fields = ("hostname", "socketaddress", 
-            "token", "is_disabled", "judging_sub_id",
-            "last_heartbeat", "status", "added_time")
+        fields = "__all__"

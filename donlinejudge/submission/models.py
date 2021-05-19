@@ -14,6 +14,7 @@ class SubmissionVerdict:
     NEW = "New"
     WAIT = "Waiting"
     JUDGE = "Judging"
+    SKIPPED = "Skipped" 
 
     VERDICTS = [AC, WA, TLE, MLE, RE, CE, SE]
     CHOICES = [

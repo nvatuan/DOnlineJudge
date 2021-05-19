@@ -27,6 +27,7 @@ class JudgeSubmissionTask:
     def __init__(self, sub : Submission, prob: Problem):
         self.sub = sub
         self.prob = prob
+        self.jserver = None
 
         # Prepping kwargs
         src = self.sub.content
@@ -42,25 +43,46 @@ class JudgeSubmissionTask:
         async with websockets.connect(uri) as websocket:
             await websocket.send(dumps(self.kwargs))
 
-            res = []
-            res.append(loads(await websocket.recv()))
-            res.append(loads(await websocket.recv()))
-            res.append(loads(await websocket.recv()))
+            judge_results, compile_result = (loads(await websocket.recv()))
 
-            self.sub.verdict = "Judged"
-            self.sub.output = res 
+            self.sub.output = {
+                "sample_test": [],
+                "test": [],
+                "compile_message": compile_result
+            }
+            self.sub.verdict = SubmissionVerdict.AC
+            ## TODO Handle hidden tests
+            for i, jres in enumerate(judge_results):
+                test_verdict = jres[0]
+                if self.sub.verdict == SubmissionVerdict.AC and test_verdict != self.sub.verdict:
+                    self.sub.verdict = test_verdict
+                self.sub.output["sample_test"].append(
+                    {
+                        "test_id": i,
+                        "verdict": test_verdict,
+                        "stdout": jres[1][0],
+                        "stderr": jres[1][1],
+                        "execute time": jres[2]
+                    }
+                )
+        
         return True
 
     @staticmethod
     def assign_judge_server():
-        for jserver in JudgeServer.objects.all():
-            if jserver.status() == JudgeServerStatus.NORMAL:
-                return jserver
-        return None
+        candidates = [cand for cand in JudgeServer.objects.all() if cand.status() == JudgeServerStatus.NORMAL]
+
+        chose, priority = None, -1 
+        for cand in candidates:
+            cand_priority = cand.max_pending_tasks - cand.pending_tasks
+            if cand_priority > priority:
+                chose = cand
+
+        return chose 
     
     def main(self):
         try:
-            self.sub.verdict = "Pending"
+            self.sub.verdict = SubmissionVerdict.WAIT
             self.sub.save()
 
             counter=0
@@ -69,18 +91,29 @@ class JudgeSubmissionTask:
                 self.jserver = JudgeSubmissionTask.assign_judge_server()
                 sleep(1)
                 if counter > 10:
-                    self.sub.verdict = "Skipped"
+                    self.sub.verdict = SubmissionVerdict.SKIPPED
                     return
                 else:
                     counter += 1
             ##
+            self.sub.verdict = SubmissionVerdict.JUDGE
+            self.sub.save()
+            self.jserver.pending_tasks += 1
+            self.jserver.save()
             asyncio.get_event_loop().run_until_complete(self.send_and_receive())
         except:
-            self.sub.verdict = "System Error"
+            self.sub.verdict = SubmissionVerdict.SE
             raise
         finally:
+            if self.jserver != None:
+                self.jserver.pending_tasks -= 1
+                self.jserver.save()
             self.sub.save()
 
+    def hook(self, task):
+        if self.sub.verdict in [SubmissionVerdict.WAIT, SubmissionVerdict.NEW]: 
+            self.sub.verdict = SubmissionVerdict.SE
+            self.sub.save()
 
 class SubmissionAPI(APIView):
     """
@@ -126,7 +159,7 @@ class SubmissionAPI(APIView):
             problem = Problem.objects.get(id=prob_id)
             jstask = JudgeSubmissionTask(submission, problem)
 
-            async_task(jstask.main)
+            async_task(jstask.main, hook=jstask.hook, ack_failure=True)
 
             return response_created(SubmissionSerializer(submission).data)
         except KeyError as ke:
