@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 class JudgeServerStatus():
+    NEW = "New"
     NORMAL = "Normal"
     NOT_RESPONSDING = "Not responding"
 
@@ -27,6 +28,7 @@ class JudgeServer(models.Model):
         return f"Hostname=[{self.hostname}], Socket address=[{self.socketaddress}], Token=[{self.token}]"
     
     def status(self):
+        if (self.last_heartbeat == None): return JudgeServerStatus.NEW
         if (timezone.now() - self.last_heartbeat).total_seconds() > 10:
             return JudgeServerStatus.NOT_RESPONSDING
         return JudgeServerStatus.NORMAL
