@@ -11,13 +11,17 @@ class JudgeServerHeartbeatAPI(APIView):
         try:
             ## TODO enforce sender IP
             if request.data.get('token') == None:
-                raise "Token is missing from request data."
-            tok = request.data[token]
-            if not JudgeServer.objects.filter(token=tok).exists():
-                raise "There is no judge server with the token='{tok}'"
+                raise Exception("Token is missing from request data.")
+            tok = request.data['token']
+
+            try:
+                jserver = JudgeServer.objects.get(token=tok)
+            except JudgeServer.DoesNotExist:
+                return response_not_found(f"Judge server with token={tok} does not exist.")
             
             jserver = JudgeServer.objects.get(token=tok)
             jserver.last_heartbeat = timezone.now()
             jserver.save()
+            return response_no_content("Heartbeat received.")
         except Exception as e:
-            return response_bad_request(e)
+            return response_bad_request(str(e))

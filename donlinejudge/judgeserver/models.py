@@ -15,18 +15,15 @@ class JudgeServer(models.Model):
     is_disabled = models.BooleanField(default=False)
     judging_sub_id = models.IntegerField(null=True, default=None)
 
-    last_heartbeat = models.DateTimeField()
+    last_heartbeat = models.DateTimeField(null=True)
     added_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "judge_server"
         ordering = ["-is_disabled", "-added_time"]
     
-    def __init__(self):
-        self.generate_new_token()
-    
     def status(self):
-        if (timezone.now() - self.last_heartbeat) > 5:
+        if (timezone.now() - self.last_heartbeat).total_seconds() > 10:
             return JudgeServerStatus.NOT_RESPONSDING
         return JudgeServerStatus.NORMAL
     

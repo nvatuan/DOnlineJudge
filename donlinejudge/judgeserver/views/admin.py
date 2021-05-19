@@ -6,6 +6,8 @@ from judgeserver.serializer import JudgeServerSerializer
 
 from utils.make_response import *
 
+from json import dumps
+
 class JudgeServerAPI(APIView):
     @admin_required
     def get(self, request):
@@ -25,13 +27,13 @@ class JudgeServerAPI(APIView):
             FIELDS = ['hostname', 'socketaddress']
             for field in FIELDS:
                 if request.data.get(field) == None:
-                    error += f"'{field}' is missing.\n"
-            if error: raise error
+                    error += (f"'{field}' is missing. ")
+            if error: raise Exception(error)
             
             data = request.data
             if JudgeServer.objects.filter(socketaddress=data['socketaddress']).exists():
-                error = f"Judge server with socket address '{data['socketaddress']}' already exists."
-            if error: raise error
+                error += ("Judge server with socket address '{data['socketaddress']}' already exists. ")
+            if error: raise Exception(error)
 
             data['hostname'] = data.get('hostname', '')
 
@@ -39,10 +41,11 @@ class JudgeServerAPI(APIView):
                 hostname=data['hostname'],
                 socketaddress=data['socketaddress']
             )
+            jserver.generate_new_token()
             jserver.save()
-            return response_created(JudgeServerSerializer(jserver))
+            return response_created(JudgeServerSerializer(jserver).data)
         except Exception as e:
-            return response_bad_request(e)
+            return response_bad_request(str(e))
 
 
 class JudgeServerDetailAPI(APIView):
@@ -52,8 +55,10 @@ class JudgeServerDetailAPI(APIView):
         Edit Judge Server
         """
         try:
-            if not JudgeServer.objects.filter(id=id).exists():
-                raise f"Judge server with id=`{id}` does not exist."
+            try:
+                jserver = JudgeServer.objects.get(id=id)
+            except JudgeServer.DoesNotExist:
+                return response_not_found("Judgeserver with id=%s does not exist." % str(id))
             jserver = JudgeServer.objects.get(id=id)
 
             FIELDS = ['hostname', 'socketaddress', 'is_disabled']
@@ -65,11 +70,11 @@ class JudgeServerDetailAPI(APIView):
             jserver.save()
             
             if changed:
-                return response_ok(JudgeServerSerializer(jserver))
+                return response_ok(JudgeServerSerializer(jserver).data)
             else:
                 return response_no_content("Request is empty. Nothing is changed.")
         except Exception as e:
-            return response_bad_reqeust(e)
+            return response_bad_request(e.args)
 
     @admin_required
     def get(self, request, id):
@@ -77,12 +82,15 @@ class JudgeServerDetailAPI(APIView):
         Get one Judge Server 
         """
         try:
-            if not JudgeServer.objects.filter(id=id).exists():
-                raise f"Judge server with id=`{id}` does not exist."
+            try:
+                jserver = JudgeServer.objects.get(id=id)
+            except JudgeServer.DoesNotExist:
+                return response_not_found("Judgeserver with id=%s does not exist." % str(id))
+
             jserver = JudgeServer.objects.get(id=id)
-            return response_ok(JudgeServerSerializer(jserver))
-        except Exception as e:
-            return response_bad_reqeust(e)
+            return response_ok(JudgeServerSerializer(jserver).data)
+        except:
+            raise
 
     @super_admin_required
     def delete(self, request, id):
@@ -90,6 +98,7 @@ class JudgeServerDetailAPI(APIView):
             if not JudgeServer.objects.filter(id=id).exists():
                 raise f"Judge server with id=`{id}` does not exist."
             jserver = JudgeServer.objects.get(id=id)
+            jserver.delete()
             return response_no_content("Delete successful")
         except Exception as e:
-            return response_bad_reqeust(e)
+            return response_bad_request(str(e))

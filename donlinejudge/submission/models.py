@@ -29,7 +29,7 @@ class SubmissionVerdict:
         return d
 
 class SubmissionLanguage:
-    LANG = ["Python3", "Python2", "Java", "C", "C++"]
+    LANG = ["PyPy3", "Python3", "Python2", "Java", "C", "C++"]
     DEFAULT = LANG[0]
     CHOICES = [
         ("Python3", LANG[0]), 
