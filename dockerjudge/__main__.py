@@ -1,5 +1,6 @@
 "WebSocket server"
 
+import asyncio
 from asyncio import get_event_loop, new_event_loop, set_event_loop
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
@@ -28,10 +29,13 @@ class JSONEncoder(_JSONEncoder):
             return o.name
         return _JSONEncoder.default(self, o)
 
+stop_sending_heartbeat = False ## lock the heartbeat service
 
 async def server(websocket, path):  # pylint: disable = W0613
+    global stop_sending_heartbeat
     "WebSocket server"
     loop = get_event_loop()
+
     kwargs = loads(await websocket.recv())
 
     logging.info("Received a connection " + repr(websocket.remote_address))
@@ -49,14 +53,57 @@ async def server(websocket, path):  # pylint: disable = W0613
     await websocket.send(dumps(["done", res], cls=JSONEncoder))
     logging.info("Closing connection on " + repr(websocket.remote_address))
 
+from time import sleep
+import requests
+class HeartbeatSender():
+    def __init__(self, url, token) -> None:
+        self.url = url
+        self.token = token
+
+        self.headers = {'Content-Type':'application/json','Connection':'close'}
+        self.data = {'token':self.token}
+
+    def heartbeat_sender(self, period=5) -> None:
+        global stop_sending_heartbeat
+
+        retry = 0
+        while True:
+            try:
+                while True:
+                    if not stop_sending_heartbeat:
+                        r = requests.post(self.url, headers=self.headers, data=dumps(self.data))
+                        logging.info(f"Heartbeat sent, response = {r}")
+                    sleep(period)
+                    retry=0
+            except ConnectionError: 
+                logging.error("Cannot connect to the given URL. Aborting..")
+                break
+            except KeyboardInterrupt: 
+                logging.info("Interrupted by user")
+                break
+            except Exception as e:
+                retry += 1
+                if retry > 3:
+                    logging.error("Failed after 3 retries. Aborting..")
+                    break
+                logging.error("Something went wrong at 'heartbeat_sender':", e)
+                logging.error(f"Retrying (attempt {retry})..")
+    
+from threading import Thread
+URL = "http://127.0.0.1:9999/judgeserver_heartbeat/" ## CHANGE ME
+TOK = "ADTLVBoEHRTz1C0HrObs6nwTiz8mzfGv" ## CHANGE ME
 
 def main(*args):
+    logging.info("Creating heartbeat thread..")
+    heartbeat_thread = Thread(target=HeartbeatSender(URL, TOK).heartbeat_sender)
+    heartbeat_thread.start()
+    logging.info("Heartbeat thread started..")
+
     "if __name__ == '__main__'"
     set_event_loop(new_event_loop())
-
     start_server = websockets.serve(server, *args)
 
-    logging.info("Server is starting..")
+    logging.info("Websocket server is starting..")
     get_event_loop().run_until_complete(start_server)
     get_event_loop().run_forever()
 
