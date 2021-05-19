@@ -26,32 +26,37 @@ class JSONEncoder(_JSONEncoder):
         if isinstance(o, bytes):
             return o.decode()
         if isinstance(o, Status):
-            return o.name
+            return o.value
         return _JSONEncoder.default(self, o)
 
-stop_sending_heartbeat = False ## lock the heartbeat service
+pending_task = 0
 
 async def server(websocket, path):  # pylint: disable = W0613
-    global stop_sending_heartbeat
-    "WebSocket server"
-    loop = get_event_loop()
+    global pending_task
+    try:
+        pending_task += 1
+        "WebSocket server"
+        loop = get_event_loop()
 
-    kwargs = loads(await websocket.recv())
+        kwargs = loads(await websocket.recv())
 
-    logging.info("Received a connection " + repr(websocket.remote_address))
-    logging.info("Kwargs: " + repr(kwargs))
+        logging.info("Received a connection " + repr(websocket.remote_address))
+        #logging.info("Kwargs: " + repr(kwargs))
 
-    await websocket.send(dumps(["judge", kwargs]))
-    kwargs["source"] = kwargs["source"].encode()
-    kwargs["tests"] = [(i.encode(), o.encode()) for i, o in kwargs["tests"]]
-    kwargs["config"]["callback"] = {
-        "compile": lambda *args: loop.create_task(
-            websocket.send(dumps(["compile", args], cls=JSONEncoder))
-        )
-    }
-    res = await loop.run_in_executor(executor, partial(judge, **kwargs))
-    await websocket.send(dumps(["done", res], cls=JSONEncoder))
-    logging.info("Closing connection on " + repr(websocket.remote_address))
+        # await websocket.send(dumps(["judge", kwargs]))
+
+        kwargs["source"] = kwargs["source"].encode()
+        kwargs["tests"] = [(i.encode(), o.encode()) for i, o in kwargs["tests"]]
+        # kwargs["config"]["callback"] = {
+        #     "compile": lambda *args: loop.create_task(
+        #         websocket.send(dumps(["compile", args], cls=JSONEncoder))
+        #     )
+        # }
+        res = await loop.run_in_executor(executor, partial(judge, **kwargs))
+        await websocket.send(dumps(res, cls=JSONEncoder))
+        logging.info("Closing connection on " + repr(websocket.remote_address))
+    finally:
+        pending_task -= 1
 
 from time import sleep
 import requests
@@ -64,13 +69,14 @@ class HeartbeatSender():
         self.data = {'token':self.token}
 
     def heartbeat_sender(self, period=5) -> None:
-        global stop_sending_heartbeat
+        global pending_task 
 
         retry = 0
         while True:
             try:
                 while True:
-                    if not stop_sending_heartbeat:
+                    logging.info(f"Pending tasks = {pending_task}")
+                    if pending_task == 0:
                         r = requests.post(self.url, headers=self.headers, data=dumps(self.data))
                         logging.info(f"Heartbeat sent, response = {r}")
                     sleep(period)
@@ -83,8 +89,9 @@ class HeartbeatSender():
                 break
             except Exception as e:
                 retry += 1
-                if retry > 3:
-                    logging.error("Failed after 3 retries. Aborting..")
+                sleep(retry*2)
+                if retry > 10:
+                    logging.error("Failed after 10 retries. Aborting..")
                     break
                 logging.error("Something went wrong at 'heartbeat_sender':", e)
                 logging.error(f"Retrying (attempt {retry})..")

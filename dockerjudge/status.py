@@ -21,8 +21,8 @@ class Status(Enum):
 
     AC = "Accepted"
     WA = "Wrong Answer"
-    ONF = "Output Not Found"
     RE = "Runtime Error"
-    TLE = "Time Limit Exceeded"
-    UE = "Unknown Error"
     CE = "Compilation Error"
+    TLE = "Time Limit Exceeded"
+    ONF = "Output Not Found"
+    UE = "Unknown Error"
