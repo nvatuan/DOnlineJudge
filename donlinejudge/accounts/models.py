@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.conf import settings
 from django.db import models
 
-
 class AdminType(object):
     REGULAR_USER = "Regular User"
     ADMIN = "Admin"
@@ -47,6 +46,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(null=True)
     first_name = models.CharField(max_length=100,null=True)
     last_name = models.CharField(max_length=100, null=True)
+
+    solved_problem = models.ManyToManyField('problem.Problem', blank=True) 
+
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     update_time = models.DateTimeField(auto_now=True, null=True)
 
@@ -58,7 +60,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     problem_permission = models.TextField(default=ProblemPermission.NONE)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = "username"

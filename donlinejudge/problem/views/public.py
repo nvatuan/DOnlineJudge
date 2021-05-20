@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from utils.make_response import response_bad_request, response_created, response_no_content, response_not_found, response_ok
+from utils.query_set_rearrange import filter_then_sort
 
 class ProblemAPI(APIView):
     """
@@ -18,6 +19,7 @@ class ProblemAPI(APIView):
     """
     def get(self, request, format=None):
         probs = Problem.objects.all()
+        probs = filter_then_sort(probs, request.query_params)
         seris = ProblemSerializer(probs, many=True)
         return response_ok(seris.data)
 

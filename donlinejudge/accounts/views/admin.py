@@ -9,16 +9,18 @@ from django.contrib.auth.hashers import make_password
 from django.db import transaction, IntegrityError
 from submission.models import Submission
 
-class UserAPI(APIView):
+from utils.query_set_rearrange import *
 
+class UserAPI(APIView):
     @super_admin_required
     def get(self, request):
         user = User.objects.all()
+        user = filter_then_sort(user, request.query_params)
         return Response(UserSerializer(user, many=True).data)
 
     @super_admin_required
     def post(self, request):
-        pass
+        raise NotImplementedError
 
     @super_admin_required
     def put(self, request):

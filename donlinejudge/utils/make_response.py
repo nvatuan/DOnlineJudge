@@ -5,6 +5,8 @@ from rest_framework import status
 def response_ok(message):
     resp = {}
     resp["data"] = message
+    if isinstance(message, list):
+        resp["total"] = len(message)
     resp["error"] = "none"
     return Response(resp, status=status.HTTP_200_OK)
 

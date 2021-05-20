@@ -11,12 +11,19 @@ class SubmissionVerdict:
     RE = "Runtime Error"
     CE = "Compile Error"
     SE = "System Error"
+
     NEW = "New"
     WAIT = "Waiting"
     JUDGE = "Judging"
     SKIPPED = "Skipped" 
 
     VERDICTS = [AC, WA, TLE, MLE, RE, CE, SE]
+
+    ACCEPTED_VERDICTS = [AC]
+    NOT_ACCEPTED_VERDICTS = [WA, TLE, MLE, RE]
+
+    NOT_YET_VERDICTS = [NEW, WAIT, JUDGE, SKIPPED]
+
     CHOICES = [
         ("AC", AC), ("WA", WA), ("TLE", TLE),
         ("MLE", MLE), ("RE", RE), ("CE", CE),
@@ -30,14 +37,14 @@ class SubmissionVerdict:
         return d
 
 class SubmissionLanguage:
-    LANG = ["PyPy3", "Python3", "Python2", "Java", "C", "C++"]
+    LANG = ["PyPy3", "Python3", "Python2", "Java", "C", "Cpp"]
     DEFAULT = LANG[0]
     CHOICES = [
         ("Python3", LANG[0]), 
         ("Python2", LANG[1]), 
         ("Java", LANG[2]), 
         ("C", LANG[3]), 
-        ("C++", LANG[4])
+        ("Cpp", LANG[4])
     ]
 
 class Submission(models.Model):

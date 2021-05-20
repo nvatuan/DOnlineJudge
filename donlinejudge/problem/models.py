@@ -2,11 +2,10 @@ from django.db import models
 from accounts.models import User
 
 class ProblemDifficulty(object):
-    hard = "Hard"
-    medium = "Medium"
-    easy = "Easy"
-    DIFF = [hard, medium, easy]
-    choices = [(easy, easy), (medium, medium), (hard, hard)]
+    HARD = "Hard"
+    MEDIUM = "Medium"
+    EASY = "Easy"
+    CHOICES = [(EASY, EASY), (MEDIUM, MEDIUM), (HARD, HARD)]
 
 class ProblemTag(models.Model):
     tagName = models.TextField()
@@ -28,7 +27,7 @@ class Problem(models.Model):
     statement = models.TextField() ## TODO RichTextField support
 
     #== Tag, Difficulty, Source
-    difficulty = models.CharField(choices=ProblemDifficulty.choices, max_length=50, default=ProblemDifficulty.easy)
+    difficulty = models.CharField(choices=ProblemDifficulty.CHOICES, max_length=50, default=ProblemDifficulty.EASY)
     tags = models.ManyToManyField(ProblemTag)
     source = models.TextField(null=True)
 
@@ -53,3 +52,6 @@ class Problem(models.Model):
     class Meta:
         db_table = "problem"
         ordering = ["created"]
+    
+    def __str__(self):
+        return f"Disp_id[{self.display_id}] Title[{self.title}]"
