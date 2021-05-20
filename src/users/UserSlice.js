@@ -7,10 +7,11 @@ export const loginUser = createAsyncThunk(
     async ({username, password }, thunkAPI) => {
         try {
             const response = await loginAPI.login({username, password});
-            // console.log(response);
+            console.log(response);
             if(response.token !== null){
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('role', response.user.admin_type);
+                localStorage.setItem('username', response.user.username);
                 return response;
             }else{
                 alert("fail to fetch tokem Login")

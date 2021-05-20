@@ -4,7 +4,7 @@ import '../Page.scss';
 import './Home.scss';
 import {Card} from 'react-bootstrap';
 import oj_announcementAPI from '../../../api/oj_announcementAPI';
-
+import Announcement from './Announcement';
 function Home() {
     const [announcement, setAnnouncement] = useState([]);
     useEffect(() => {
@@ -23,31 +23,23 @@ function Home() {
             <Navbar/>
             <div className="pages-container">
                 <div className="home-container">
-                    <div className="annoucement-container">
-                        <Card>
+                        <Card className="annoucement-container">
                             <Card.Header as="h3">Annoucement</Card.Header>
                             <Card.Body>
-                                <table>
-                                    <thead>
-
-                                    </thead>
-                                    <tbody>
+                                <div className="card-container">
+                                
                                         {
                                             announcement.map(annou => {
-                                                return (
-                                                    <tr key={annou.id}>
-                                                        <td>{annou.title}</td>
-                                                        <td>{annou.creation_time}</td>
-                                                        <td>{annou.author}</td>
-                                                    </tr>
-                                                )
+                                                return <Announcement title={annou.title} 
+                                                content={annou.content} 
+                                                creation_time={annou.creation_time} 
+                                                author={annou.author} key={annou.id}
+                                                id={annou.id}/>
                                             })
-                                        } 
-                                    </tbody>
-                                </table>
+                                        }
+                                </div>
                             </Card.Body>
                         </Card>
-                    </div>
                 </div>
             </div>      
         </div>

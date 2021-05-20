@@ -84,11 +84,11 @@ function Register(props) {
                 </Form>
 
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
                 <Button variant="outline-primary" onClick={() => (setShowRegis(false))} >
                     Already registed? Login now!
                 </Button>
-            </Modal.Footer>
+            </Modal.Footer> */}
         </Modal>
     </div>);
     return (

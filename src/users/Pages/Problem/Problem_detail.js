@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Form, ListGroup} from 'react-bootstrap';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import './Problem_detail.scss';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import oj_problemAPI from '../../../api/oj_problemAPI';
@@ -23,13 +23,29 @@ function Problem_detail({ match }) {
     const history = useHistory();   
     //check login
     const [checkLogin, setCheckLogin] = useState(false);
-    
+    //check content
+    const [content, setContent] = useState('');
     const {register, handleSubmit, error} = useForm();
 
+    function onChangeUploadFile(e) {
+        let files = e.target.files;
+        let reader = new FileReader();
+        reader.readAsText(files[0]);
+        reader.onload = (e) => {
+            setContent(e.target.result);
+        }
+
+    }
+    function onChangeTextarea(e) {
+        setContent(e.target.value);
+    }
     const onSubmit = async (data) => {
+        data.content = content;
         data.problem_id = parseInt(data.problem_id);
+        alert(JSON.stringify(data))
         try {
             const response = await oj_statusAPI.postProblem(data);
+
             if(response) {
                 history.push('/status');
             }
@@ -43,12 +59,18 @@ function Problem_detail({ match }) {
         const fetchProblem_detail = async () => {
             const response = await oj_problemAPI.getById(id);
             setProblem(response.data);
+            console.log(content);
             //check login
             if(localStorage.getItem('token') !== null) setCheckLogin(true);
             else setCheckLogin(false);
         };
         fetchProblem_detail();
     }, [])
+
+    useEffect(() =>{
+        console.log(content);
+        return () => console.log('unmounting...');
+    },[content])
     return (
         <div>
             <Navbar/>
@@ -75,16 +97,23 @@ function Problem_detail({ match }) {
                                     <br /><br />
                                 </div>
                                     <div className="problem-id submit-nav__item">
-                                    <label>Problem id: </label>
-                                    <input type="text" placeholder="Problem id" value={id} {...register("problem_id")} />
+                                        <label>Problem id: </label>
+                                        <input type="text" placeholder="Problem id" value={id} {...register("problem_id")} />
                                     </div>
-                                    <Form.File id="formcheck-api-regular" className="submit-nav__item">
-                                        <Form.File.Input />
-                                    </Form.File>
-                            </div>
-                            <Form.Control as="textarea" rows={5} cols={5} {...register("content")}/>
+                                    <div className="upload_file">
+                                        <Form.File id="formcheck-api-regular">
+                                                <Form.File.Input onChange={(e) => { onChangeUploadFile(e) }}/>
+                                        </Form.File>
+                                    </div>
                                     
-                            <br/>
+                            </div>
+                            <Form.Control as="textarea" rows={5} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }
+                                    onFocus={(e) => {
+                                        console.log('Focused on input');
+                                    }}>
+                            </Form.Control>
+                                
+                            <br/>   
                             <div className="problem-main__footer">
                                    {checkLogin === true ? (
                                         <Button variant="primary" type="submit" id="submit-button" >Submit</Button>

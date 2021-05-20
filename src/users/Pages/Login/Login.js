@@ -83,9 +83,9 @@ function Signin(props) {
                     </Form>
                 </Modal.Body>
 
-                <Modal.Footer>
+                {/* <Modal.Footer>
                     <Button onClick={handleOnClickRegister}>No account? Register now!</Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
             </Modal>
 
         </div>

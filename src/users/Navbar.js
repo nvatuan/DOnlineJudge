@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FcNightPortrait } from 'react-icons/fc'
-import { Button } from 'react-bootstrap';
+import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import Login from './Pages/Login/Login';
 import './Navbar.css';
 import { useHistory } from 'react-router-dom';
@@ -41,6 +41,8 @@ function Navbar() {
         });
         history.push('/');
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('username');
 
     }
     return (
@@ -70,12 +72,9 @@ function Navbar() {
                         <li className="nav-btn">
                             {!check ? (
                                     <Login/>
-                            ) :
-                                <Button
-                                    variant="outline-dark" size="lg" variant="dark"
-                                    onClick={onLogout}>
-                                    Logout
-                            </Button>}
+                            ) : <DropdownButton variant="secondary" title={localStorage.getItem('username')}>
+                                    <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
+                                </DropdownButton>}
                         </li>
                         <li className="nav-btn">
                             {!check ? (

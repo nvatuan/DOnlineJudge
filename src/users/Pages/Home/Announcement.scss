@@ -1,0 +1,74 @@
+.announcement-container{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    background-color: #eee;
+    width: 100%;
+    
+}
+article{
+    position: relative;
+    display: flex;
+    background-color:  #eee5e9;
+    box-sizing: border-box;
+    border: none;
+    box-shadow: 2px 2px 6px 0px rgba(0,0,0,0.3);
+    border-radius: 20px;
+    text-align: center;
+    width: 100%;
+    max-height: 160px;
+    transition: trasform .3s;
+    min-height: 200px;
+}   
+
+article:hover{
+    transform: translateY(5px);
+    box-shadow: 2px 2px 26px 0px rgba(0,0,0,0.3);
+}
+.annou_head{
+    background-color: #1c2237;
+    flex: 1;
+    color: #fff;
+    // padding: 8px 8px;
+    border-radius: 12px;
+
+}
+
+.annou_detail{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex: 5;
+    padding: 20px 20px;
+}
+.annou_detail h4{
+    word-wrap: break-word;
+}
+.creation_time{
+    bottom: 7%;
+    font-size: 15px;
+    font-weight: 500;
+}
+.more-button{
+    bottom: 10%;
+    right: 10%;
+}
+
+.more-button Button{
+    position: absolute;
+    bottom: 5%;
+    right: 1%;
+    background-color: #1c2237;
+    border-radius: 20px;
+    border: none;
+    color: #fff;
+    padding: 10px;
+    width: 10%;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.more-button Button:hover{
+    background-color: rgb(87, 76, 117) !important ;
+}
+
