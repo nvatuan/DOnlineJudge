@@ -6,7 +6,17 @@ import Navbar from '../../Navbar';
 import './status.scss';
 function Status(props) {
     const [status, setStatus] = useState([]);
+    const result = {
+        "Accepted": "Accepted",
+        "Wrong Answer": "Wrong_answer",
+        "Runtime Error": "Runtime_error",
+        "New": "New",
+        "Compilation Error": "Compile_error",
+        "System Error": "System_error",
+        "Judged": "Judged",
+        "Judging": "Judging"
 
+    }
     useEffect(() => {
         const fetchStatus = async () => {
             try {
@@ -24,7 +34,7 @@ function Status(props) {
     return (
         <div>
             <Navbar/>
-            <div className="status-container">
+            <div className="status-container pages-container">
                   <Card>
                 <Card.Header as="h3">Status</Card.Header>
                 <Card.Body>
@@ -49,8 +59,20 @@ function Status(props) {
                                             <tr key={stat.id}>
                                                 <td>{hanldeTime(stat.submit_time)}</td>
                                                 <td>{stat.id}</td>
-                                                <td>{stat.verdict}</td>
-                                                <td>{stat.problem}</td>
+                                                <td >
+                                                    <div className="table-cell">
+                                                        <div className={`result-container ${result[stat.verdict]}`}>
+                                                            <div className="result-text">
+                                                                {stat.verdict}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className="table-cell">
+                                                        <Link to={`problem/${stat.problem}`} >{stat.problem}</Link>
+                                                    </div>
+                                                </td>
                                                 <td>{stat.time}</td>
                                                 <td>{stat.memory}</td>
                                                 <td>{stat.language}</td>

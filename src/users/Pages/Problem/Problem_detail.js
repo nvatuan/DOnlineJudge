@@ -7,15 +7,7 @@ import oj_problemAPI from '../../../api/oj_problemAPI';
 import Navbar from '../../Navbar'
 import { AiOutlineAlignLeft } from 'react-icons/ai'
 import { GrCircleInformation } from 'react-icons/gr'
-import { Link, Redirect, useHistory } from 'react-router-dom';
-
-//code mirror editor 
-import { UnControlled as CodeMirror } from 'react-codemirror2';
-require('codemirror/lib/codemirror.css');
-require('codemirror/theme/material.css');
-require('codemirror/theme/neat.css');
-require('codemirror/mode/xml/xml.js');
-require('codemirror/mode/javascript/javascript.js');
+import { Link, useHistory } from 'react-router-dom';
 
 function Problem_detail({ match }) {
     const id = match.params.id;
@@ -74,7 +66,7 @@ function Problem_detail({ match }) {
     return (
         <div>
             <Navbar/>
-            <div className="problem_detail-flex-container">
+            <div className="problem_detail-flex-container pages-container">
                 <div className="problem-main">
                 <Card className="problem-main__item">
                     <Card.Header as="h3">{problem.title}</Card.Header>
@@ -88,17 +80,22 @@ function Problem_detail({ match }) {
                             <div className='submit-nav'>
                                 <div className="dropdown-languege submit-nav__item">
                                     <label htmlFor="languege">Language: </label>
-                                    <select name="languege" id="languege" {...register("language")}>
+                                    <Form.Control as="select" size="sm" custom {...register("language")}>
                                         <option value="Python3">Python3</option>
                                         <option value="Python2">Python2</option>
                                         <option value="Java">Java</option>
                                         <option value="C">C</option>
-                                    </select>
+                                    </Form.Control>
                                     <br /><br />
                                 </div>
                                     <div className="problem-id submit-nav__item">
-                                        <label>Problem id: </label>
-                                        <input type="text" placeholder="Problem id" value={id} {...register("problem_id")} />
+                                        <Form.Label>Problem </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            size="sm"
+                                            value={id} 
+                                            {...register("problem_id")}
+                                        />
                                     </div>
                                     <div className="upload_file">
                                         <Form.File id="formcheck-api-regular">
@@ -107,10 +104,7 @@ function Problem_detail({ match }) {
                                     </div>
                                     
                             </div>
-                            <Form.Control as="textarea" rows={5} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }
-                                    onFocus={(e) => {
-                                        console.log('Focused on input');
-                                    }}>
+                            <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }>
                             </Form.Control>
                                 
                             <br/>   

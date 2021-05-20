@@ -35,7 +35,7 @@ function Announcement(props) {
             <div className="announcement-container">
                 <article>
                     <div className="annou_head">
-                    <h3>From:  {author}</h3>
+                    <h5>From: {author}</h5>
                     <div className="creation_time">
                         <p>{hanldeTime(creation_time)}</p>
                     </div>

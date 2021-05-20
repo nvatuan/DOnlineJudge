@@ -19,6 +19,12 @@ function Problem() {
     const [filters, setFilters] = useState({
         page: 1
     })
+    //difficulty
+    const difficulty = {
+        "Easy": "Easy",
+        "Medium": "Medium",
+        "Hard": "Hard"
+    }
     useEffect(() => {
         const fectchProblems = async () => {
             const response = await oj_problemAPI.getAll();
@@ -50,7 +56,7 @@ function Problem() {
     return (
         <div>
             <Navbar />
-            <div className="problems-container">
+            <div className="problems-container pages-container">
                 <Card>
                     <Card.Header as="h4">Problem List</Card.Header>
                     <Card.Body>
@@ -72,7 +78,15 @@ function Problem() {
                                                 <tr key={problem.id}>
                                                     <td>{problem.id}</td>
                                                     <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
-                                                    <td>{problem.difficulty}</td>
+                                                    <td>
+                                                        <div className="table-cell">
+                                                            <div className={`difficulty-container ${difficulty[problem.difficulty]}`}>
+                                                                <div className="difficulty-text">
+                                                                    {problem.difficulty}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                     <td>{problem.total_submission}</td>
                                                     <td>{problem.correct_submission}</td>
                                                 </tr>

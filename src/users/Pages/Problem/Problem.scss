@@ -7,8 +7,34 @@
         width: 100%;
     }
 }
+.difficulty-container{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    margin: 2px 4px 2px 0;
+    padding: 0 8px;
+    border: 1px solid #e9eaec;
+    border-radius: 8px;
+    background: #f7f7f7;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 380;
+    vertical-align: middle;
+    opacity: 1;
+    overflow: hidden;
+    cursor: pointer;
+}
 table {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+.Easy{
+    background: #337ab7;
+}
+.Medium{
+    background: #19be6b;
+}
+.Hard{
+    background: #c82333;
 }

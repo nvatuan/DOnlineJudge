@@ -25,7 +25,7 @@ function Status_detail({ match }) {
     return (
         <div>
             <Navbar/>
-            <div className="status_details-container">
+            <div className="status_details-container pages-container">
                 <h2>Submission #{id}</h2>
                 <hr />
                 <div className="source-code status_details-container__item">

@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { userSelector, clearState, loginUser } from '../../UserSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-function Signin(props) {
+function Login(props) {
     //toast 
     toast.configure();
     //for Modal
@@ -98,4 +98,4 @@ function Signin(props) {
     );
 }
 
-export default Signin;
+export default Login;

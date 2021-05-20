@@ -1,15 +1,14 @@
 .announcement-container{
-    margin-top: 20px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
-    background-color: #eee;
     width: 100%;
     
 }
 article{
     position: relative;
     display: flex;
-    background-color:  #eee5e9;
+    background-color:  #ececf3;
     box-sizing: border-box;
     border: none;
     box-shadow: 2px 2px 6px 0px rgba(0,0,0,0.3);
@@ -26,11 +25,14 @@ article:hover{
     box-shadow: 2px 2px 26px 0px rgba(0,0,0,0.3);
 }
 .annou_head{
-    background-color: #1c2237;
+    background-color: #2a3358;
     flex: 1;
     color: #fff;
-    // padding: 8px 8px;
-    border-radius: 12px;
+    padding: 20px 8px;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 180px;
 
 }
 
@@ -38,7 +40,7 @@ article:hover{
     display: flex;
     position: relative;
     flex-direction: column;
-    flex: 5;
+    flex: 7;
     padding: 20px 20px;
 }
 .annou_detail h4{
@@ -58,7 +60,7 @@ article:hover{
     position: absolute;
     bottom: 5%;
     right: 1%;
-    background-color: #1c2237;
+    background-color: #242d4d;
     border-radius: 20px;
     border: none;
     color: #fff;
@@ -69,6 +71,9 @@ article:hover{
 }
 
 .more-button Button:hover{
-    background-color: rgb(87, 76, 117) !important ;
+    background-color: rgb(47, 47, 77) !important ;
+}
+.more-button Button:focus{
+    background-color: #1c2237;
 }
 
