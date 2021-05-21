@@ -119,7 +119,6 @@ class JudgeSubmissionTask:
         m2m_solved = self.sub.author.solved_problem
         if self.sub.verdict in SubmissionVerdict.ACCEPTED_VERDICTS:
             m2m_solved.add(self.prob)
-            m2m_solved.save()
 
 class SubmissionAPI(APIView):
     """
