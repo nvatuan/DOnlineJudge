@@ -12,7 +12,7 @@ import logging
 
 ## Project's
 from donlinejudge.settings import MEDIA_ROOT
-from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, UpdateUserSerializer, ProfilePageSerializer
+from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer
 from accounts.models import User
 from accounts.decorators import unauthenticated_user, login_required
 
@@ -57,18 +57,18 @@ class LogoutAPI(APIView):
         return response_no_content("User logout.")
 
 class OwnProfilePageAPI(generics.GenericAPIView):
-    serializer_class = UpdateUserSerializer
+    serializer_class = ProfilePageSerializer
 
     @login_required
     def get(self, request):
         user = request.user
-        return response_ok(UpdateUserSerializer(user, context=self.get_serializer_context()).data)
+        return response_ok(ProfilePageSerializer(user, context=self.get_serializer_context()).data)
 
     @login_required
     def put(self, request):
         user = request.user
         data = request.data
-        serializer = UpdateUserSerializer(instance=user)
+        serializer = ProfilePageSerializer(instance=user)
 
         if data["email"] != '':
             if User.objects.filter(email=data["email"].lower()).exclude(id=user.id).exists():
@@ -85,7 +85,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
             user.profile_pic = data["profile_pic"]
         user.save()
 
-        return response_ok(UpdateUserSerializer(user, context=self.get_serializer_context()).data)
+        return response_ok(ProfilePageSerializer(user, context=self.get_serializer_context()).data)
     
     @login_required
     def delete(self, request):
