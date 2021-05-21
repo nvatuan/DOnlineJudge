@@ -89,7 +89,7 @@ def judge(processor, source, tests, config=None, client=None):
             "PyPy2": _processor.PyPy(version=2),
             "Python2": _processor.Python(version=2),
 
-            "C++": _processor.GCC(language=_processor.GCC.Language.cpp),
+            "Cpp": _processor.GCC(language=_processor.GCC.Language.cpp),
             "C": _processor.GCC(language=_processor.GCC.Language.c),
             "Java": _processor.OpenJDK(),
         }[processor]
