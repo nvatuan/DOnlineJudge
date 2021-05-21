@@ -2,7 +2,6 @@ from rest_framework import serializers
 from accounts.models import User
 from django.contrib.auth import authenticate, login, logout
 
-
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=80, min_length=8)
 
@@ -41,9 +40,15 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    profile_pic = serializers.ImageField(
-        default='profile1.png')
+    profile_pic = serializers.ImageField(default='profile1.png')
 
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name', 'profile_pic']
+
+class ProfilePageSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.ImageField(default='profile1.png')
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'profile_pic', 'solved_problem']

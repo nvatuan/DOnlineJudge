@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.conf import settings
 from django.db import models
 
+from utils.file_upload import FileUploadUtils 
+
 class AdminType(object):
     REGULAR_USER = "Regular User"
     ADMIN = "Admin"
@@ -54,7 +56,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # One of UserType
     profile_pic = models.ImageField(
-        default='profile1.png', null=True, blank=True)
+        default='avatar/__default__.png', null=True, blank=True,
+        upload_to=FileUploadUtils().upload_to_path_and_rename('avatar/', False)
+    )
 
     admin_type = models.TextField(default=AdminType.REGULAR_USER)
     problem_permission = models.TextField(default=ProblemPermission.NONE)

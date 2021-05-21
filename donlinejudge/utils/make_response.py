@@ -46,3 +46,16 @@ def response_bad_request(message):
     resp["data"] = message
     resp["error"] = "Failed to handle request"
     return Response(resp, status=status.HTTP_400_BAD_REQUEST)
+
+## ============= 5xx
+def response_internal_error(message):
+    resp = {}
+    resp["data"] = message
+    resp["error"] = "Something went wrong"
+    return Response(resp, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def response_unavailable(message):
+    resp = {}
+    resp["data"] = message
+    resp["error"] = "Cannot handle the request at the moment"
+    return Response(resp, status=status.HTTP_503_SERVICE_UNAVAILABLE)

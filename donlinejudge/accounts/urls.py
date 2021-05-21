@@ -4,7 +4,9 @@ from accounts.views import public, admin
 
 urlpatterns = [
     path('register/', public.RegisterAPI.as_view()),
-    path('profile/', public.UpdateAPI.as_view()),
+    path('profile/', public.OwnProfilePageAPI.as_view()),
+    path('profile/<int:id>', public.ProfilePageAPI.as_view()),
+
     path('login/', public.LoginAPI.as_view()),
     path('logout/', public.LogoutAPI.as_view()),
 
