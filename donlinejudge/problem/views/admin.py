@@ -13,12 +13,12 @@ from rest_framework.views import APIView
 from accounts.decorators import super_admin_required
 from accounts.decorators import admin_required, super_admin_required
 from utils.make_response import *
-from utils.query_set_rearrange import *
+from utils.query_set_rearrange import auto_apply
 
 class ProblemAPI(APIView):
     def get(self, request, format=None):
         probs = Problem.objects.all()
-        probs = filter_then_sort(probs, request.query_params)
+        probs = auto_apply(probs, request)
         seris = ProblemSerializer(probs, many=True)
         return response_ok(seris.data)
     

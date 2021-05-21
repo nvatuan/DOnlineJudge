@@ -21,7 +21,7 @@ from json import loads, dumps
 import sys
 
 from utils.make_response import *
-from utils.query_set_rearrange import *
+from utils.query_set_rearrange import auto_apply 
 
 import asyncio, websockets
 class JudgeSubmissionTask:
@@ -126,7 +126,7 @@ class SubmissionAPI(APIView):
     """
     def get(self, request, format=None):
         subs = Submission.objects.all()
-        subs = filter_then_sort(subs, request.query_params)
+        subs = auto_apply(subs, request)
         seris = SubmissionSerializer(subs, many=True)
         return response_ok(seris.data)
 

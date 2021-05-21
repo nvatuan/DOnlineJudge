@@ -1,22 +1,26 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from announcement.models import Announcement
-from announcement.serializers import AnnouncementSerializer
 from rest_framework import status
 
+from announcement.models import Announcement
+from announcement.serializers import AnnouncementSerializer
+
+from utils.make_response import *
+from utils.query_set_rearrange import auto_apply
 
 class AnnouncementAPI(APIView):
     def get(self, request):
         """
-        get announcement list 
+        Get announcement list 
         """
-        announcement = Announcement.objects.all().order_by("-creation_time")
-        return Response(AnnouncementSerializer(announcement, many=True).data)
+        announcement = Announcement.objects.all()
+        announcement = auto_apply(announcement, request)
+        return response_ok(AnnouncementSerializer(announcement, many=True).data)
 
 class AnnouncementDetailAPI(APIView):
     def get(self, request, id):
         """
-        get one announcement
+        Get one announcement
         """
         try:
             announcement = Announcement.objects.get(id=id)
