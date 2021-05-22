@@ -1,0 +1,47 @@
+body {
+    background-color: blanchedalmond;
+}
+
+.ProblemDetail {
+    background-color: white;
+    display: block;
+    margin: 50px;
+
+    padding: 15px;
+
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.ProblemDetail h4 {
+    text-decoration: underline;
+}
+
+.ProblemDetail code {
+    border: 3px solid lightgray;
+    border-radius: 7px;
+    background-color: lightgray;
+    color: darkred;
+}
+
+.ProblemDetail table,
+.ProblemDetail th,
+.ProblemDetail td{
+    border: 3px solid black;
+}
+
+.ProblemDetail table {
+    margin: auto;
+    table-layout: fixed;
+    width: 80%;
+    border-collapse: collapse;
+}
+.ProblemDetail table td.Sample {
+    text-align: left;
+    vertical-align: top;
+}
+
+.ProblemDetail table pre {
+    margin: 3px;
+    font-size: larger;
+}
