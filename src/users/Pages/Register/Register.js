@@ -93,7 +93,7 @@ function Register(props) {
     </div>);
     return (
         <>
-            <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Register</Button>
+            <Button variant="outline-dark" size="sm" variant="light" onClick={handleShow}>Register</Button>
             {registerModal}
         </>
     );

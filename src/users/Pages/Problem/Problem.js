@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Navbar from '../../Navbar';
 import Pagination from '../../Pagination/Pagination';
 import { Card } from 'react-bootstrap';
 import './Problem.scss';
 import oj_problemAPI from '../../../api/oj_problemAPI';
 import { Link } from 'react-router-dom';
+import Search from '../../Components/Search';
+
 function Problem() {
     const [problems, setProblems] = useState([]);
-    const [search, setSearch] = useState('');
     const [pagination, setPagination] = useState({
         page: 1
     })
@@ -17,7 +17,8 @@ function Problem() {
 
 
     const [filters, setFilters] = useState({
-        page: 1
+        contains: '',
+        
     })
     //difficulty
     const difficulty = {
@@ -25,24 +26,33 @@ function Problem() {
         "Medium": "Medium",
         "Hard": "Hard"
     }
+
     useEffect(() => {
         const fectchProblems = async () => {
-            const response = await oj_problemAPI.getAll();
+            const response = await oj_problemAPI.getAll(filters);
             setProblems(response.data);
-            setPagination(filters);
+            // setPagination(filters);
         }
         fectchProblems();
     }, [filters])
-    const handleChange = (e) => {
-        setSearch(e.target.value);
-    }
-    const handlePageChange = (newPage) => {
-        console.log('New page: ', newPage);
+    //serach process
+    function handleSearchForm(newValue) {
         setFilters({
             ...filters,
-            page: newPage
+            contains: newValue,
         })
+        alert(filters.contains);
     }
+    // const handleChange = (e) => {
+    //     setSearch(e.target.value);
+    // }
+    // const handlePageChange = (newPage) => {
+    //     console.log('New page: ', newPage);
+    //     setFilters({
+    //         ...filters,
+    //         page: newPage
+    //     })
+    // }
     //serach feature
     // const filteredProblem = problems.filter(problem => (
     //     problem.name.toLowerCase().includes(search.toLowerCase())
@@ -52,13 +62,18 @@ function Problem() {
     // const indexOfFirstProblem = indexOfLastProblem - problemsPerPage;
     // const currentProblem = problems.slice(indexOfFirstProblem, indexOfLastProblem);
     //page change
-    const paginate = pageNumber => setCurrentPage(pageNumber);
+    // const paginate = pageNumber => setCurrentPage(pageNumber);
     return (
         <div>
             <Navbar />
             <div className="problems-container pages-container">
                 <Card>
-                    <Card.Header as="h4">Problem List</Card.Header>
+                    <Card.Header as="h3" className="status-header">
+                        Problem
+                    <div className="problem-feartures">
+                            <Search onSubmit={handleSearchForm} />
+                        </div>
+                    </Card.Header>
                     <Card.Body>
                         <Card.Text>
                             < table >

@@ -18,7 +18,8 @@ const oj_statusAPI = {
     getById: (id) => {
         const url = `status/${id}`;
         return axiosClient.get(url);
-    }
+    },
+
 }
 
 export default oj_statusAPI;

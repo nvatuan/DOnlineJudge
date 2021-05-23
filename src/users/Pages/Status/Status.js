@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
+import Search from '../../Components/Search';
 function Status(props) {
     const [status, setStatus] = useState([]);
     const result = {
@@ -16,6 +17,11 @@ function Status(props) {
         "Judged": "Judged",
         "Judging": "Judging"
 
+    };
+
+    //serach process
+    function handleSearchForm(newValue){
+        console.log(newValue);
     }
     useEffect(() => {
         const fetchStatus = async () => {
@@ -36,7 +42,12 @@ function Status(props) {
             <Navbar/>
             <div className="status-container pages-container">
                   <Card>
-                <Card.Header as="h3">Status</Card.Header>
+                <Card.Header as="h3" className="status-header">
+                    Status
+                    <div className="status-feartures">
+                        <Search onSubmit={handleSearchForm}/>
+                    </div>
+                </Card.Header>
                 <Card.Body>
                     
                         <table>

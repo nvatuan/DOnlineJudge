@@ -3,6 +3,11 @@
     width: 100%;
 
 }
+
+.status-header{
+    display: flex;
+    justify-content: space-between;
+}
 .table-cell{
     padding-left: 10px;
     overflow: hidden;
@@ -19,7 +24,7 @@
     padding: 0 8px;
     border: 1px solid #e9eaec;
     border-radius: 8px;
-    background: #f7f7f7;
+    background: #924381;
     color: #fff;
     font-size: 13px;
     font-weight: 380;
@@ -34,10 +39,10 @@
 .Accepted{
     background: #19be6b;
 }
-.Time_limit,.Wrong_answer{
+.Time_limit,.Wrong_answer,.Runtime_error{
     background: #ed3f14;
 }
-.Runtime_error,.System_error,.Compile_error{
+.System_error,.Compile_error{
     background: #f90;
 }
 

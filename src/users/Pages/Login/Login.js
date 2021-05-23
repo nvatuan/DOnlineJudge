@@ -92,7 +92,7 @@ function Login(props) {
     );
     return (
         <>
-            <Button variant="outline-dark" size="lg" variant="light" onClick={handleShow}>Login</Button>
+            <Button variant="outline-dark" size="sm" variant="light" onClick={handleShow}>Login</Button>
             {showRegis ? <Register setShowRegis={setShowRegis}/> : LoginModal}
         </>
     );
