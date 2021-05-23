@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Form, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
-import Search from '../../Components/Search';
 function Status(props) {
     const [status, setStatus] = useState([]);
+    const [filters, setFilters] = useState({
+        sort_by: '-submit_time',
+        filter_by: '',
+        verdict: '',
+    })
     const result = {
         "Accepted": "Accepted",
         "Wrong Answer": "Wrong_answer",
@@ -18,22 +22,65 @@ function Status(props) {
         "Judging": "Judging"
 
     };
+    
 
-    //serach process
-    function handleSearchForm(newValue){
-        console.log(newValue);
+
+    //sort by id
+    function handleSortChange(e){
+        const condition = (e.target.value === 'newest' ? '-submit_time' : 'submit_time');
+        setFilters({
+            ...filters,
+            sort_by: condition,
+
+        })
+    }
+    function handleFilterVerdict(e){
+        const value = e.target.value
+        if(value === '') {
+            setFilters({
+                ...filters,
+                filter_by: '',
+                verdict: '',
+            })
+        }
+        else{
+        setFilters({
+            ...filters,
+            filter_by: 'verdict',
+            verdict: value,
+            
+        })
+    }
+    };
+    function handleFilterLanguege(e){
+        const value = e.target.value;
+        if (value === '') {
+            setFilters({
+                ...filters,
+                filter_by: '',
+                language: '',
+            })
+        }
+        else{
+            setFilters({
+                ...filters,
+                filter_by: 'language',
+                language: value,
+
+            })
+        }
     }
     useEffect(() => {
         const fetchStatus = async () => {
             try {
-                const response = await oj_statusAPI.getAll();
+                const response = await oj_statusAPI.getAll(filters);
                 setStatus(response.data);
             } catch (error) {
                console.log('fail to fetch status: ', error); 
             }
         }
         fetchStatus();
-    }, [])
+    }, [filters])
     const hanldeTime = (time) => {
         return new Date(time).toDateString();  
     }
@@ -45,7 +92,37 @@ function Status(props) {
                 <Card.Header as="h3" className="status-header">
                     Status
                     <div className="status-feartures">
-                        <Search onSubmit={handleSearchForm}/>
+                        <div className="filter_by">
+                            <Form className="filter_by" onChange={handleFilterVerdict}>
+                                    <Form.Control as="select" className="filter_by">
+                                        <option value="">All</option> 
+                                        <option value="Accepted">Accepted</option>
+                                        <option value="Wrong Answer">Wrong answer</option>
+                                        <option value="Runtime Error">Runtime error</option>
+                                        <option value="New">New</option>
+                                        <option value="Compile Error">Compile error</option>
+                                        <option value="System Error">System error</option>
+                                        <option value="Judged">Judged</option>
+                                        <option value="Judging">Judging</option>
+                                </Form.Control>
+                            </Form>
+                                <Form className="filter_by" onChange={handleFilterLanguege}>
+                                    <Form.Control as="select" className="filter_by">
+                                        <option value="">All</option>
+                                        <option value="Python3">Python3</option>
+                                        <option value="Python2">Python2</option>
+                                        <option value="C">C</option>
+                                        <option value="Cpp">C++</option>
+                                        <option value="Java">Java</option>
+                                    </Form.Control>
+                                </Form>
+                        </div>
+                        <div className="sort_by_day">
+                                <Form.Control as="select" onChange={handleSortChange} >
+                                    <option value="newest">Newest</option>
+                                    <option value="lastest">Lastest</option>
+                                </Form.Control>
+                        </div>
                     </div>
                 </Card.Header>
                 <Card.Body>

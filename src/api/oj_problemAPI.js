@@ -4,9 +4,7 @@ import queryString from 'query-string';
 const oj_problemAPI = {
     getAll: (data) => {
         const paramString = queryString.stringify(data);
-        console.log(paramString);
         const url = `problem/?${paramString}`;
-        console.log(url);
         return axiosClient.get(url);
     },
     getById: (id) => {

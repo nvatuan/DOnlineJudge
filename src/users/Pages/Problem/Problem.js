@@ -41,7 +41,6 @@ function Problem() {
             ...filters,
             contains: newValue,
         })
-        alert(filters.contains);
     }
     // const handleChange = (e) => {
     //     setSearch(e.target.value);
