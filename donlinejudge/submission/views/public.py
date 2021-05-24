@@ -78,6 +78,7 @@ class JudgeSubmissionTask:
             cand_priority = cand.max_pending_tasks - cand.pending_tasks
             if cand_priority > priority:
                 chose = cand
+                priority = cand_priority
 
         return chose 
     
