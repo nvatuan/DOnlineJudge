@@ -8,7 +8,7 @@ function Status(props) {
     const [status, setStatus] = useState([]);
     const [filters, setFilters] = useState({
         sort_by: '-submit_time',
-        filter_by: '',
+        filter_by: [],
         verdict: '',
     })
     const result = {
@@ -36,17 +36,18 @@ function Status(props) {
     }
     function handleFilterVerdict(e){
         const value = e.target.value
+        const temp = filters.filter_by.push('verdict');
         if(value === '') {
+            filters.filter_by = filters.filter_by.filter((item) => item !== 'verdict');
             setFilters({
                 ...filters,
-                filter_by: '',
+                filter_by: filters.filter_by,
                 verdict: '',
             })
         }
         else{
         setFilters({
             ...filters,
-            filter_by: 'verdict',
             verdict: value,
             
         })
@@ -54,17 +55,18 @@ function Status(props) {
     };
     function handleFilterLanguege(e){
         const value = e.target.value;
+        const temp = filters.filter_by.push('language');
         if (value === '') {
+            filters.filter_by = filters.filter_by.filter((item) => item !== 'language');
             setFilters({
                 ...filters,
-                filter_by: '',
+                filter_by: filters.filter_by,
                 language: '',
             })
         }
         else{
             setFilters({
                 ...filters,
-                filter_by: 'language',
                 language: value,
 
             })

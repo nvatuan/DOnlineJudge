@@ -69,18 +69,21 @@ function Navbar() {
                         <li className="nav-item">
                             <Link to='/about' className='nav-links'> About</Link>
                         </li>
-                        <li className="nav-btn">
-                            {!check ? (
+                        <li className="nav-btn ">
+                            {/* {!check ? (
                                     <Login/>
                             ) : <DropdownButton variant="secondary" title={localStorage.getItem('username')}>
                                     <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
-                                </DropdownButton>}
+                                </DropdownButton>} */}
+                                <DropdownButton variant="secondary" title={localStorage.getItem('username')}>
+                                    <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
+                                </DropdownButton>
                         </li>
-                        <li className="nav-btn">
+                        {/* <li className="nav-btn">
                             {!check ? (
                                 <Register />
                             ) : <></>}
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </div>

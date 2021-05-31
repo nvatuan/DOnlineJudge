@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
-import Pagination from '../../Pagination/Pagination';
 import { Card } from 'react-bootstrap';
 import './Problem.scss';
 import oj_problemAPI from '../../../api/oj_problemAPI';

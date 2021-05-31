@@ -1,0 +1,40 @@
+.sidebar{
+    background-color: #2f323A;
+    position: fixed;
+    left: 0;
+    width: 250px;
+    height: 100%;
+
+    .profile_img{
+        width: 70%;
+        height: 70%;
+        border-radius: 100px;
+        margin-bottom: 10px;
+    }
+    h4{
+        color: #ccc;
+        margin-bottom: 20px;
+    }
+    a{
+        color: #fff;
+        display: block;
+        border-radius: 20px;
+        margin-left: 20px;
+        width: 85%;
+        line-height: 60px;
+        text-decoration: none;
+        padding-left: 40px;
+        box-sizing: border-box;
+        transition: 0.5s;
+        transition-property: background;
+    }
+    a:hover{
+        background: #3d4c81;
+    }
+    i{
+        padding-right: 10px;
+    }
+    label{
+        
+    }
+}

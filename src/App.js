@@ -21,6 +21,7 @@ import Announcement from './users/Pages/Home/Announcement'
 //Private Route
 import { PrivateRoute } from './helpers/PrivateRoute';
 import Status_detail from './users/Pages/Status/Status_detail';
+import Setting from './users/Pages/Setting/Setting';
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
         <Route path='/status' exact component={Status}></Route>
         <Route path='/status/:id' exact component={Status_detail}></Route>
         <Route path='/announcement' exact component={Announcement}/>
+        <Route path='/profile' exact component={Setting}/>
+
         //admin
         <PrivateRoute exact component={Dashboard} path='/admin/'/>
         <PrivateRoute exact component={Dashboard} path='/admin/dashboard'/>
