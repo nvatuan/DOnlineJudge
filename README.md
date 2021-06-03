@@ -3,3 +3,9 @@ An online judge written in ReactJS, Django REST API framework. It is still a wor
 - Backend: [dev-backend](https://github.com/nvatuan/PBL_DOnlineJudge/tree/dev-backend)
 - Frontend: [dev-frontend](https://github.com/nvatuan/PBL_DOnlineJudge/tree/dev-frontend)
 - Judge Server: [dev-judgeserver](https://github.com/nvatuan/PBL_DOnlineJudge/tree/dev-judgeserver)
+
+# Development server
+The development version is daily refreshed and updated. The remote server:
+- [API server](http://nvatazure.southeastasia.cloudapp.azure.com:7000/). 
+- Front-end (Not yet hosted)
+- Judge-server (Local only)
