@@ -6,6 +6,6 @@ An online judge written in ReactJS, Django REST API framework. It is still a wor
 
 # Development server
 The development version is daily refreshed and updated. The remote server:
-- [API server](http://nvatazure.southeastasia.cloudapp.azure.com:7000/). 
+- [API server](http://nvatazure.southeastasia.cloudapp.azure.com:7000/) (The default home page show a list of API that is permitted)
 - Front-end (Not yet hosted)
 - Judge-server (Local only)
