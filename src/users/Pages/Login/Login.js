@@ -35,7 +35,6 @@ function Login(props) {
 
     useEffect(() => {
         return () => {
-            console.log('login unmount');
             dispatch(clearState());
         }
     }, []);

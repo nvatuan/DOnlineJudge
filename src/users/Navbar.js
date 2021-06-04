@@ -35,7 +35,7 @@ function Navbar() {
     const history = useHistory();
     const onLogout = () => {
         dispatch(logoutUser());
-        toast.success('bai baii', {
+        toast.success('goodbye!', {
             position: toast.POSITION.BOTTOM_CENTER,
             autoClose: 1500
         });
@@ -43,6 +43,7 @@ function Navbar() {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
         localStorage.removeItem('username');
+        localStorage.removeItem('userId');
 
     }
     return (
@@ -70,20 +71,18 @@ function Navbar() {
                             <Link to='/about' className='nav-links'> About</Link>
                         </li>
                         <li className="nav-btn ">
-                            {/* {!check ? (
+                            {!check ? (
                                     <Login/>
                             ) : <DropdownButton variant="secondary" title={localStorage.getItem('username')}>
+                                    <Link to='/profile' className="dropdown-items">Settings</Link>
                                     <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
-                                </DropdownButton>} */}
-                                <DropdownButton variant="secondary" title={localStorage.getItem('username')}>
-                                    <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
-                                </DropdownButton>
+                                </DropdownButton>}
                         </li>
-                        {/* <li className="nav-btn">
+                        <li className="nav-btn">
                             {!check ? (
                                 <Register />
                             ) : <></>}
-                        </li> */}
+                        </li>
                     </ul>
                 </div>
             </div>

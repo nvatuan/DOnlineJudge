@@ -7,9 +7,25 @@
         width: 100%;
     }
 }
-.problem-feartures{
+.problem-header{
     display: flex;
+    justify-content: space-between;
+    .problem-feartures{
+        display: flex;
+        .problem-feartures__items{
+            display: flex;
+            padding: 0 10px;
+            width: 50%;
+            p{
+                padding-top: 10px;
+                font-size: 15px;
+                font-weight: 350;
+            }
+        }
+
 }
+}
+
 .difficulty-container{
     display: inline-block;
     height: 30px;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
-import { Card } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 import './Problem.scss';
 import oj_problemAPI from '../../../api/oj_problemAPI';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ function Problem() {
 
 
     const [filters, setFilters] = useState({
-        contains: '',
+        filter_by: [],
         
     })
     //difficulty
@@ -66,14 +66,27 @@ function Problem() {
             <Navbar />
             <div className="problems-container pages-container">
                 <Card>
-                    <Card.Header as="h3" className="status-header">
+                    <Card.Header as="h3" className="problem-header">
                         Problem
                     <div className="problem-feartures">
-                            <Search onSubmit={handleSearchForm} />
+                            <div className="problem-feartures__items">
+                                <Search onSubmit={handleSearchForm} />
+                            </div>
+                            <div className="problem-feartures__items">
+                                <p>Difficulty</p>
+                                <Form className="filter_by">
+                                    <Form.Control as="select" className="filter_by">
+                                        <option value="">All</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </Form.Control>
+                                </Form>
+                            </div>
+
                         </div>
                     </Card.Header>
                     <Card.Body>
-                        <Card.Text>
                             < table >
                                 <thead>
                                     <tr>
@@ -112,7 +125,6 @@ function Problem() {
                                     }
                                 </tbody>
                             </table >
-                        </Card.Text>
                     </Card.Body>
                 </Card>
             </div>

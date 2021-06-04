@@ -21,6 +21,10 @@ const oj_statusAPI = {
         const url = `status/${id}`;
         return axiosClient.get(url);
     },
+    getByAuthor: (authorId) => {
+        const url = `status/${authorId}}`;
+        return axiosClient.get(url);
+    }
 
 }
 

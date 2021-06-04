@@ -17,7 +17,6 @@ function Search(props) {
         <div>
             <Form inline onSubmit={handleSearch}>
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" onChange={handleSearchTerm}/>
-                <Button type="submit" variant="outline-success">Search</Button>
             </Form>
         </div>
     )

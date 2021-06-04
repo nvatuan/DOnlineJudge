@@ -1,9 +1,36 @@
+.setting_container{
+    width: 100%;
+    min-width: 800px;
+    background: #eee;
+    border-radius: 4px;
+    font-size: 14px;
+    position: relative;
+    transition: all .2s ease-in-out;
+
+}
+.card_container{
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    background: #eee;
+    justify-content: space-around;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding-top: 5%;
+    padding-left: 20%;
+}
 .sidebar{
+    flex: 4;
     background-color: #2f323A;
-    position: fixed;
     left: 0;
-    width: 250px;
+    width: 15%;
     height: 100%;
+    flex: 1 0 150px;
+    max-width: 350px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
+    
 
     .profile_img{
         width: 70%;
@@ -17,7 +44,7 @@
     }
     a{
         color: #fff;
-        display: block;
+        display: inline-block;
         border-radius: 20px;
         margin-left: 20px;
         width: 85%;
@@ -34,7 +61,19 @@
     i{
         padding-right: 10px;
     }
-    label{
-        
+    span{
+        font-size: medium;
     }
+    .profile_submission{
+        padding-left: 0px;
+        width: 70%;
+        margin-left: 0px;
+    }
+}
+
+.right_container{
+    flex: 1;
+    position: relative;
+    margin: 10px 40px;
+    padding-bottom: 20px;
 }

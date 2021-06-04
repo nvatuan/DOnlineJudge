@@ -7,11 +7,11 @@ export const loginUser = createAsyncThunk(
     async ({username, password }, thunkAPI) => {
         try {
             const response = await loginAPI.login({username, password});
-            console.log(response);
             if(response.token !== null){
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('role', response.user.admin_type);
                 localStorage.setItem('username', response.user.username);
+                localStorage.setItem('userId', response.user.id);
                 return response;
             }else{
                 alert("fail to fetch tokem Login")
@@ -54,6 +54,7 @@ export const userSlice = createSlice({
     initialState: {
         username: '',
         email: '',
+        userInformation: {},
         isLoginSuccess: false,
         isLoginError: false,
         isRegisterSuccess: false,
@@ -68,6 +69,9 @@ export const userSlice = createSlice({
             state.isRegisterSuccess = false;
             state.isRegisterError = false;      
             return state;
+        },
+        userClear: (state) =>{
+            state.userInformation = {};
         }
     },
 
@@ -75,6 +79,8 @@ export const userSlice = createSlice({
         //login feching status
         [loginUser.fulfilled]: (state, { payload }) =>{
             state.username = payload.user.username;
+            state.userInformation = payload.user
+            console.log(state.userInformation);
             state.isFeching = false;
             state.isLoginSuccess = true;
             return state;
@@ -119,6 +125,6 @@ export const userSlice = createSlice({
 
     },
 })
-export const { clearState } = userSlice.actions;
+export const { clearState, userClear } = userSlice.actions;
 
 export const userSelector = (state) => state.user;
