@@ -7,13 +7,15 @@ from rest_framework import status
 from accounts.decorators import admin_required, super_admin_required
 from accounts.models import User
 
+from utils.make_response import *
+
 class AnnouncementAdminAPI(APIView):
     def get(self, request):
         """
         Get announcement list 
         """
         announcement = Announcement.objects.all().order_by("-creation_time")
-        return Response(AnnouncementSerializer(announcement, many=True).data)
+        return response_ok(AnnouncementSerializer(announcement, many=True).data)
 
     @super_admin_required
     def post(self, request):
@@ -25,7 +27,7 @@ class AnnouncementAdminAPI(APIView):
         announcement = Announcement.objects.create(title=data["title"], content=data["content"], author=request.user)
         
         announcement.save()
-        return Response(AnnouncementSerializer(announcement).data)
+        return response_ok(AnnouncementSerializer(announcement).data)
 
 
 class AnnouncementDetailAdminAPI(APIView):
@@ -39,12 +41,12 @@ class AnnouncementDetailAdminAPI(APIView):
         try:
             announcement = Announcement.objects.get(id=id)
         except Announcement.DoesNotExist:
-            return Response("Announcement does not exist.", status=status.HTTP_400_BAD_REQUEST)
+            return  response_bad_request("Announcement does not exist.")
 
         for k, v in data.items():
             setattr(announcement, k, v)
         announcement.save()
-        return Response(AnnouncementSerializer(announcement).data)
+        return response_ok(AnnouncementSerializer(announcement).data)
 
     def get(self, request, id):
         """
@@ -53,14 +55,14 @@ class AnnouncementDetailAdminAPI(APIView):
         try:
             announcement = Announcement.objects.get(id=id)
         except Announcement.DoesNotExist:
-            return Response("Announcement does not exist.", status=status.HTTP_400_BAD_REQUEST)
-        return Response(AnnouncementSerializer(announcement).data)
+            return  response_bad_request("Announcement does not exist.")
+        return response_ok(AnnouncementSerializer(announcement).data)
 
     @super_admin_required
     def delete(self, request, id):
         try:
             announcement = Announcement.objects.get(id=id)
         except Announcement.DoesNotExist:
-            return Response("Announcement does not exist.", status=status.HTTP_400_BAD_REQUEST)
+            return response_bad_request("Announcement does not exist.")
         announcement.delete()
-        return Response({"Xoa thanh cong."}, status=status.HTTP_204_NO_CONTENT)
+        return response_no_content("Delete successfully.")

@@ -10,17 +10,18 @@ from django.db import transaction, IntegrityError
 from submission.models import Submission
 
 from utils.query_set_rearrange import *
+from utils.make_response import *
 
 class UserAPI(APIView):
     @super_admin_required
     def get(self, request):
         user = User.objects.all()
         user = filter_then_sort(user, request.query_params)
-        return Response(UserSerializer(user, many=True).data)
+        return response_ok(UserSerializer(user, many=True).data)
 
     @super_admin_required
     def post(self, request):
-        raise NotImplementedError
+        return response_bad_resquest("This API is not implemented")
 
     @super_admin_required
     def put(self, request):
@@ -28,11 +29,11 @@ class UserAPI(APIView):
         try:
             user = User.objects.get(id=data["id"])
         except User.DoesNotExist:
-            return Response("User does not exist", status=status.HTTP_404_NOT_FOUND)
+            return response_bad_request("User does not exist")
         if User.objects.filter(username=data["username"].lower()).exclude(id=user.id).exists():
-            return Response("Username already exists", status=status.HTTP_400_BAD_REQUEST)
+            return response_bad_request("Username already exists")
         if User.objects.filter(email=data["email"].lower()).exclude(id=user.id).exists():
-            return Response("Email already exists", status=status.HTTP_400_BAD_REQUEST)
+            return response_bad_request("Email already exists")
 
         pre_username = user.username
         user.username = data["username"].lower()
@@ -56,7 +57,7 @@ class UserAPI(APIView):
         if pre_username != user.username:
             Submission.objects.filter(username=pre_username).update(username=user.username)
 
-        return Response(UserSerializer(user).data)
+        return response_ok(UserSerializer(user).data)
 
 class LoginAPI(APIView):
     pass

@@ -7,7 +7,6 @@ from problem.models import ProblemDifficulty
 from problem.serializers import ProblemSerializer, ProblemTagSerializer
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 
 from utils.make_response import response_bad_request, response_created, response_no_content, response_not_found, response_ok

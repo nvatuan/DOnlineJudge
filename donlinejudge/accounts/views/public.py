@@ -45,6 +45,8 @@ class LoginAPI(generics.GenericAPIView):
         login(request, user)
         user_data = User.objects.get(username=request.data['username'])
         token, created = Token.objects.get_or_create(user=user_data)
+
+        ## make_response would break ?
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": str(token)

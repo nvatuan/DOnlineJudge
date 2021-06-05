@@ -9,7 +9,6 @@ from submission.serializers import SubmissionSerializer
 from judgeserver.models import JudgeServer, JudgeServerStatus
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 
 from accounts.decorators import login_required
