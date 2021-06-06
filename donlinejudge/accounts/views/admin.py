@@ -59,6 +59,30 @@ class UserAPI(APIView):
 
         return response_ok(UserSerializer(user).data)
 
+class UserDetailAPI(APIView):
+    @super_admin_required
+    def get(self, request, id):
+        """
+        Get specific user
+        """
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return response_not_found(f"User with id={id} could not be found.")
+        return response_ok(UserSerializer(user).data)
+
+    @super_admin_required
+    def delete(self, request, id):
+        """
+        Delete a specific user
+        """
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return response_not_found(f"User with id={id} could not be found.")
+        user.delete()
+        return response_no_content("Delete successfully")
+
 class LoginAPI(APIView):
     pass
     

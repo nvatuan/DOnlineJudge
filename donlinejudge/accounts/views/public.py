@@ -91,6 +91,9 @@ class OwnProfilePageAPI(generics.GenericAPIView):
     
     @login_required
     def delete(self, request):
+        '''
+        Delete avatar - not the user
+        '''
         user = request.user
         default_profile_pic = User._meta.get_field('profile_pic').get_default()
         if user.profile_pic == default_profile_pic:

@@ -31,7 +31,6 @@ class AnnouncementAdminAPI(APIView):
 
 
 class AnnouncementDetailAdminAPI(APIView):
-
     @super_admin_required
     def put(self, request, id):
         """
@@ -44,10 +43,14 @@ class AnnouncementDetailAdminAPI(APIView):
             return  response_bad_request("Announcement does not exist.")
 
         for k, v in data.items():
-            setattr(announcement, k, v)
+            if hasattr(announcement, k):
+                setattr(announcement, k, v)
+            else:
+                return response_bad_request(f"Announcement object does not have attribute '{k}'")
         announcement.save()
         return response_ok(AnnouncementSerializer(announcement).data)
 
+    @super_admin_required
     def get(self, request, id):
         """
         get one announcement
