@@ -47,6 +47,7 @@ function App() {
         <PrivateRoute exact component={Annoucement} path='/admin/announcement'/>
         <PrivateRoute exact component={CreateProblem} path='/admin/problem/create'/>
         <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id'/>
+        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new'/>
       </Switch>
     </Router>
   );

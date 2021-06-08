@@ -9,9 +9,8 @@ import '../../Table.scss';
 // import admin_users from '../../../api/admin_usersAPI';
 
 //
-
 import {useDispatch, useSelector} from 'react-redux';
-import {adminSelector, UserList} from '../../AdminSlice';
+import {adminSelector, clearState, UserList} from '../../AdminSlice';
 function User(props) {
     const [users, setUsers] = useState([]);
 
@@ -21,6 +20,12 @@ function User(props) {
     useEffect(() => {
         dispatch(UserList());
     },[])
+    useEffect(() => {
+        if(isFetchUsersSuccess){
+            setUsers(admin_users);
+            dispatch(clearState);
+        }
+    })
     
     return (
         <div>
@@ -79,7 +84,6 @@ function User(props) {
                                     }
                                 </tbody>
                             </table >
-                        <Button variant="primary">Create</Button>
                     </Card.Body>
                 </Card>
             </div>

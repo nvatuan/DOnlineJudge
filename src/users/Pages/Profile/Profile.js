@@ -7,7 +7,7 @@ function Profile() {
     const userInformation = JSON.parse(localStorage.getItem('userInformation'));
     return (
         <div>
-            <div className="wrapper">
+            <div className="wrapper pages-container">
                 <div className="right">
                     <div className="info">
                         <h3>Information</h3>

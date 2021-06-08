@@ -1,23 +1,24 @@
 import React, {useState, useEffect} from 'react'
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
-import { Card, Button , Form} from 'react-bootstrap';
+import { Card, Button, Form} from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { BsFillPlusCircleFill } from 'react-icons/bs';
 import '../../Table.scss';
 import './Annoucement.scss';
-import EditAnnoucement from './EditAnnoucement';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminSelector, AnnouncementList, deleteAnnouncement, clearState } from '../../AdminSlice';
 import { Link } from 'react-router-dom';
 function Annoucement(props) {
     const [annoucements, setAnnoucements] = useState({});
-
     //for redux
     const dispatch = useDispatch();
     const { admin_announcements, isFetchAnnouncementsSuccess, deleteSusscess } = useSelector(adminSelector);
     //delete announcement
     const HandleDeleteAnnouncement = (id) => {
-        dispatch(deleteAnnouncement(id));
+        if(window.confirm("Are you sure?")){
+            dispatch(deleteAnnouncement(id));
+        }
     }
     useEffect(()=>{
         dispatch(AnnouncementList());
@@ -45,7 +46,7 @@ function Annoucement(props) {
                         <Card.Header as="h3" className="announcement-header">
                             Annoucements
                             <div className="create_button">
-                                <Button variant="primary">Create</Button>
+                                <Link to={`/admin/announcement/new`} className="alter_announcement"> <BsFillPlusCircleFill/> New</Link>
                             </div>
                         </Card.Header>
                         <Card.Body>

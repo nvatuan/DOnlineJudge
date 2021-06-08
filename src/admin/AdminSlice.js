@@ -55,13 +55,14 @@ export const adminSlice = createSlice({
         clearState: (state) => {
             state.deleteSusscess = false;
             state.isFetchAnnouncementsSuccess = false;
+            state.isFetchUsersSuccess = false;
         }
     },
     extraReducers: {
-        [UserList.fulfilled]: (state, action) =>{
+        [UserList.fulfilled]: (state, {payload}) =>{
             // state.users = payload;
             state.isFetchUsersSuccess = true;
-            return state;
+            state.admin_users = payload.data;
         },
         [UserList.rejected]: () =>{
             console.log("failt to fetch userList");

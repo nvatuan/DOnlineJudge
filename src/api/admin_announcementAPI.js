@@ -24,6 +24,27 @@ const admin_announcementAPI = {
         }
         return axiosClient.delete(url,config);
     },
+    updateById: (data) => {
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
+        const url = `admin/announcement/${data.id}/`;
+        return axiosClient.put(url, data.formData ,config)
+    },
+    createAnnouncemt: (data) => {
+        const token = localStorage.getItem('token');
+        console.log(data);
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        };
+        const url = 'admin/announcement/';
+        return axiosClient.post(url,data,config);
+    }
 }
 
 export default admin_announcementAPI;

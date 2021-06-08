@@ -20,13 +20,14 @@
     padding-left: 20%;
 }
 .sidebar{
+    position: sticky;
     flex: 4;
     background-color: #2f323A;
     left: 0;
-    width: 15%;
+    width: 10%;
     height: 100%;
     flex: 1 0 150px;
-    max-width: 350px;
+    max-width: 300px;
     padding-top: 20px;
     padding-bottom: 20px;
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
@@ -74,6 +75,24 @@
 .right_container{
     flex: 1;
     position: relative;
+    width: 100%;
     margin: 10px 40px;
     padding-bottom: 20px;
+}
+.sidebar-item{
+    color: #fff;
+    display: inline-block;
+    border-radius: 20px;
+    margin-left: 20px;
+    width: 85%;
+    line-height: 60px;
+    text-decoration: none;
+    padding-left: 40px;
+    box-sizing: border-box;
+    transition: 0.5s;
+    transition-property: background;
+}
+.sidebar-item:hover{
+    background: #3d4c81;
+    width: 85%;
 }
