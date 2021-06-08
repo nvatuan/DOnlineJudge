@@ -4,8 +4,7 @@ import Social_icon from '../../Components/Social_icons/Social_icon';
 import { userSelector } from '../../UserSlice';
 import './Profile.scss';
 function Profile() {
-    const { userInformation } = useSelector(userSelector)
-    console.log(userInformation);
+    const userInformation = JSON.parse(localStorage.getItem('userInformation'));
     return (
         <div>
             <div className="wrapper">

@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import '../../Table.scss';
+//
+// import admin_users from '../../../api/admin_usersAPI';
+
+//
+
+import {useDispatch, useSelector} from 'react-redux';
+import {adminSelector, UserList} from '../../AdminSlice';
 function User(props) {
-    const users = [
-        {
-            id: 4,
-            username: "qhuy",
-            create_time: "2021-5-1 15:25:54",
-            last_login: "2021-5-2 16:59:27",
-            email: "naruto@g.com",
-            user_type: "Regular User",
-        }
-    ]
+    const [users, setUsers] = useState([]);
+
+    //for redux
+    const dispatch = useDispatch();
+    const { admin_users, isFetchUsersSuccess } = useSelector(adminSelector);
+    useEffect(() => {
+        dispatch(UserList());
+    },[])
+    
     return (
         <div>
             <AdminNavbar />
@@ -24,7 +30,6 @@ function User(props) {
                 <Card>
                     <Card.Header as="h4">Users</Card.Header>
                     <Card.Body>
-                        <Card.Text>
                             < table >
                                 <thead>
                                     <tr>
@@ -74,7 +79,6 @@ function User(props) {
                                     }
                                 </tbody>
                             </table >
-                        </Card.Text>
                         <Button variant="primary">Create</Button>
                     </Card.Body>
                 </Card>

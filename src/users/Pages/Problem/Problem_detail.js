@@ -34,7 +34,7 @@ function Problem_detail({ match }) {
     const onSubmit = async (data) => {
         data.content = content;
         data.problem_id = parseInt(data.problem_id);
-        alert(JSON.stringify(data))
+        // alert(JSON.stringify(data))
         try {
             const response = await oj_statusAPI.postProblem(data);
 
@@ -51,7 +51,6 @@ function Problem_detail({ match }) {
         const fetchProblem_detail = async () => {
             const response = await oj_problemAPI.getById(id);
             setProblem(response.data);
-            console.log(content);
             //check login
             if(localStorage.getItem('token') !== null) setCheckLogin(true);
             else setCheckLogin(false);
@@ -60,7 +59,6 @@ function Problem_detail({ match }) {
     }, [])
 
     useEffect(() =>{
-        console.log(content);
         return () => console.log('unmounting...');
     },[content])
     return (
@@ -126,13 +124,13 @@ function Problem_detail({ match }) {
                     <Card className="submit-card right-column__item">
                         <Card.Body>
                             <Link to='/status' className='to_statusPage_card'>
-                                <AiOutlineAlignLeft /><h7>Submissions</h7>
+                                <AiOutlineAlignLeft /><p>Submissions</p>
                             </Link>
                         </Card.Body>
                     </Card>
                     <div className="problem-information">
                         <Card className="right-column__item">
-                            <Card.Header><GrCircleInformation /><h7> Imformation</h7></Card.Header>
+                            <Card.Header><GrCircleInformation /><p> Imformation</p></Card.Header>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Id</p>

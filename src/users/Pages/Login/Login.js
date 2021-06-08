@@ -15,11 +15,7 @@ function Login(props) {
     const [showRegis, setShowRegis] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => { 
-        console.log(show);
         setShow(true);
-    };
-    const handleOnClickRegister = () => {
-        setShowRegis(!showRegis);
     };
 
     //for redux

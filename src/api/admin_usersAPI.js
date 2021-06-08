@@ -1,8 +1,8 @@
-import axiosClient from './axiosClient';
+import axiosClient from './axiosClient'
 
-const logoutAPI = {
-    logout: () => {
-        const url = 'logout/';
+const admin_users = {
+    getAll: () =>{
+        const url = 'admin/users';
         const token = localStorage.getItem('token');
         let config = {
             headers: {
@@ -12,4 +12,4 @@ const logoutAPI = {
         return axiosClient.get(url,config);
     }
 }
-export default logoutAPI;
+export default admin_users;

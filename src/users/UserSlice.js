@@ -12,6 +12,7 @@ export const loginUser = createAsyncThunk(
                 localStorage.setItem('role', response.user.admin_type);
                 localStorage.setItem('username', response.user.username);
                 localStorage.setItem('userId', response.user.id);
+                localStorage.setItem('userInformation', JSON.stringify(response.user));
                 return response;
             }else{
                 alert("fail to fetch tokem Login")
@@ -28,8 +29,7 @@ export const registerUser = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             // console.log(data);
-            const response = await registerAPI.register(data);
-            console.log('register: ', response);
+           await registerAPI.register(data);
         } catch (error) {
             console.log('Fail to register: ', error);
             thunkAPI.rejectWithValue(error.response.json());
@@ -40,8 +40,7 @@ export const logoutUser = createAsyncThunk(
     '/logout',
     async (data, thunkAPI) => {
         try {
-            const response = await logoutAPI.logout();
-            console.log('logout');
+            await logoutAPI.logout();
 
         } catch (error) {
             console.log('Fail to logout: ', error);
@@ -54,7 +53,6 @@ export const userSlice = createSlice({
     initialState: {
         username: '',
         email: '',
-        userInformation: {},
         isLoginSuccess: false,
         isLoginError: false,
         isRegisterSuccess: false,
@@ -77,10 +75,8 @@ export const userSlice = createSlice({
 
     extraReducers:{
         //login feching status
-        [loginUser.fulfilled]: (state, { payload }) =>{
+        [loginUser.fulfilled]: (state, {payload}) =>{
             state.username = payload.user.username;
-            state.userInformation = payload.user
-            console.log(state.userInformation);
             state.isFeching = false;
             state.isLoginSuccess = true;
             return state;
@@ -95,12 +91,10 @@ export const userSlice = createSlice({
         },
         //register fetching status
         [registerUser.fulfilled]: (state , {payload}) => {
-            console.log('payload: ', payload);
             state.isFeching = false;
             state.isRegisterSuccess = true;
         },
         [registerUser.rejected]: (state, { payload }) => {
-            console.log('payload:', payload);
             state.isFeching = false;
             state.isRegisterError = true;
             state.errorMessage = 'Register fail';

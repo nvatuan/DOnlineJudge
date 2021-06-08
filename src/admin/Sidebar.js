@@ -19,13 +19,13 @@ function Sidebar(props) {
               <Link to='/admin/dashboard'/>
             </MenuItem>
           <SubMenu title="General" icon={<AiFillAppstore/>}>
+            <MenuItem>
+              Announcement
+               <Link to="/admin/announcement" />
+            </MenuItem>
             <MenuItem >
               User
               <Link to="/admin/user"/>
-            </MenuItem>
-            <MenuItem>
-              Announcement
-               <Link to="/admin/annoucement" />
             </MenuItem>
           </SubMenu>
           <SubMenu title="Problem" icon={<AiOutlineBars/>}>

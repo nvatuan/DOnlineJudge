@@ -4,7 +4,6 @@ const oj_statusAPI = {
     getAll: (data) => {
         const paramString = queryString.stringify(data);
         const url = `status/?${paramString}`;
-        console.log(url);
         return axiosClient.get(url);
     },
     postProblem: (data) =>{

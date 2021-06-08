@@ -44,8 +44,9 @@ function App() {
         <PrivateRoute exact component={Dashboard} path='/admin/dashboard'/>
         <PrivateRoute exact component={User} path='/admin/user'/>
         <PrivateRoute exact component={ProblemList} path='/admin/problems'/>
-        <PrivateRoute exact component={Annoucement} path='/admin/annoucement'/>
+        <PrivateRoute exact component={Annoucement} path='/admin/announcement'/>
         <PrivateRoute exact component={CreateProblem} path='/admin/problem/create'/>
+        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id'/>
       </Switch>
     </Router>
   );

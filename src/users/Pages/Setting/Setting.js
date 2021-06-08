@@ -4,7 +4,6 @@ import avatar from '../../../public/avatar.jpg';
 import Profile from '../Profile/Profile'
 import './Setting.scss'
 import { Link } from 'react-router-dom';
-
 function Setting() {
     return (
         <div>

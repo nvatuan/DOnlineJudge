@@ -44,6 +44,8 @@ function Navbar() {
         localStorage.removeItem('role');
         localStorage.removeItem('username');
         localStorage.removeItem('userId');
+        localStorage.removeItem('userInformation');
+
 
     }
     return (
