@@ -1,17 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ListGroup, Button, Form } from 'react-bootstrap';
 import Editor from '../../editor/Editor';
 import Swit from '../../switch/Swit';
 import './Createproblem.scss';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom';
 
 function Createproblem(props) {
     const { register, handleSubmit } = useForm();
-    const onSubmit = (data) => {
-        alert(JSON.stringify(data));
-    }
+    const [displayID, setDisplayID] = useState('');
+    const [title, setTitle] = useState('');
+    const history = useHistory();
+    const onSubmit = async (formData) => {
+        console.log(formData);
+        formData.displayID = displayID;
+        formData.title = title;
+        if (!isNaN(id)) {
+            try {
+                const response = await admin_announcementAPI.updateById({ formData, id });
+
+                if (response) {
+                    history.push('/admin/announcement/');
+                }
+            } catch (error) {
+                console.log("Fail to put problem: ", error);
+            }
+        }
+        else {
+            try {
+                const response = await admin_announcementAPI.createAnnouncemt(formData);
+                if (response) {
+                    history.push('/admin/popblem/');
+                }
+            } catch (error) {
+                console.log("Fail to post problem: ", error);
+            }
+        }
+
+    };
+    useEffect(() => {
+        if (!isNaN(id)) {
+            const fetchAnnouncement = async () => {
+                try {
+                    const response = await admin_announcementAPI.getById(id);
+                    setDisplayID(response.data.)
+                    setTitle(response.data.title);
+                    
+                } catch (error) {
+                    console.log("fail to alter announcement: ", error);
+                }
+            };
+            fetchAnnouncement();
+        }
+    }, [])
     const [fields, setFields] = useState([{ value: null }]);
 
     function handleChange(i, event) {
@@ -151,7 +194,7 @@ function Createproblem(props) {
                                 {fields.map((field, idx) => {
                                     return (
                                         <div key={`${field}-${idx}`}>
-                                            <textarea
+                                            <Form.Control as="textarea" rows={5} cols={150}
                                                 {...register("sample" + idx)}
                                                 className="textArea"
                                                 placeholder="Enter sample..."
@@ -159,7 +202,8 @@ function Createproblem(props) {
                                                 required
                                                 onChange={e => handleChange(idx, e)}
 
-                                            />
+                                            >
+                                            </Form.Control>
                                             <Button className="removeButton" onClick={() => handleRemove(idx)}>
                                                 X
                                             </Button>
