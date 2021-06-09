@@ -5,6 +5,7 @@ import Swit from '../../switch/Swit';
 import './Createproblem.scss';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
+import Sample from '../../Sample/Sample'
 function Createproblem(props) {
     return (
         <div className="Edit-container">
@@ -111,6 +112,7 @@ function Createproblem(props) {
                     <ListGroup.Item className="cp-list">
                         <i style={{ color: 'red' }}>*</i>
                         <span> Sample</span> <br /> <br />
+                        <Sample></Sample>
                     </ListGroup.Item>
                     <ListGroup.Item className="cp-list">
                         <span> Hint</span> <br /> <br />
