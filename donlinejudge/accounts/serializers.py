@@ -43,4 +43,11 @@ class ProfilePageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'profile_pic', 'solved_problem']
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'profile_pic', 'solved_problem']
+
+class ProfilePageNoPasswordSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.ImageField(default='avatar/__default__.png')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'profile_pic', 'solved_problem']

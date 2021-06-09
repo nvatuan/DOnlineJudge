@@ -9,11 +9,15 @@ class AdminType(object):
     ADMIN = "Admin"
     SUPER_ADMIN = "Super Admin"
 
+    TYPES = [REGULAR_USER, ADMIN, SUPER_ADMIN]
+
 
 class ProblemPermission(object):
     NONE = "None"
     OWN = "Own"
     ALL = "All"
+
+    TYPES = [NONE, OWN, ALL]
 
 
 class UserManager(BaseUserManager):

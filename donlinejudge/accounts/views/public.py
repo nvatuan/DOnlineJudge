@@ -12,7 +12,7 @@ import logging
 
 ## Project's
 from donlinejudge.settings import MEDIA_ROOT
-from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer
+from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer
 from accounts.models import User
 from accounts.decorators import unauthenticated_user, login_required
 
@@ -64,30 +64,37 @@ class OwnProfilePageAPI(generics.GenericAPIView):
     @login_required
     def get(self, request):
         user = request.user
-        return response_ok(ProfilePageSerializer(user, context=self.get_serializer_context()).data)
+        return response_ok(ProfilePageNoPasswordSerializer(user, context=self.get_serializer_context()).data)
 
     @login_required
     def put(self, request):
         user = request.user
         data = request.data
-        serializer = ProfilePageSerializer(instance=user)
 
-        if data["email"] != '':
+        if data.get("username", '') != '':
+            if User.objects.filter(username=data["username"].lower()).exclude(id=user.id).exists():
+                return response_bad_request("This username already exists")
+            user.username = data["username"].lower()
+
+        if data.get("password", '') != '':
+            user.set_password(data['password'])
+
+        if data.get("email", '') != '':
             if User.objects.filter(email=data["email"].lower()).exclude(id=user.id).exists():
-                return response_not_found("This email already exists")
+                return response_bad_request("This email already exists")
             user.email = data["email"].lower()
 
-        if data["first_name"] != '':
+        if data.get("first_name", '') != '':
             user.first_name = data["first_name"]
 
-        if data["last_name"] != '':
+        if data.get("last_name", '') != '':
             user.last_name = data["last_name"]
         
-        if data["profile_pic"] != '':
+        if data.get("profile_pic", '') != '':
             user.profile_pic = data["profile_pic"]
         user.save()
 
-        return response_ok(ProfilePageSerializer(user, context=self.get_serializer_context()).data)
+        return response_ok(ProfilePageNoPasswordSerializer(user, context=self.get_serializer_context()).data)
     
     @login_required
     def delete(self, request):
@@ -121,4 +128,4 @@ class ProfilePageAPI(APIView):
         user = request.user
         if not User.objects.filter(id=id).exists():
             return response_not_found(f"User with id={id} could not be found.")
-        return response_ok(ProfilePageSerializer(User.objects.get(id=id)).data)
+        return response_ok(ProfilePageNoPasswordSerializer(User.objects.get(id=id)).data)
