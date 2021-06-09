@@ -1,32 +1,33 @@
-import React, { useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Card, ListGroup, Button, Form, FormControl } from 'react-bootstrap';
 import './EditAnnoucement.scss';
 import admin_announcementAPI from '../../../api/admin_announcementAPI';
 import { useForm } from 'react-hook-form';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
-import { useHistory } from 'react-router-dom'; 
+import { useHistory } from 'react-router-dom';
 
 //
-function EditAnnoucement({match}) {
+function EditAnnoucement({ match }) {
     const id = match.params.id;
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const { register, handleSubmit } = useForm();
     const history = useHistory();
 
-    const handleTitle = (e) =>{
+    const handleTitle = (e) => {
         const value = e.target.value;
         setTitle(value);
     }
-    const handleContent = (e) =>{
+    const handleContent = (e) => {
         const value = e.target.value;
         setContent(value);
     }
     const onSubmit = async (formData) => {
+        console.log(formData);
         formData.title = title;
         formData.content = content;
-        if(!isNaN(id)){
+        if (!isNaN(id)) {
             try {
                 const response = await admin_announcementAPI.updateById({ formData, id });
 
@@ -37,7 +38,7 @@ function EditAnnoucement({match}) {
                 console.log("Fail to put problem: ", error);
             }
         }
-        else{
+        else {
             try {
                 const response = await admin_announcementAPI.createAnnouncemt(formData);
                 if (response) {
@@ -50,7 +51,7 @@ function EditAnnoucement({match}) {
 
     };
     useEffect(() => {
-        if(!isNaN(id)){
+        if (!isNaN(id)) {
             const fetchAnnouncement = async () => {
                 try {
                     const response = await admin_announcementAPI.getById(id);
@@ -62,11 +63,11 @@ function EditAnnoucement({match}) {
             };
             fetchAnnouncement();
         }
-    },[])
+    }, [])
     return (
         <div className="announcements-container">
             <AdminNavbar />
-            <Sidebar/>
+            <Sidebar />
             <div className="edit_form">
                 <Card>
                     <Card.Header as="h3">Edit</Card.Header>
@@ -87,7 +88,7 @@ function EditAnnoucement({match}) {
                             <ListGroup.Item className="announForm-items">
                                 <i style={{ color: 'red' }}>*</i>
                                 <span> Content</span> <br /> <br />
-                                <Form.Control as="textarea" rows={10} cols={150} {...register("content")} 
+                                <Form.Control as="textarea" rows={10} cols={150} {...register("content")}
                                     value={content} onChange={(e) => { handleContent(e) }}>
                                 </Form.Control>
                             </ListGroup.Item>
@@ -96,7 +97,7 @@ function EditAnnoucement({match}) {
                         </Form>
                     </Card.Body>
                 </Card>
-                
+
             </div>
         </div>
     )
