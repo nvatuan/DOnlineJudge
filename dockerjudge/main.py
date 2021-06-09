@@ -13,70 +13,6 @@ from .status import Status
 
 
 def judge(processor, source, tests, config=None, client=None):
-    """Main function
-
-    :param processor: Programming language processor
-    :type processor:
-        :class:`dockerjudge.processor.Processor`, `list` or `tuple`
-    :param source: Source code
-    :type source: str
-    :param tests: Test cases
-    :type tests: list
-    :param config: Configuration
-
-        +------------------------------+-----------------+---------+----------+
-        | Key                          | Description     | Default |Value type|
-        +================+=============+=================+=========+==========+
-        | ``callback``   | ``compile`` | Compilation     | None    |`function`|
-        |                |             | callback        |         |          |
-        |                +-------------+-----------------+         |          |
-        |                | ``judge``   | Callback after  |         |          |
-        |                |             | judging         |         |          |
-        +----------------+-------------+-----------------+---------+----------+
-        | ``demux``      | ``compile`` | Return `stdout` |``False``| `bool`   |
-        |                |             | and `stderr` of |         |          |
-        |                |             | compiler        |         |          |
-        |                |             | separately      |         |          |
-        +----------------+-------------+-----------------+---------+----------+
-        | ``iofilename`` | ``in``      | Input filename  | `stdin` | `str`    |
-        |                +-------------+-----------------+---------+          |
-        |                | ``out``     | Output filename | `stdout`|          |
-        +----------------+-------------+-----------------+---------+----------+
-        | ``limit``      | ``time``    | Time limit      | ``1``   | `int` or |
-        |                |             |                 |         | `float`  |
-        +----------------+-------------+-----------------+---------+----------+
-        | ``network``                  | Network enabled |``False``| `bool`   |
-        +------------------------------+-----------------+---------+----------+
-        | ``threads``                  | Thread limit    | None    | `int`    |
-        +------------------------------+-----------------+---------+----------+
-    :type config: dict
-    :param client: Docker client
-    :type client: |DockerClient|_
-
-    .. |DockerClient| replace:: `docker.client.DockerClient`
-    .. _DockerClient: https://docker-py.readthedocs.io/en/stable/client.html\
-            #docker.client.DockerClient
-
-    :return: Result
-    :rtype: `list`
-
-        === ========== ========================
-        Key Value type Description
-        === ========== ========================
-        `0` `list`     Result of each test case
-        `1` `byte`     Compiler output
-        === ========== ========================
-
-        Tese case
-
-        === =================================== =====================
-        Key Value type                          Description
-        === =================================== =====================
-        `0` :class:`~dockerjudge.status.Status` Status code
-        `1` `tuple`                             `stdout` and `stderr`
-        `2` `float`                             Time spent
-        === =================================== =====================
-    """
     config = config or {}
     client = client or docker.from_env(version="auto")
 
@@ -104,7 +40,9 @@ def judge(processor, source, tests, config=None, client=None):
 
 
     container = client.containers.run(
-        processor.image,
+        #processor.image,
+        #'doj_allinone_timeout',
+        "nvat/doj_allinone_timeout:v0.1", ### An all-in-one docker image that is on docker hub
         detach=True,
         tty=True,
         network_disabled=not config.get("network"),
@@ -157,7 +95,7 @@ def judge_test_cases(container, processor, tests, config):
     return [
         future.result()
         if not future.exception()
-        else (Status.UE, (None, None), 0.0)
+        else (Status.UE, (None, None), 0.0, 0)
         for future in futures
     ]
 
@@ -165,7 +103,7 @@ def judge_test_cases(container, processor, tests, config):
 def done_callback(i, config, future):
     "Callback function for concurrent.futures.Future.add_done_callback"
     result = (
-        (Status.UE, (None, None), 0.0)
+        (Status.UE, (None, None), 0.0, 0)
         if future.exception()
         else future.result()
     )
@@ -183,7 +121,7 @@ def run(container, processor, source, tests, config=None):
     exec_result = compile_source_code(container, processor, source, config)
     if exec_result.exit_code:
         return [
-            [(Status.CE, (None, None), 0.0)] * len(tests),
+            [(Status.CE, (None, None), 0.0, 0)] * len(tests),
             exec_result.output,
         ]
 

@@ -102,8 +102,8 @@ TOK = "ADTLVBoEHRTz1C0HrObs6nwTiz8mzfGv" ## CHANGE ME
 
 def main(*args):
     logging.info("Creating heartbeat thread..")
-    heartbeat_thread = Thread(target=HeartbeatSender(URL, TOK).heartbeat_sender)
-    heartbeat_thread.start()
+    #heartbeat_thread = Thread(target=HeartbeatSender(URL, TOK).heartbeat_sender)
+    #heartbeat_thread.start()
     logging.info("Heartbeat thread started..")
 
     "if __name__ == '__main__'"
@@ -116,6 +116,10 @@ def main(*args):
 
 
 if __name__ == "__main__":
+    if len(argv) == 1:
+        print("Syntax: python -m dockerjudge <server ip>:<port>")
+        exit(0)
+
     try:
         main(*argv[1].split(":"))
     except KeyboardInterrupt:

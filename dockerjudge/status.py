@@ -24,5 +24,6 @@ class Status(Enum):
     RE = "Runtime Error"
     CE = "Compilation Error"
     TLE = "Time Limit Exceeded"
+    MLE = "Memory Limit Exceeded"
     ONF = "Output Not Found"
     UE = "Unknown Error"
