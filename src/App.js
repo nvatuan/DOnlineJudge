@@ -13,7 +13,7 @@ import ProblemList from './admin/Problems/ProblemList/ProblemList';
 import User from './admin/General/User/User';
 import Annoucement from './admin/General/Annoucement/Annoucement';
 import Dashboard from './admin/Dashboard/Dashboard';
-import CreateProblem from './admin/Problems/CreateProblem/Createproblem'
+import CreateProblem from './admin/Problems/CreateProblem/CreateProblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
 import Problem_detail from './users/Pages/Problem/Problem_detail';
@@ -36,18 +36,18 @@ function App() {
         <Route path='/problem/:id' exact component={Problem_detail}></Route>
         <Route path='/status' exact component={Status}></Route>
         <Route path='/status/:id' exact component={Status_detail}></Route>
-        <Route path='/announcement' exact component={Announcement}/>
-        <Route path='/profile' exact component={Setting}/>
+        <Route path='/announcement' exact component={Announcement} />
+        <Route path='/profile' exact component={Setting} />
 
         //admin
-        <PrivateRoute exact component={Dashboard} path='/admin/'/>
-        <PrivateRoute exact component={Dashboard} path='/admin/dashboard'/>
-        <PrivateRoute exact component={User} path='/admin/user'/>
-        <PrivateRoute exact component={ProblemList} path='/admin/problems'/>
-        <PrivateRoute exact component={Annoucement} path='/admin/announcement'/>
-        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create'/>
-        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id'/>
-        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new'/>
+        <PrivateRoute exact component={Dashboard} path='/admin/' />
+        <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
+        <PrivateRoute exact component={User} path='/admin/user' />
+        <PrivateRoute exact component={ProblemList} path='/admin/problems' />
+        <PrivateRoute exact component={Annoucement} path='/admin/announcement' />
+        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
+        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id' />
+        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
       </Switch>
     </Router>
   );
