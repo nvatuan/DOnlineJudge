@@ -98,10 +98,11 @@
     height: 100px;
     border-radius: 4px;
     border-color: #ccc;
+    margin-bottom: 5px;
 }
 .removeButton {
+    float: right;
     width: 3%;
     position: relative;
-    left: 1%;
-    bottom: 44px;
+    bottom: 94px;
 }
