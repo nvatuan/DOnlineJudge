@@ -96,7 +96,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
             if valid_extension(str(data["profile_pic"])):
                 user.profile_pic = data["profile_pic"]
             else:
-                return response_bad_request("Not a valid Image. The path must have an image extensions (.jpg/.jpeg/.png)")
+                return response_bad_request("Not a valid Image. The file must have an image extensions (.jpg/.jpeg/.png)")
         user.save()
 
         return response_ok(ProfilePageNoPasswordSerializer(user, context=self.get_serializer_context()).data)
