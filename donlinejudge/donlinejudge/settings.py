@@ -26,7 +26,7 @@ SECRET_KEY = '!(@vvs7z33kzg89h19y!913@q&x@(4%#kcunpadrh7l_4u-m5t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [                                
+ALLOWED_HOSTS = [
     '*',
 ]
 
@@ -41,8 +41,8 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = [
-    'django_extensions',  ## python manage.py reset_db ## extension
-    'django_q', ## multiprocessing
+    'django_extensions',  # python manage.py reset_db ## extension
+    'django_q',  # multiprocessing
     'corsheaders',
 
     'django.contrib.admin',
@@ -58,7 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'donlinejudge.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-     'default': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'donlinejudge',
         'USER': 'postgres',
@@ -160,10 +160,22 @@ REST_FRAMEWORK = {
     ]
 }
 
+VALID_IMAGE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+]
+
+
+def valid_extension(path, extension_list=VALID_IMAGE_EXTENSIONS):
+    return any([path.endswith(e) for e in extension_list])
+
+
 # == DJANGO_Q settings
 Q_CLUSTER = {
     'name': 'donlinejudge',
-    #'workers': 8,
+    # 'workers': 8,
     'max_attempt': 1,
     'recycle': 500,
     'timeout': 60,

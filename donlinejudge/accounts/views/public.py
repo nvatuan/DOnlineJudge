@@ -9,9 +9,10 @@ from rest_framework.authtoken.models import Token
 ## Python
 import os
 import logging
+from PIL import Image
 
 ## Project's
-from donlinejudge.settings import MEDIA_ROOT
+from donlinejudge.settings import MEDIA_ROOT, valid_extension
 from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer, ChangePasswordSerializer
 from accounts.models import User
 from accounts.decorators import unauthenticated_user, login_required
@@ -92,7 +93,10 @@ class OwnProfilePageAPI(generics.GenericAPIView):
             user.last_name = data["last_name"]
         
         if data.get("profile_pic", '') != '':
-            user.profile_pic = data["profile_pic"]
+            if valid_extension(str(data["profile_pic"])):
+                user.profile_pic = data["profile_pic"]
+            else:
+                return response_bad_request("Not a valid Image. The path must have an image extensions (.jpg/.jpeg/.png)")
         user.save()
 
         return response_ok(ProfilePageNoPasswordSerializer(user, context=self.get_serializer_context()).data)
