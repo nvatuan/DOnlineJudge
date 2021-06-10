@@ -2,6 +2,7 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import React from 'react'
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
 import './Sidebar.scss';
 import { AiFillAppstore, AiOutlineBars, AiOutlineCode } from 'react-icons/ai';
 import Logo from './Logo.jpg';
@@ -24,11 +25,7 @@ function Sidebar(props) {
             </MenuItem>
             <MenuItem >
               User
-<<<<<<< Updated upstream
-              <Link to="/admin/users"/>
-=======
               <Link to="/admin/user" />
->>>>>>> Stashed changes
             </MenuItem>
           </SubMenu>
           <SubMenu title="Problem" icon={<AiOutlineBars />}>

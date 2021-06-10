@@ -9,13 +9,6 @@ import { AiOutlineAlignLeft } from 'react-icons/ai'
 import { GrCircleInformation } from 'react-icons/gr'
 import { Link, useHistory } from 'react-router-dom';
 
-import { UnControlled as CodeMirror } from 'react-codemirror2';
-require('codemirror/lib/codemirror.css');
-require('codemirror/theme/material.css');
-require('codemirror/theme/neat.css');
-require('codemirror/mode/xml/xml.js');
-require('codemirror/mode/javascript/javascript.js');
-
 function Problem_detail({ match }) {
     const id = match.params.id;
     const [problem, setProblem] = useState([]);
@@ -24,11 +17,7 @@ function Problem_detail({ match }) {
     const [checkLogin, setCheckLogin] = useState(false);
     //check content
     const [content, setContent] = useState('');
-<<<<<<< Updated upstream
-    const {register, handleSubmit} = useForm();
-=======
     const { register, handleSubmit, error } = useForm();
->>>>>>> Stashed changes
 
     function onChangeUploadFile(e) {
         let files = e.target.files;
@@ -39,13 +28,13 @@ function Problem_detail({ match }) {
         }
 
     }
-    function onChangeTextarea(editor, data, value) {
-        setContent(value);
+    function onChangeTextarea(e) {
+        setContent(e.target.value);
     }
     const onSubmit = async (data) => {
         data.content = content;
         data.problem_id = parseInt(data.problem_id);
-        alert(JSON.stringify(data))
+        // alert(JSON.stringify(data))
         try {
             const response = await oj_statusAPI.postProblem(data);
 
@@ -68,8 +57,6 @@ function Problem_detail({ match }) {
         };
         fetchProblem_detail();
     }, [])
-<<<<<<< Updated upstream
-=======
 
     useEffect(() => {
         return () => console.log('unmounting...');
@@ -99,51 +86,32 @@ function Problem_detail({ match }) {
         }
         else return ''
     }
+    function getSample_test() {
+        const str = JSON.stringify(problem.sample_test)
 
->>>>>>> Stashed changes
+
+    }
     return (
         <div>
             <Navbar />
             <div className="problem_detail-flex-container pages-container">
                 <div className="problem-main">
-<<<<<<< Updated upstream
-                <Card className="problem-main__item">
-                    <Card.Header as="h3">{problem.title}</Card.Header>
-                    <Card.Body>
-                        {problem.statement}
-                    </Card.Body>
-                </Card>
-                <Card className="problem-main__item">
-                    <Card.Body>
-                        <Form onSubmit={handleSubmit(onSubmit)}>
-                            <div className='submit-nav'>
-                                <div className="dropdown-languege submit-nav__item">
-                                    <label htmlFor="languege">Language: </label>
-                                    <Form.Control as="select" size="sm" custom {...register("language")}>
-                                        <option value="Python3">Python3</option>
-                                        <option value="Python2">Python2</option>
-                                        <option value="Java">Java</option>
-                                        <option value="Cpp">C++</option>
-                                        <option value="C">C</option>
-                                    </Form.Control>
-                                    <br /><br />
-                                </div>
-=======
                     <Card className="problem-main__item">
                         <Card.Header as="h3">{problem.title}</Card.Header>
                         <Card.Body>
                             {getDescription(problem.statement)}
                             <br /> <br />
-                            <strong>Input Description:</strong>
+                            <strong>Input Description</strong>
                             <br />
                             {getInput_description(problem.statement)}
                             <br /> <br />
-                            <strong>Output Description:</strong>
+                            <strong>Output Description</strong>
                             <br />
                             {getOutput_description(problem.statement)}
                             <br /> <br />
                             <strong>Sample Test</strong>
                             <br />
+                            {getSample_test()}
 
 
 
@@ -163,7 +131,6 @@ function Problem_detail({ match }) {
                                         </Form.Control>
                                         <br /><br />
                                     </div>
->>>>>>> Stashed changes
                                     <div className="problem-id submit-nav__item">
                                         <Form.Label>Problem </Form.Label>
                                         <Form.Control
@@ -178,27 +145,6 @@ function Problem_detail({ match }) {
                                             <Form.File.Input onChange={(e) => { onChangeUploadFile(e) }} />
                                         </Form.File>
                                     </div>
-<<<<<<< Updated upstream
-                                    
-                            </div>
-                            {/* <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }>
-                            </Form.Control> */}
-                                <div className="editor-container">
-                                <CodeMirror
-                                    value={content}
-                                        onChange={(editor, data, value) => { onChangeTextarea(editor, data, value) }}
-                                    options={{
-                                        mode: 'xml',
-                                        theme: 'default',
-                                        lineNumbers: true
-                                    }}
-                                />
-                            </div>
-                                
-                            <br/>   
-                            <div className="problem-main__footer">
-                                   {checkLogin === true ? (
-=======
 
                                 </div>
                                 <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e) }}>
@@ -207,7 +153,6 @@ function Problem_detail({ match }) {
                                 <br />
                                 <div className="problem-main__footer">
                                     {checkLogin === true ? (
->>>>>>> Stashed changes
                                         <Button variant="primary" type="submit" id="submit-button" >Submit</Button>
                                     ) :
                                         (
@@ -224,14 +169,13 @@ function Problem_detail({ match }) {
                     <Card className="submit-card right-column__item">
                         <Card.Body>
                             <Link to='/status' className='to_statusPage_card'>
-                                <AiOutlineAlignLeft className="to_statusPage_card-item"/>
-                                <p>Submissions</p>
+                                <AiOutlineAlignLeft /><p>Submissions</p>
                             </Link>
                         </Card.Body>
                     </Card>
                     <div className="problem-information">
                         <Card className="right-column__item">
-                            <Card.Header className=" problem-information_header "><GrCircleInformation /><p> Imformation</p></Card.Header>
+                            <Card.Header><GrCircleInformation /><p> Imformation</p></Card.Header>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Id</p>
