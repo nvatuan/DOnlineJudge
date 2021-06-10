@@ -1,69 +1,8 @@
-"""Processors
-
-+---------------------------------------+--------------+-----------------+
-| Processor                             | Language(s)  |Required `Docker |
-|                                       | [*]_         |image <https://  |
-|                                       |              |hub.docker.com>`_|
-+=======================================+==============+=================+
-| :class:`~dockerjudge.processor.Bash`  | Shell        | |bash|_         |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Clang` | - C (``c``)  | |clang|_        |
-|                                       | - **C++**    |                 |
-|                                       |   (``cpp``)  |                 |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.GCC`   | - C          | |gcc|_          |
-|                                       |   (``c``)    |                 |
-|                                       | - **C++**    |                 |
-|                                       |   (``cpp``)  |                 |
-|                                       | - Go         |                 |
-|                                       |   (``go``)   |                 |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Go`    | Go           | |golang|_       |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Mono`  |- Visual Basic| |mono|_         |
-|                                       |  (``vb``)    |                 |
-|                                       |- **C#**      |                 |
-|                                       |  (``csharp``)|                 |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Node`  | Node.js      | |node|_         |
-+---------------------------------------+--------------+-----------------+
-|:class:`~dockerjudge.processor.OpenJDK`| Java         | |openjdk|_      |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.PHP`   | PHP          | |php|_          |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.PyPy`  | Python       | |pypy|_         |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Python`| Python       | |python|_       |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Ruby`  | Ruby         | |ruby|_         |
-+---------------------------------------+--------------+-----------------+
-| :class:`~dockerjudge.processor.Swift` | Swift        | |swift|_        |
-+---------------------------------------+--------------+-----------------+
-
-.. https://docutils.sourceforge.io/FAQ.html#is-nested-inline-markup-possible
-.. |node| replace:: `node`
-.. _node: https://hub.docker.com/_/node
-.. |openjdk| replace:: `openjdk`
-.. _openjdk: https://hub.docker.com/_/openjdk
-.. |php| replace:: `php`
-.. _php: https://hub.docker.com/_/php
-.. |pypy| replace:: `pypy`
-.. _pypy: https://hub.docker.com/_/pypy
-.. |python| replace:: `python`
-.. _python: https://hub.docker.com/_/python
-.. |ruby| replace:: `ruby`
-.. _ruby: https://hub.docker.com/_/ruby
-.. |swift| replace:: `swift`
-.. _swift: https://hub.docker.com/_/swift
-
-.. [*] Emboldened language by default.
-"""
 # pylint: disable = missing-function-docstring, too-few-public-methods
 
 import shlex
 from enum import Enum
 from pathlib import PurePosixPath
-
 
 class Processor:
     """Defines the operations of a multi-version programming language processor
@@ -97,6 +36,8 @@ class Processor:
     judge = None
     after_judge = None
 
+    bare_program = ''
+    initial_mem = None
 
 class _Language(Enum):
     "Get programming language from enum"
@@ -112,79 +53,6 @@ class _Language(Enum):
                 return cls(language)
             except ValueError:
                 return cls.__get_language(default)
-
-
-class Bash(Processor):
-    """Bash is the GNU Project's Bourne Again SHell
-
-    :param version: Tag name of Docker image |bash|_
-    :type version: `str`, `int` or `float`
-
-    .. |bash| replace:: `bash`
-    .. _bash: https://hub.docker.com/_/bash
-    """
-
-    def __init__(self, version=None):
-        self.image = self._get_image_with_tag("bash", version)
-        self.source = "bash.sh"
-        self.compile = ["bash", "-n", self.source]
-        self.judge = f"bash {self.source}"
-
-
-class Clang(Processor):
-    """Clang C Language Family Frontend for LLVM
-
-    :param language: Programming panguage
-        (``C``\\ /\\ `c` or ``C++``\\ /\\ ``cpp``), `C++` by default
-    :type language: :class:`dockerjudge.processor.Clang.Language` or `str`
-    :param version: Tag name of Docker image |clang|_
-    :type version: `str`, `int` or `float`
-    :param filenames: Filenames of source code and binary file,
-        C++ default: ``{'src': 'a.cpp', 'bin': None}``
-    :type filenames: `dict`
-    :param options: Compiler options
-    :type options: `list` or `str`
-
-    .. |clang| replace:: `clangbuiltlinux/ubuntu`
-    .. _clang: https://hub.docker.com/r/clangbuiltlinux/ubuntu
-    """
-
-    class Language(_Language):
-        """Programming language, `C` (``c``) or `C++` (``cpp``)
-
-        :C: ``Clang.Language.c``,
-            ``Clang.Language['c']`` or ``Clang.Language('C')``
-        :C++: ``Clang.Language.cpp``,
-            ``Clang.Language['cpp']`` or ``Clang.Language('C++')``
-        """
-
-        c = "C"
-        cpp = "C++"
-
-        @classmethod
-        def _get_language(cls, language):
-            return super().__get_language(language, cls.cpp)
-
-    def __init__(
-        self, language=None, version=None, filenames=None, options=None
-    ):
-        lang = self.Language._get_language(language)
-        fns = filenames or {}
-        args = options or []
-
-        self.image = "clangbuiltlinux/ubuntu" + f":llvm{version}-latest"
-        self.source = fns.get("src", f"a.{lang.name}")
-        self.compile = (
-            [
-                {self.Language.c: "clang", self.Language.cpp: "clang++"}[lang]
-                + f"-{version}",
-                self.source,
-            ]
-            + (["-o", fns["bin"]] if fns.get("bin") else [])
-            + (shlex.split(args) if isinstance(args, str) else args)
-        )
-        self.after_compile = ["rm", self.source]
-        self.judge = f"./{fns.get('bin', 'a.out')}"
 
 
 class GCC(Processor):
@@ -219,16 +87,37 @@ class GCC(Processor):
 
         c = "C"
         cpp = "C++"
-        go = "Go"
+        #go = "Go"
 
         @classmethod
         def _get_language(cls, language):
             return super().__get_language(language, cls.cpp)
+    
+    @classmethod
+    def _get_bare_program(cls, lang):
+        return {
+            "C": b'#include <stdio.h>\nint main(){ while(1){} }',
+            "Cpp": b'#include <iostream>\nusing namespace std;\nint main(){ while(1){} }'
+        }[lang]
+    
+    initial_mem = None
+    @classmethod
+    def _get_initial_mem(cls):
+        return cls.initial_mem
+    
+    @classmethod
+    def _set_initial_mem(cls, mem):
+        if cls.initial_mem is None:
+            cls.initial_mem = mem
+        else:
+            cls.initial_mem = max(cls.initial_mem, mem)
 
     def __init__(
         self, language=None, version=None, filenames=None, options=None
     ):
         lang = self.Language._get_language(language)
+        self.lang = lang
+
         fns = filenames or {}
         args = options or []
 
@@ -239,7 +128,7 @@ class GCC(Processor):
                 {
                     self.Language.c: "gcc",
                     self.Language.cpp: "g++",
-                    self.Language.go: "gccgo",
+                    #self.Language.go: "gccgo",
                 }[lang],
                 self.source,
             ]
@@ -248,104 +137,9 @@ class GCC(Processor):
         )
         self.after_compile = ["rm", self.source]
         self.judge = f"./{fns.get('bin', 'a.out')}"
-
-
-class Go(Processor):
-    """The Go Programming Language
-
-    :param version: Tag name of Docker image |golang|_
-    :type version: `str`, `int` or `float`
-    :param filenames: Filenames of source code and binary file,
-        default: ``{'src': 'main.go', 'bin': None}``
-    :type filenames: `dict`
-
-    .. |golang| replace:: `golang`
-    .. _golang: https://hub.docker.com/_/golang
-    """
-
-    def __init__(self, version=None, filenames=None, options=None):
-        fns = filenames or {}
-        args = options or []
-
-        self.image = self._get_image_with_tag("golang", version)
-        self.source = fns.get("src", "main.go")
-        self.compile = (
-            ["go", "build"]
-            + (["-o", fns["bin"]] if fns.get("bin") else [])
-            + args
-            + [self.source]
-        )
-        self.after_compile = ["rm", self.source]
-        self.judge = f"./{fns.get('bin', 'main')}"
-
-
-class Mono(Processor):
-    """**Mono** is a software platform
-    designed to allow developers to easily create
-    cross platform applications part of the `.NET Foundation`_.
-
-        Sponsored by Microsoft_,
-        Mono is an open source implementation of Microsoft's .NET Framework
-        based on the ECMA_ standards
-        for `C#`_ and the `Common Language Runtime`_.
-
-    :param language: Programming panguage
-        (``Visual Basic``\\ /\\ ``vb`` or ``C#``\\ /\\ ``csharp``),
-        C# by default
-    :type language: :class:`dockerjudge.processor.Mono.Language` or `str`
-    :param version: Tag name of Docker image |mono|_
-    :type version: `str`, `int` or `float`
-
-    .. _.NET Foundation: https://www.dotnetfoundation.org
-    .. _Microsoft: https://www.microsoft.com
-    .. _ECMA: https://www.mono-project.com/docs/about-mono/languages/ecma/
-    .. _C#: https://www.mono-project.com/docs/about-mono/languages/csharp/
-    .. _Common Language Runtime:
-        https://www.mono-project.com/docs/advanced/runtime/
-    .. |mono| replace:: `mono`
-    .. _mono: https://hub.docker.com/_/mono
-    """
-
-    class Language(_Language):
-        """Programming language, `Visual Basic` (``vb``) or `C#` (``csharp``)
-
-        :Visual Basic: ``GCC.Language.vb``,
-            ``GCC.Language['vb']`` or ``GCC.Language('Visual Basic')``
-        :C#: ``GCC.Language.csharp``,
-            ``GCC.Language['csharp']`` or ``GCC.Language('C#')``
-        """
-
-        vb = "Visual Basic"
-        csharp = "C#"
-
-        @classmethod
-        def _get_language(cls, language):
-            return super().__get_language(language, cls.csharp)
-
-    def __init__(self, language=None, version=None):
-        lang = self.Language._get_language(language)
-
-        self.image = self._get_image_with_tag("mono", version)
-        self.source = f"""mono.{
-            {self.Language.csharp: 'cs', self.Language.vb: 'vb'}[lang]
-        }"""
-        self.compile = [
-            {self.Language.csharp: "csc", self.Language.vb: "vbnc"}[lang],
-            self.source,
-        ]
-        self.after_compile = ["rm", self.source]
-        self.judge = "mono mono.exe"
-
-
-class Node(Processor):
-    "Node.js®"
-
-    def __init__(self, version=None):
-        self.image = self._get_image_with_tag("node", version)
-        self.source = "index.js"
-        self.compile = ["node", "-c", self.source]
-        self.judge = f"node {self.source}"
-
+    
+    def __str__(self):
+        return f"{self.Language._get_language(self.lang)} processor"
 
 class OpenJDK(Processor):
     "Open Java Development Kit"
@@ -358,15 +152,21 @@ class OpenJDK(Processor):
         self.judge = "java Main"
 
 
-class PHP(Processor):
-    "PHP"
+    def __str__(self):
+        return "Java processor"
 
-    def __init__(self, version=None):
-        self.image = self._get_image_with_tag("php", version)
-        self.source = "index.php"
-        self.compile = ["php", "-l", self.source]
-        self.judge = f"php {self.source}"
-
+    @classmethod
+    def _get_bare_program(cls, lang):
+        return b"""public class Main {\npublic static void main(String[] args) {\nwhile (true){}\n}\n}"""
+    
+    initial_mem = None
+    @classmethod
+    def _get_initial_mem(cls):
+        return cls.initial_mem
+    
+    @classmethod
+    def _set_initial_mem(cls, mem):
+        cls.initial_mem = mem
 
 class PyPy(Processor):
     "PyPy"
@@ -379,32 +179,255 @@ class PyPy(Processor):
         self.compile = [pypy, "-m", "compileall", "."]
         self.judge = f"{pypy} {self.source}"
 
+        b"while True: pass"
+    
+    def __str__(self):
+        return "PyPy processor"
+    
+    @classmethod
+    def _get_bare_program(cls, lang):
+        return b"while True: pass"
+    
+    initial_mem = None
+    @classmethod
+    def _get_initial_mem(cls):
+        return cls.initial_mem
+    
+    @classmethod
+    def _set_initial_mem(cls, mem):
+        cls.initial_mem = mem
 
 class Python(Processor):
     "CPython"
 
     def __init__(self, version=None):
         self.image = self._get_image_with_tag("python", version)
+
         self.source = "__init__.py"
-        self.compile = ["python", "-m", "compileall", "."]
-        self.judge = f"python {self.source}"
+        pythonmodule = 'python' + ('2' if version==2 else '3')
+        
+        self.compile = [pythonmodule, "-m", "compileall", "."]
+        self.compile = [pythonmodule, "-m", "compileall", "."]
 
+        self.judge = f"{pythonmodule} {self.source}"
 
-class Ruby(Processor):
-    "Ruby"
+        self.bare_program = b"while True: pass"
+    
+    def __str__(self):
+        return "CPython processor"
+    
+    @classmethod
+    def _get_bare_program(cls, lang):
+        return b"while True: pass"
+    
+    initial_mem = None
+    @classmethod
+    def _get_initial_mem(cls):
+        return cls.initial_mem
+    
+    @classmethod
+    def _set_initial_mem(cls, mem):
+        cls.initial_mem = mem
 
-    def __init__(self, version=None):
-        self.image = self._get_image_with_tag("ruby", version)
-        self.source = "ruby.rb"
-        self.compile = ["ruby", "-wc", self.source]
-        self.judge = f"ruby {self.source}"
-
-
-class Swift(Processor):
-    "Swift"
-
-    def __init__(self, version=None):
-        self.image = self._get_image_with_tag("swift", version)
-        self.source = "main.swift"
-        self.compile = ["swiftc", self.source]
-        self.judge = "./main"
+## Other Processors:
+#
+#
+#class Bash(Processor):
+#    """Bash is the GNU Project's Bourne Again SHell
+#
+#    :param version: Tag name of Docker image |bash|_
+#    :type version: `str`, `int` or `float`
+#
+#    .. |bash| replace:: `bash`
+#    .. _bash: https://hub.docker.com/_/bash
+#    """
+#
+#    def __init__(self, version=None):
+#        self.image = self._get_image_with_tag("bash", version)
+#        self.source = "bash.sh"
+#        self.compile = ["bash", "-n", self.source]
+#        self.judge = f"bash {self.source}"
+#
+#
+#class Clang(Processor):
+#    """Clang C Language Family Frontend for LLVM
+#
+#    :param language: Programming panguage
+#        (``C``\\ /\\ `c` or ``C++``\\ /\\ ``cpp``), `C++` by default
+#    :type language: :class:`dockerjudge.processor.Clang.Language` or `str`
+#    :param version: Tag name of Docker image |clang|_
+#    :type version: `str`, `int` or `float`
+#    :param filenames: Filenames of source code and binary file,
+#        C++ default: ``{'src': 'a.cpp', 'bin': None}``
+#    :type filenames: `dict`
+#    :param options: Compiler options
+#    :type options: `list` or `str`
+#
+#    .. |clang| replace:: `clangbuiltlinux/ubuntu`
+#    .. _clang: https://hub.docker.com/r/clangbuiltlinux/ubuntu
+#    """
+#
+#    class Language(_Language):
+#        """Programming language, `C` (``c``) or `C++` (``cpp``)
+#
+#        :C: ``Clang.Language.c``,
+#            ``Clang.Language['c']`` or ``Clang.Language('C')``
+#        :C++: ``Clang.Language.cpp``,
+#            ``Clang.Language['cpp']`` or ``Clang.Language('C++')``
+#        """
+#
+#        c = "C"
+#        cpp = "C++"
+#
+#        @classmethod
+#        def _get_language(cls, language):
+#            return super().__get_language(language, cls.cpp)
+#
+#    def __init__(
+#        self, language=None, version=None, filenames=None, options=None
+#    ):
+#        lang = self.Language._get_language(language)
+#        fns = filenames or {}
+#        args = options or []
+#
+#        self.image = "clangbuiltlinux/ubuntu" + f":llvm{version}-latest"
+#        self.source = fns.get("src", f"a.{lang.name}")
+#        self.compile = (
+#            [
+#                {self.Language.c: "clang", self.Language.cpp: "clang++"}[lang]
+#                + f"-{version}",
+#                self.source,
+#            ]
+#            + (["-o", fns["bin"]] if fns.get("bin") else [])
+#            + (shlex.split(args) if isinstance(args, str) else args)
+#        )
+#        self.after_compile = ["rm", self.source]
+#        self.judge = f"./{fns.get('bin', 'a.out')}"
+#
+#class Go(Processor):
+#    """The Go Programming Language
+#
+#    :param version: Tag name of Docker image |golang|_
+#    :type version: `str`, `int` or `float`
+#    :param filenames: Filenames of source code and binary file,
+#        default: ``{'src': 'main.go', 'bin': None}``
+#    :type filenames: `dict`
+#
+#    .. |golang| replace:: `golang`
+#    .. _golang: https://hub.docker.com/_/golang
+#    """
+#
+#    def __init__(self, version=None, filenames=None, options=None):
+#        fns = filenames or {}
+#        args = options or []
+#
+#        self.image = self._get_image_with_tag("golang", version)
+#        self.source = fns.get("src", "main.go")
+#        self.compile = (
+#            ["go", "build"]
+#            + (["-o", fns["bin"]] if fns.get("bin") else [])
+#            + args
+#            + [self.source]
+#        )
+#        self.after_compile = ["rm", self.source]
+#        self.judge = f"./{fns.get('bin', 'main')}"
+#
+#
+#class Mono(Processor):
+#    """**Mono** is a software platform
+#    designed to allow developers to easily create
+#    cross platform applications part of the `.NET Foundation`_.
+#
+#        Sponsored by Microsoft_,
+#        Mono is an open source implementation of Microsoft's .NET Framework
+#        based on the ECMA_ standards
+#        for `C#`_ and the `Common Language Runtime`_.
+#
+#    :param language: Programming panguage
+#        (``Visual Basic``\\ /\\ ``vb`` or ``C#``\\ /\\ ``csharp``),
+#        C# by default
+#    :type language: :class:`dockerjudge.processor.Mono.Language` or `str`
+#    :param version: Tag name of Docker image |mono|_
+#    :type version: `str`, `int` or `float`
+#
+#    .. _.NET Foundation: https://www.dotnetfoundation.org
+#    .. _Microsoft: https://www.microsoft.com
+#    .. _ECMA: https://www.mono-project.com/docs/about-mono/languages/ecma/
+#    .. _C#: https://www.mono-project.com/docs/about-mono/languages/csharp/
+#    .. _Common Language Runtime:
+#        https://www.mono-project.com/docs/advanced/runtime/
+#    .. |mono| replace:: `mono`
+#    .. _mono: https://hub.docker.com/_/mono
+#    """
+#
+#    class Language(_Language):
+#        """Programming language, `Visual Basic` (``vb``) or `C#` (``csharp``)
+#
+#        :Visual Basic: ``GCC.Language.vb``,
+#            ``GCC.Language['vb']`` or ``GCC.Language('Visual Basic')``
+#        :C#: ``GCC.Language.csharp``,
+#            ``GCC.Language['csharp']`` or ``GCC.Language('C#')``
+#        """
+#
+#        vb = "Visual Basic"
+#        csharp = "C#"
+#
+#        @classmethod
+#        def _get_language(cls, language):
+#            return super().__get_language(language, cls.csharp)
+#
+#    def __init__(self, language=None, version=None):
+#        lang = self.Language._get_language(language)
+#
+#        self.image = self._get_image_with_tag("mono", version)
+#        self.source = f"""mono.{
+#            {self.Language.csharp: 'cs', self.Language.vb: 'vb'}[lang]
+#        }"""
+#        self.compile = [
+#            {self.Language.csharp: "csc", self.Language.vb: "vbnc"}[lang],
+#            self.source,
+#        ]
+#        self.after_compile = ["rm", self.source]
+#        self.judge = "mono mono.exe"
+#
+#
+#class Node(Processor):
+#    "Node.js®"
+#
+#    def __init__(self, version=None):
+#        self.image = self._get_image_with_tag("node", version)
+#        self.source = "index.js"
+#        self.compile = ["node", "-c", self.source]
+#        self.judge = f"node {self.source}"
+#
+#
+#
+#class PHP(Processor):
+#    "PHP"
+#
+#    def __init__(self, version=None):
+#        self.image = self._get_image_with_tag("php", version)
+#        self.source = "index.php"
+#        self.compile = ["php", "-l", self.source]
+#        self.judge = f"php {self.source}"
+#
+#
+#class Ruby(Processor):
+#    "Ruby"
+#
+#    def __init__(self, version=None):
+#        self.image = self._get_image_with_tag("ruby", version)
+#        self.source = "ruby.rb"
+#        self.compile = ["ruby", "-wc", self.source]
+#        self.judge = f"ruby {self.source}"
+#
+#
+#class Swift(Processor):
+#    "Swift"
+#
+#    def __init__(self, version=None):
+#        self.image = self._get_image_with_tag("swift", version)
+#        self.source = "main.swift"
+#        self.compile = ["swiftc", self.source]
+#        self.judge = "./main"
+#

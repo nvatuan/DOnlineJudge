@@ -10,7 +10,7 @@ from sys import argv
 
 import websockets
 
-from .main import judge
+from .main import judge, warmup
 from .status import Status
 
 import logging
@@ -74,11 +74,12 @@ class HeartbeatSender():
         retry = 0
         while True:
             try:
+                logging.info("Sending heartbeat..")
                 while True:
-                    logging.info(f"Pending tasks = {pending_task}")
+                    #logging.info(f"Pending tasks = {pending_task}")
                     if pending_task == 0:
                         r = requests.post(self.url, headers=self.headers, data=dumps(self.data))
-                        logging.info(f"Heartbeat sent, response = {r}")
+                        #logging.info(f"Heartbeat sent, response = {r}")
                     sleep(period)
                     retry=0
             except ConnectionError: 
@@ -101,9 +102,14 @@ URL = "http://127.0.0.1:9999/judgeserver_heartbeat/" ## CHANGE ME
 TOK = "ADTLVBoEHRTz1C0HrObs6nwTiz8mzfGv" ## CHANGE ME
 
 def main(*args):
+    logging.info("Server is starting ...")
+    logging.info("Warming up Docker container ...")
+    warmup()
+    logging.info("Finished warming up.")
+
     logging.info("Creating heartbeat thread..")
-    #heartbeat_thread = Thread(target=HeartbeatSender(URL, TOK).heartbeat_sender)
-    #heartbeat_thread.start()
+    heartbeat_thread = Thread(target=HeartbeatSender(URL, TOK).heartbeat_sender)
+    heartbeat_thread.start()
     logging.info("Heartbeat thread started..")
 
     "if __name__ == '__main__'"

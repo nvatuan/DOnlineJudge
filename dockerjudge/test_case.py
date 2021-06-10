@@ -9,17 +9,26 @@ from docker.errors import NotFound
 from .dockerpy import exec_run, get_bin, put_bin
 from .status import Status
 
+from .processor import OpenJDK
 
 def __init__(container, processor, i, ioput, config):
     "Copy binary files to `i` and judge"
     container.exec_run(f"cp -r 0 {i}", workdir=str(processor.workdir))
     exec_run(container, processor.before_judge, f"{processor.workdir}/{i}")
 
+    res = None
+    MEM_MEASURE_NOT_SUPPORTED = [OpenJDK]
+    for prcclass in MEM_MEASURE_NOT_SUPPORTED:
+        if isinstance(processor, prcclass):
+            res = judge(container, processor, i, ioput, config)
+    if res is None:
+        res = judge_use_timeout(container, processor, i, ioput, config)
+
     ### <<< judge using the original Judge function: which only do time measureing and limitting
     #res = judge(container, processor, i, ioput, config)
 
     ### << new judge_with_timeout
-    res = judge_use_timeout(container, processor, i, ioput, config)
+    #res = judge_use_timeout(container, processor, i, ioput, config)
 
     exec_run(container, processor.after_judge, f"{processor.workdir}/{i}")
     return res
@@ -81,11 +90,14 @@ def judge(container, processor, i, ioput, config):
     )
 
 def judge_use_timeout(container, processor, i, ioput, config):
-    "Judge one of the test cases"
+    "Judge one of the test cases, with the use of timeout tool to measure cpu time and mem usage"
     put_bin(container, _get_io_file_path("in", processor, i, config), ioput[0])
+
+    initmem = processor.__class__._get_initial_mem()
+    if initmem is None: initmem = 0
     
     command = "/bin/resourceout -t " + str(config.get("limit", {}).get("time", 1)) + " " \
-        + "-m " + str(config.get("limit", {}).get("memory", 128000)) + " "          \
+        + "-m " + str(config.get("limit", {}).get("memory", 128000) + initmem) + " "  \
         + shlex.quote(
             " sh -c "                                                               \
             + shlex.quote(processor.judge)                                          \
@@ -97,6 +109,7 @@ def judge_use_timeout(container, processor, i, ioput, config):
                 else ""
             )
         )
+    #print(command)
     
     ### Retrying
     for retrycounter in range(1, 4):
@@ -117,14 +130,15 @@ def judge_use_timeout(container, processor, i, ioput, config):
             stderr = ''
 
         ### Participant program can write to stderr as well, so we need to strip our own stderr output
-        pattern = '[A-Z]+\sCPU\s' ## our stderr is eg. 'FINISHED CPU 0.23 MEM 123...' or 'TIME CPU 2.03...' 
-        lastocc = re.findall(pattern, stderr)[-1]
-        rfindpos = stderr.rfind(lastocc)
+        pattern = 'DOJ_USAGE_REPORT ' ## our stderr is eg. 'FINISHED CPU 0.23 MEM 123...' or 'TIME CPU 2.03...' 
+        rfindpos = stderr.rfind(pattern)
 
-        rawusage = stderr[rfindpos:].replace('\n', ' ').split(' ')
+        rawusage = stderr[rfindpos+len(pattern):].replace('\n', ' ').split(' ')
         ## rawusage = [<verdict>, 'CPU', <cputime>, 'MEM', <memused>, 'MAXMEM', <max_memused>,...]
         rs_cputime = rawusage[2]
-        rs_memused = rawusage[6]
+        rs_memused = str(max(0, int(rawusage[4]) - initmem))
+        #print(f"Mem = {rawusage[4]} Maxmem = {rawusage[6]}")
+        #print(processor.__class__._get_initial_mem())
 
         # Now stderr will only contains output by the participants
         stderr = stderr[:rfindpos]
