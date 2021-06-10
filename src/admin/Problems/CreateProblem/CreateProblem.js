@@ -130,7 +130,13 @@ function Createproblem({ match }) {
                     setMemory_limit(response.data.memory_limit)
                     setVisible(response.data.visible)
                     setDifficulty(response.data.difficulty)
-                    setSample_test(response.data.sample_test)
+                    if (JSON.stringify(response.data.sample_test) === JSON.stringify({})) {
+                        setSample_test([])
+                    }
+                    else {
+                        setSample_test(response.data.sample_test)
+                    }
+
 
                 } catch (error) {
                     console.log("fail to alter problem: ", error);
@@ -290,49 +296,50 @@ function Createproblem({ match }) {
                             <i style={{ color: 'red' }}>*</i>
                             <span> Sample</span> <br /> <br />
                             <div className="Sample" >
-                                {console.log(sample_test.length)}
-                                {sample_test.length <= 0 ? <h1>none</h1> : sample_test.map((sample, idx) => {
-                                    return (
-                                        <div key={`${sample}-${idx}`}>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <i style={{ color: 'red' }}>*</i>
-                                                            <span> Input</span> <br />
-                                                            <Form.Control as="textarea" rows={5} cols={150}
-                                                                className="textArea"
-                                                                placeholder="Enter input..."
-                                                                value={sample.input || ""}
-                                                                required
-                                                                onChange={e => handleInput(idx, e)}
-                                                            >
-                                                            </Form.Control>
-                                                        </td>
-                                                        <td>
-                                                            <i style={{ color: 'red' }}>*</i>
-                                                            <span> Output</span> <br />
-                                                            <Form.Control as="textarea" rows={5} cols={150}
-                                                                className="textArea"
-                                                                placeholder="Enter output..."
-                                                                value={sample.output || ""}
-                                                                required
-                                                                onChange={e => handleOutput(idx, e)}
-                                                            >
-                                                            </Form.Control>
-                                                        </td>
-                                                        <td>
-                                                            <Button className="removeButton" onClick={() => handleRemove(idx)}>
-                                                                X
-                                                    </Button>
-                                                        </td>
+                                {
+                                    sample_test.map((sample, idx) => {
+                                        return (
 
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    );
-                                })}
+                                            <div key={`${sample}-${idx}`}>
+
+                                                <tr>
+                                                    <td>
+                                                        <i style={{ color: 'red' }}>*</i>
+                                                        <span> Input</span> <br />
+                                                        <Form.Control as="textarea" rows={5} cols={150}
+                                                            className="textArea"
+                                                            placeholder="Enter input..."
+                                                            value={sample.input || ""}
+                                                            required
+                                                            onChange={e => handleInput(idx, e)}
+                                                        >
+                                                        </Form.Control>
+                                                    </td>
+                                                    <td>
+                                                        <i style={{ color: 'red' }}>*</i>
+                                                        <span> Output</span> <br />
+                                                        <Form.Control as="textarea" rows={5} cols={150}
+                                                            className="textArea"
+                                                            placeholder="Enter output..."
+                                                            value={sample.output || ""}
+                                                            required
+                                                            onChange={e => handleOutput(idx, e)}
+                                                        >
+                                                        </Form.Control>
+                                                    </td>
+                                                    <td>
+                                                        <Button className="removeButton" onClick={() => handleRemove(idx)}>
+                                                            X
+                                                    </Button>
+                                                    </td>
+
+                                                </tr>
+
+
+
+                                            </div>
+                                        );
+                                    })}
                                 <Button className="addButton" onClick={() => handleAdd()}>
                                     +
                                 </Button>
