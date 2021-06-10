@@ -92,7 +92,7 @@ function EditAnnoucement({ match }) {
                                     value={content} onChange={(e) => { handleContent(e) }}>
                                 </Form.Control>
                             </ListGroup.Item>
-                            <br />
+                            <br /> 
                             <Button type="submit" className="save_button">Save</Button>
                         </Form>
                     </Card.Body>
