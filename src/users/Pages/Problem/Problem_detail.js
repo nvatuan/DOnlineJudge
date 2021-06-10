@@ -105,6 +105,7 @@ function Problem_detail({ match }) {
                             <p className="time_limit"><strong>Time limit:</strong> {problem.time_limit} ms</p>
                             <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} mb</p>
                             <br />
+                            <strong>Problem Description:</strong>
                             <p className="description">{getDescription(problem.statement)}</p>
                             <br /> <br />
                             <strong>Input Description:</strong>
