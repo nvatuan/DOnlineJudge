@@ -12,7 +12,7 @@ import logging
 
 ## Project's
 from donlinejudge.settings import MEDIA_ROOT
-from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer
+from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer, ChangePasswordSerializer
 from accounts.models import User
 from accounts.decorators import unauthenticated_user, login_required
 
@@ -55,6 +55,7 @@ class LoginAPI(generics.GenericAPIView):
 class LogoutAPI(APIView):
     @login_required
     def get(self, request):
+        request.user.auth_token.delete()
         logout(request)
         return response_no_content("User logout.")
 
@@ -129,3 +130,19 @@ class ProfilePageAPI(APIView):
         if not User.objects.filter(id=id).exists():
             return response_not_found(f"User with id={id} could not be found.")
         return response_ok(ProfilePageNoPasswordSerializer(User.objects.get(id=id)).data)
+
+
+class ChangePasswordAPI(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+
+    @login_required
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # create a new token 
+        if hasattr(user, 'auth_token'):
+            user.auth_token.delete()
+        token, created = Token.objects.get_or_create(user=user)
+        # return new token
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
