@@ -5,6 +5,7 @@ import { AiOutlineEdit, AiOutlineDownload, AiOutlineDelete } from 'react-icons/a
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import admin_problemAPI from '../../../api/admin_problemAPI';
+import { Link } from 'react-router-dom';
 function ProblemList(props) {
     const [problems, setProblems] = useState([]);
     useEffect(() => {
@@ -60,9 +61,12 @@ function ProblemList(props) {
                                                         <div className="option-cell">
                                                             <div className="option-button">
                                                                 <div className="option-button">
-                                                                    <Button variant="light">
-                                                                        <AiOutlineEdit />
-                                                                    </Button>
+                                                                    <Link to={`/admin/problem/${problem.id}`} >
+                                                                        <Button variant="light">
+                                                                            <AiOutlineEdit />
+                                                                        </Button>
+                                                                    </Link>
+
                                                                 </div>
                                                                 <div className="option-button">
                                                                     <Button variant="light">
@@ -88,11 +92,14 @@ function ProblemList(props) {
                                 </tbody>
                             </table >
                         </Card.Text>
-                        <Button variant="primary">Create</Button>
+                        <Link to={`/admin/problem/create`} >
+                            <Button variant="primary">Create</Button>
+                        </Link>
+
                     </Card.Body>
                 </Card>
             </div>
-        </div>
+        </div >
     )
 }
 
