@@ -92,6 +92,13 @@ class OwnProfilePageAPI(generics.GenericAPIView):
             user.last_name = data["last_name"]
         
         if data.get("profile_pic", '') != '':
+            default_profile_pic = User._meta.get_field('profile_pic').get_default()
+            if user.profile_pic != default_profile_pic:
+                try:
+                    filepath = os.path.join(MEDIA_ROOT, str(user.profile_pic))
+                    os.remove(filepath)
+                except Exception as e:
+                    logging.debug(f"Cannot delete file {filepath}: {e}")
             user.profile_pic = data["profile_pic"]
         user.save()
 
