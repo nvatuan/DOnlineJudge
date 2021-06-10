@@ -24,6 +24,7 @@ from utils.query_set_rearrange import auto_apply
 
 import asyncio, websockets
 class JudgeSubmissionTask:
+    __name__ = 'JudgeSubmissionTask'
     def __init__(self, sub : Submission, prob: Problem):
         self.sub = sub
         self.prob = prob
@@ -48,23 +49,37 @@ class JudgeSubmissionTask:
             self.sub.output = {
                 "sample_test": [],
                 "test": [],
-                "compile_message": compile_result
+                "compile_message": compile_result,
+                "time": 0,
+                "memory": 0,
             }
             self.sub.verdict = SubmissionVerdict.AC
-            ## TODO Handle hidden tests
+
+            maxtime, maxmem = 0, 0 
+            ## Sample tests
             for i, jres in enumerate(judge_results):
                 test_verdict = jres[0]
                 if self.sub.verdict == SubmissionVerdict.AC and test_verdict != self.sub.verdict:
                     self.sub.verdict = test_verdict
+                
+                maxtime = max(maxtime, float(jres[2]))
+                maxmem  = max(maxmem, int(jres[3]))
+                
                 self.sub.output["sample_test"].append(
                     {
                         "test_id": i,
                         "verdict": test_verdict,
                         "stdout": jres[1][0],
                         "stderr": jres[1][1],
-                        "execute time": jres[2]
+                        "cpu time": jres[2],
+                        "memory used": jres[3]
                     }
                 )
+            
+            ## TODO Handle hidden tests
+            ## Update stats
+            self.sub.output["time"] = maxtime
+            self.sub.output["memory"] = maxmem
         
         return True
 
@@ -89,13 +104,13 @@ class JudgeSubmissionTask:
             counter=0
             self.jserver = JudgeSubmissionTask.assign_judge_server()
             while self.jserver is None:
-                self.jserver = JudgeSubmissionTask.assign_judge_server()
                 sleep(1)
                 if counter > 10:
                     self.sub.verdict = SubmissionVerdict.SKIPPED
                     return
                 else:
                     counter += 1
+                self.jserver = JudgeSubmissionTask.assign_judge_server()
             ##
             self.sub.verdict = SubmissionVerdict.JUDGE
             self.sub.save()
@@ -106,6 +121,8 @@ class JudgeSubmissionTask:
             self.sub.verdict = SubmissionVerdict.SE
             raise
         finally:
+            self.prob.statistic_info[self.sub.verdict] = self.prob.statistic_info.get(self.sub.verdict, 0) + 1
+            self.prob.save()
             if self.jserver != None:
                 self.jserver.pending_tasks -= 1
                 self.jserver.save()
