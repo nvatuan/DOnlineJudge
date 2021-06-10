@@ -1,4 +1,4 @@
-.problem_detail-flex-container{
+.problem_detail-flex-container {
     display: flex;
     width: 100%;
     max-width: 100%;
@@ -6,98 +6,95 @@
     align-items: flex-start;
     flex-flow: row nowrap;
     background-color: #eee;
-    
 }
 
-.problem-main{
+.problem-main {
     width: 80%;
 }
 
-.problem-main__item{
+.problem-main__item {
     margin: 35px 0;
 }
 
-.dropdown-languege{
+.dropdown-languege {
     display: flex;
 }
-.problem-id{
+.problem-id {
     display: flex;
 }
-.submit-nav{
+.submit-nav {
     display: flex;
     justify-content: space-between;
-    label{
+    label {
         padding-right: 10px;
     }
-    .submit-nav__item{
+    .submit-nav__item {
         padding: 0 10px;
     }
 }
-#submit-button{
+#submit-button {
     background-color: #1c2237;
 }
-#submit-button:hover{
+#submit-button:hover {
     background-color: rgba(35, 38, 54, 0.815);
     box-shadow: none;
-    
 }
-.right-column{
+.right-column {
     flex: none;
     margin: 35px 0;
 }
 
-.submit-card{
+.submit-card {
     text-align: center;
     align-items: center;
     width: 100%;
 }
 
-.right-column p{
+.right-column p {
     margin-left: 10px;
     margin-right: 10px;
 }
-.to_statusPage_card{
+.to_statusPage_card {
     display: flex;
     justify-content: flex-start;
-    font-weight: 600; 
-    .to_statusPage_card-item{
+    font-weight: 600;
+    .to_statusPage_card-item {
         width: 20px;
         margin-top: 5px;
-    }  
+    }
 }
-.to_statusPage_card:hover{
+.to_statusPage_card:hover {
     text-decoration: none;
 }
-.right-column__item{
+.right-column__item {
     margin-bottom: 60px;
     width: 15rem;
 }
 
-.problem-information__item{
+.problem-information__item {
     display: flex;
     justify-content: space-between;
     text-align: center;
     height: 3rem;
 }
-.problem-information_header{
+.problem-information_header {
     display: flex;
     width: 100%;
     height: 60px;
 }
 
+.title,
+.time_limit,
+.memory_limit {
+    text-align: center;
+}
 
-
-
-
-
-
-
-
-
-
-.problem-main__footer{
+.description,
+.input_description,
+.output_description {
+    text-indent: 20px;
+}
+.problem-main__footer {
     display: flex;
     justify-content: flex-end;
 }
-
-
