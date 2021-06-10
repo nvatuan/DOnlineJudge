@@ -9,7 +9,6 @@ function Status(props) {
     const [filters, setFilters] = useState({
         sort_by: '-submit_time',
         filter_by: [],
-        verdict: '',
     })
     const result = {
         "Accepted": "Accepted",

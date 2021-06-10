@@ -20,9 +20,10 @@ function EditProfile() {
             const fetchUserData = async () => {
                 const response = await oj_profileAPI.editUserInformation(data);
                 setUser(response.data);
-                if(response){
-                    window.location.reload();
-                }
+                console.log(response.data);
+                // if(response){
+                //     window.location.reload();
+                // }
             }
             fetchUserData();
         } catch (error) {
@@ -65,7 +66,7 @@ function EditProfile() {
                         <div className="right">
                             <div className="right-items">
                                 <p className="section-title">Change Password</p>
-                                <Form>
+                                <Form onSubmit={handleSubmit(onSubmit)}>
                                     <Form.Group >
                                         <Form.Label>Current password</Form.Label>
                                         <Form.Control type="password" placeholder="Current password" />
@@ -78,7 +79,7 @@ function EditProfile() {
 
                                     <Form.Group >
                                         <Form.Label>Confirm New Password</Form.Label>
-                                        <Form.Control type="password" placeholder="New Password" />
+                                        <Form.Control type="password" placeholder="New Password" {...register("password")}/>
                                     </Form.Group>
                                     <Button variant="primary" type="submit">
                                         Save

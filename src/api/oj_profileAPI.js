@@ -12,7 +12,7 @@ const oj_profileAPI = {
     },
     editUserInformation: (data) =>{
         Object.assign(data, { email: "", "profile_pic": "",});
-        
+        console.log(data);
         const url = '/profile/';
         return axiosClient.put(url,data,config);
     },

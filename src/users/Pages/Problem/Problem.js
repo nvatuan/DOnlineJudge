@@ -34,6 +34,26 @@ function Problem() {
             contains: newValue,
         })
     }
+
+    function handleFilterDiff(e) {
+        const value = e.target.value;
+        filters.filter_by.push('difficulty');
+        if (value === '') {
+            filters.filter_by = filters.filter_by.filter((item) => item !== 'difficulty');
+            setFilters({
+                ...filters,
+                filter_by: filters.filter_by,
+                difficulty: '',
+            })
+        }
+        else {
+            setFilters({
+                ...filters,
+                difficulty: value,
+
+            })
+        }
+    }
     return (
         <div>
             <Navbar />
@@ -47,20 +67,20 @@ function Problem() {
                             </div>
                             <div className="problem-feartures__items">
                                 <p>Difficulty</p>
-                                <Form className="filter_by">
+                                <Form className="filter_by" onChange={(e) => { handleFilterDiff(e)}}>
                                     <Form.Control as="select" className="filter_by">
                                         <option value="">All</option>
-                                        <option value="easy">Easy</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="hard">Hard</option>
+                                        <option value="Easy">Easy</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Hard">Hard</option>
                                     </Form.Control>
                                 </Form>
                             </div>
 
                         </div>
                     </Card.Header>
-                    <Card.Body>
-                            < table >
+                    <Card.Body >
+                        < table >
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -70,7 +90,7 @@ function Problem() {
                                         <th>AC Rate</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                            <tbody className="pages-container">
                                     {
                                         problems.length > 0 ? (
                                             problems.map((problem) => (
