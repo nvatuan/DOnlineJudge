@@ -53,7 +53,7 @@ function Navbar() {
                 <div className="navbar-container container">
                     <Link to='/home' className="navbar-logo">
                         <FcNightPortrait className='navbar-icon'></FcNightPortrait>
-                        WIBU Code
+                        <h2>DOnlineJudge</h2>
                     </Link>
                     <div className="menu-icon" onClick={handleClick}>
                         {click ? <FaTimes /> : <FaBars />}

@@ -6,20 +6,33 @@ import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import admin_problemAPI from '../../../api/admin_problemAPI';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { adminSelector, deleteProblem, clearState } from '../../AdminSlice';
+
 function ProblemList(props) {
     const [problems, setProblems] = useState([]);
+    //redux 
+    const dispatch = useDispatch();
+    const { deleteSusscess } = useSelector(adminSelector);
+    //delete problem
+    const handleDeleteProblem = (id) => {
+        if (window.confirm("Are you sure?")) {
+            dispatch(deleteProblem(id));
+            dispatch(clearState)
+        }
+    }
     useEffect(() => {
         const fetchProblemList = async () => {
             try {
                 const response = await admin_problemAPI.getAll();
-                console.log(response);
                 setProblems(response.data);
             } catch (error) {
                 console.log("Fail to fetch problem list: ", error);
             }
         };
         fetchProblemList();
-    }, [])
+    }, [deleteSusscess])
+
     return (
         <div>
             <AdminNavbar />
@@ -74,7 +87,7 @@ function ProblemList(props) {
                                                                     </Button>
                                                                 </div>
                                                                 <div className="option-button">
-                                                                    <Button variant="light">
+                                                                    <Button variant="light" onClick={() => handleDeleteProblem(problem.id)}>
                                                                         <AiOutlineDelete />
                                                                     </Button>
                                                                 </div>

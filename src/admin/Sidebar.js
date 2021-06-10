@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import './Sidebar.scss';
 import { AiFillAppstore, AiOutlineBars, AiOutlineCode } from 'react-icons/ai';
-import Logo from './Logo.jpg';
-function Sidebar(props) {
+import Logo from './Logo.png';
+function Sidebar() {
   return (
     <div className="sidebar-container">
       <ProSidebar className="menu-sidebar">

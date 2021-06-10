@@ -1,5 +1,6 @@
 {
   "name": "api-tracker",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://nvatazure.southeastasia.cloudapp.azure.com:7000",

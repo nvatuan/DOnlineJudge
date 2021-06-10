@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import admin_usersAPI from '../api/admin_usersAPI';
 import admin_announcementAPI from '../api/admin_announcementAPI';
+import admin_problemAPI from '../api/admin_problemAPI'
 export const UserList = createAsyncThunk(
     '/admin/users',
     async(thunkAPI) => {
@@ -44,7 +45,18 @@ export const deleteUser = createAsyncThunk(
         try {
             await admin_usersAPI.deleteById(id);
         } catch (error) {
-            console.log("fail to get user list");
+            console.log("fail to delete user");
+            thunkAPI.rejectWithValue(error.response.json());
+        }
+    }
+)
+export const deleteProblem = createAsyncThunk(
+    '/deleteProblem',
+    async(id, thunkAPI) => {
+        try {
+            await admin_problemAPI.deleteById(id);
+        } catch (error) {
+            console.log("fail to delete problem");
             thunkAPI.rejectWithValue(error.response.json());
         }
     }
@@ -103,6 +115,13 @@ export const adminSlice = createSlice({
         [deleteAnnouncement.rejected]: (state) =>{
             state.deleteSusscess = false;
             console.log("failt to delete announcement");
+        },  
+        //delete Problem
+        [deleteProblem.fulfilled] : (state) =>{
+            state.deleteSusscess = true;
+        },
+        [deleteProblem.rejected] : (state) =>{
+            state.deleteSusscess = false;
         }
     }
 
