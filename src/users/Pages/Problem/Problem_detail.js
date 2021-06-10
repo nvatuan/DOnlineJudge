@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Form, ListGroup} from 'react-bootstrap';
+import { Button, Card, Form, ListGroup } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import './Problem_detail.scss';
 import oj_statusAPI from '../../../api/oj_statusAPI';
@@ -18,13 +18,17 @@ require('codemirror/mode/javascript/javascript.js');
 
 function Problem_detail({ match }) {
     const id = match.params.id;
-    const [problem, setProblem] = useState([]); 
-    const history = useHistory();   
+    const [problem, setProblem] = useState([]);
+    const history = useHistory();
     //check login
     const [checkLogin, setCheckLogin] = useState(false);
     //check content
     const [content, setContent] = useState('');
+<<<<<<< Updated upstream
     const {register, handleSubmit} = useForm();
+=======
+    const { register, handleSubmit, error } = useForm();
+>>>>>>> Stashed changes
 
     function onChangeUploadFile(e) {
         let files = e.target.files;
@@ -45,7 +49,7 @@ function Problem_detail({ match }) {
         try {
             const response = await oj_statusAPI.postProblem(data);
 
-            if(response) {
+            if (response) {
                 history.push('/status');
             }
         } catch (error) {
@@ -59,16 +63,50 @@ function Problem_detail({ match }) {
             const response = await oj_problemAPI.getById(id);
             setProblem(response.data);
             //check login
-            if(localStorage.getItem('token') !== null) setCheckLogin(true);
+            if (localStorage.getItem('token') !== null) setCheckLogin(true);
             else setCheckLogin(false);
         };
         fetchProblem_detail();
     }, [])
+<<<<<<< Updated upstream
+=======
+
+    useEffect(() => {
+        return () => console.log('unmounting...');
+    }, [content])
+    function getDescription(str) {
+        str = String(str)
+        let i = str.indexOf('Input')
+        if (i >= 0) {
+            return str.slice(0, i)
+        }
+        else return str
+    }
+    function getInput_description(str) {
+        str = String(str)
+        let i = str.indexOf('Input')
+        let o = str.indexOf('Output')
+        if (i >= 0 && o > i) {
+            return str.slice(i + 7, o)
+        }
+        else return ''
+    }
+    function getOutput_description(str) {
+        str = String(str)
+        let o = str.indexOf('Output')
+        if (o >= 0) {
+            return str.slice(o + 8)
+        }
+        else return ''
+    }
+
+>>>>>>> Stashed changes
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className="problem_detail-flex-container pages-container">
                 <div className="problem-main">
+<<<<<<< Updated upstream
                 <Card className="problem-main__item">
                     <Card.Header as="h3">{problem.title}</Card.Header>
                     <Card.Body>
@@ -90,20 +128,57 @@ function Problem_detail({ match }) {
                                     </Form.Control>
                                     <br /><br />
                                 </div>
+=======
+                    <Card className="problem-main__item">
+                        <Card.Header as="h3">{problem.title}</Card.Header>
+                        <Card.Body>
+                            {getDescription(problem.statement)}
+                            <br /> <br />
+                            <strong>Input Description:</strong>
+                            <br />
+                            {getInput_description(problem.statement)}
+                            <br /> <br />
+                            <strong>Output Description:</strong>
+                            <br />
+                            {getOutput_description(problem.statement)}
+                            <br /> <br />
+                            <strong>Sample Test</strong>
+                            <br />
+
+
+
+                        </Card.Body>
+                    </Card>
+                    <Card className="problem-main__item">
+                        <Card.Body>
+                            <Form onSubmit={handleSubmit(onSubmit)}>
+                                <div className='submit-nav'>
+                                    <div className="dropdown-languege submit-nav__item">
+                                        <label htmlFor="languege">Language: </label>
+                                        <Form.Control as="select" size="sm" custom {...register("language")}>
+                                            <option value="Python3">Python3</option>
+                                            <option value="Python2">Python2</option>
+                                            <option value="Java">Java</option>
+                                            <option value="C">C</option>
+                                        </Form.Control>
+                                        <br /><br />
+                                    </div>
+>>>>>>> Stashed changes
                                     <div className="problem-id submit-nav__item">
                                         <Form.Label>Problem </Form.Label>
                                         <Form.Control
                                             type="text"
                                             size="sm"
-                                            value={id} 
+                                            value={id}
                                             {...register("problem_id")}
                                         />
                                     </div>
                                     <div className="upload_file">
                                         <Form.File id="formcheck-api-regular">
-                                                <Form.File.Input onChange={(e) => { onChangeUploadFile(e) }}/>
+                                            <Form.File.Input onChange={(e) => { onChangeUploadFile(e) }} />
                                         </Form.File>
                                     </div>
+<<<<<<< Updated upstream
                                     
                             </div>
                             {/* <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }>
@@ -123,19 +198,29 @@ function Problem_detail({ match }) {
                             <br/>   
                             <div className="problem-main__footer">
                                    {checkLogin === true ? (
+=======
+
+                                </div>
+                                <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e) }}>
+                                </Form.Control>
+
+                                <br />
+                                <div className="problem-main__footer">
+                                    {checkLogin === true ? (
+>>>>>>> Stashed changes
                                         <Button variant="primary" type="submit" id="submit-button" >Submit</Button>
-                                   ) : 
-                                   (
+                                    ) :
+                                        (
                                             <Button href="#" variant="secondary" disabled id="disable-button">
-                                            Submit
-                                        </Button>
-                                   )}
-                            </div>
-                        </Form>
-                    </Card.Body>
-                </Card>
-               </div>
-               <div className="right-column">
+                                                Submit
+                                            </Button>
+                                        )}
+                                </div>
+                            </Form>
+                        </Card.Body>
+                    </Card>
+                </div>
+                <div className="right-column">
                     <Card className="submit-card right-column__item">
                         <Card.Body>
                             <Link to='/status' className='to_statusPage_card'>
@@ -171,7 +256,7 @@ function Problem_detail({ match }) {
                             </ListGroup>
                         </Card>
                     </div>
-               </div>
+                </div>
             </div>
         </div>
     )
