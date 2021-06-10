@@ -134,6 +134,10 @@ class ProblemDetailAPI(APIView):
                 dif = ProblemDifficulty.easy
             problem.difficulty = dif
     
+        ## Sample tests
+        if data.get("sample_test"):
+            problem.sample_test = data['sample_test']
+
         ## Testdir
         if data.get("testset_count") != None:
             tscount = data.get("testset_count", 0)
@@ -142,12 +146,20 @@ class ProblemDetailAPI(APIView):
 
         ## Constaints
         if data.get("time_limit") != None:
-            tlmit = data.get("time_limit", 1000)
-            if tlmit < 0: tlmit = 1000
-            problem.time_limit = tlmit 
+            try:
+                tlimit = int(data.get("time_limit", '1000'))
+            except:
+                return response_bad_request("Cannot parse time_limit to an integer")
+
+            if tlimit < 0: tlimit = 1000
+            problem.time_limit = tlimit 
 
         if data.get("memory_limit") != None:
-            mlimit = data.get("memory_limit", 256)
+            if data.get("memory_limit") != None:
+                try:
+                    mlimit = int(data.get("memory_limit", '256'))
+                except:
+                    return response_bad_request("Cannot parse memory_limit to an integer")
             if mlimit < 0: mlimit = 256
             problem.memory_limit = mlimit
 
