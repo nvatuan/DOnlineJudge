@@ -146,3 +146,4 @@ class ChangePasswordAPI(generics.UpdateAPIView):
         token, created = Token.objects.get_or_create(user=user)
         # return new token
         return Response({'token': token.key}, status=status.HTTP_200_OK)
+
