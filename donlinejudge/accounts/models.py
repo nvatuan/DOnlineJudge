@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
 from django.db import models
+from PIL import Image
 
 from utils.file_upload import FileUploadUtils 
 
@@ -77,6 +78,15 @@ class User(AbstractBaseUser, PermissionsMixin):
                      "create_time", "admin_type", "problem_permission", "is_active"]
 
     objects = UserManager()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.profile_pic.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.profile_pic.path)
 
     def is_admin(self):
         return self.admin_type == AdminType.ADMIN
