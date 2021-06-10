@@ -9,7 +9,6 @@ from problem.serializers import ProblemSerializer
 
 from rest_framework.views import APIView
 
-
 from accounts.decorators import super_admin_required
 from accounts.decorators import admin_required, super_admin_required
 from utils.make_response import *
@@ -21,9 +20,8 @@ class ProblemAPI(APIView):
         probs = auto_apply(probs, request)
         seris = ProblemSerializer(probs, many=True)
         return response_ok(seris.data)
-    
 
-    @super_admin_required
+    @admin_required
     def post(self, request, format=None):
         resperror = ""
         respdata = ""
@@ -51,9 +49,9 @@ class ProblemAPI(APIView):
                 except ProblemTag.DoesNotExist:
                     tag = ProblemTag.objects.create(tagName=item)
             
-            data["difficulty"] = data.get("difficulty", "easy")
+            data["difficulty"] = data.get("difficulty", "Easy")
             if data["difficulty"] not in ProblemDifficulty.DIFF:
-                data["difficulty"] = ProblemDifficulty.easy
+                return response_bad_request(f"Difficulty {data['difficulty']} is not valid")
         
             ## Author
             data["author"] = request.user
@@ -95,7 +93,7 @@ class ProblemDetailAPI(APIView):
     """
     Update a problem
     """
-    @super_admin_required
+    @admin_required
     def put(self, request, id):
         try:
             problem = Problem.objects.get(id=id)
@@ -160,7 +158,7 @@ class ProblemDetailAPI(APIView):
     """
     Delete a problem
     """
-    @super_admin_required
+    @admin_required
     def delete(self, request, id):
         try:
             problem = Problem.objects.get(id=id)

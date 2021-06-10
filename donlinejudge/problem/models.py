@@ -5,6 +5,7 @@ class ProblemDifficulty(object):
     HARD = "Hard"
     MEDIUM = "Medium"
     EASY = "Easy"
+    DIFF = [EASY, MEDIUM, HARD]
     CHOICES = [(EASY, EASY), (MEDIUM, MEDIUM), (HARD, HARD)]
 
 class ProblemTag(models.Model):
