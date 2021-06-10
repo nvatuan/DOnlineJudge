@@ -121,7 +121,6 @@ function Createproblem({ match }) {
             const fetchProblem = async () => {
                 try {
                     const response = await admin_problemAPI.getById(id);
-                    console.log(response);
                     setDisplay_id(response.data.display_id)
                     setTitle(response.data.title);
                     setDescription(getDescription(response.data.statement))
@@ -297,7 +296,6 @@ function Createproblem({ match }) {
                             <i style={{ color: 'red' }}>*</i>
                             <span> Sample</span> <br /> <br />
                             <div className="Sample" >
-
                                 {
                                     sample_test.map((sample, idx) => {
                                         return (

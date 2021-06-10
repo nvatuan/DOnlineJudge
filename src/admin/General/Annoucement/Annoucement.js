@@ -56,7 +56,7 @@ function Annoucement(props) {
                                         <th>ID</th>
                                         <th>Title</th>
                                         <th>Create time</th>
-                                        <th>Last update time</th>
+                                        <th>Author</th>
                                         <th>Visible</th>
                                         <th>Option</th>
                                     </tr>
@@ -69,7 +69,6 @@ function Annoucement(props) {
                                                     <td>{annoucement.id}</td>
                                                     <td>{annoucement.title}</td>
                                                     <td>{annoucement.creation_time}</td>
-                                                    <td>{annoucement.last_update_time}</td>
                                                     <td>{annoucement.author}</td>
                                                     <td>
                                                         <Form.Check
