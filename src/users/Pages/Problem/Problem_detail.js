@@ -8,8 +8,11 @@ import Navbar from '../../Navbar'
 import { AiOutlineAlignLeft } from 'react-icons/ai'
 import { GrCircleInformation } from 'react-icons/gr'
 import { Link, useHistory } from 'react-router-dom';
+import { render } from '@testing-library/react';
 
 function Problem_detail({ match }) {
+    // console.log("render")
+
     const id = match.params.id;
     const [problem, setProblem] = useState([]);
     const history = useHistory();
@@ -18,6 +21,7 @@ function Problem_detail({ match }) {
     //check content
     const [content, setContent] = useState('');
     const { register, handleSubmit, error } = useForm();
+    const [sample_test, setSample_test] = useState()
 
     function onChangeUploadFile(e) {
         let files = e.target.files;
@@ -48,6 +52,7 @@ function Problem_detail({ match }) {
     };
 
     useEffect(() => {
+        // console.log("abc");
         const fetchProblem_detail = async () => {
             const response = await oj_problemAPI.getById(id);
             setProblem(response.data);
@@ -86,11 +91,8 @@ function Problem_detail({ match }) {
         }
         else return ''
     }
-    function getSample_test() {
-        const str = JSON.stringify(problem.sample_test)
 
 
-    }
     return (
         <div>
             <Navbar />
@@ -99,20 +101,23 @@ function Problem_detail({ match }) {
                     <Card className="problem-main__item">
                         <Card.Header as="h3">{problem.title}</Card.Header>
                         <Card.Body>
-                            {getDescription(problem.statement)}
-                            <br /> <br />
-                            <strong>Input Description</strong>
+                            <h2 className="title">{problem.title}</h2>
+                            <p className="time_limit"><strong>Time limit:</strong> {problem.time_limit} ms</p>
+                            <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} mb</p>
                             <br />
-                            {getInput_description(problem.statement)}
+                            <p className="description">{getDescription(problem.statement)}</p>
                             <br /> <br />
-                            <strong>Output Description</strong>
+                            <strong>Input Description:</strong>
                             <br />
-                            {getOutput_description(problem.statement)}
+                            <p className="input_description">{getInput_description(problem.statement)}</p>
                             <br /> <br />
-                            <strong>Sample Test</strong>
+                            <strong>Output Description:</strong>
                             <br />
-                            {getSample_test()}
-
+                            <p className="output_description">{getOutput_description(problem.statement)}</p>
+                            <br /> <br />
+                            <strong>Sample Test:</strong>
+                            <br />
+                            {JSON.stringify(problem.sample_test)}
 
 
                         </Card.Body>
