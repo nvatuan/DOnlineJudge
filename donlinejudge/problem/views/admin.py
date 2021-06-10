@@ -179,7 +179,7 @@ class ProblemDetailAPI(APIView):
         
         data = request.data
 
-        if not data.user.can_mgmt_all_problem and not data.user == problem.author:
+        if not request.user.can_mgmt_all_problem and not request.user == problem.author:
             return response_unauthorized("You don't have permission to the problem")
         
         ## TODO delete testset directory
