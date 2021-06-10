@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../Table.scss';
-import { Card, Button, Form} from 'react-bootstrap';
-import { AiOutlineEdit, AiOutlineDownload, AiOutlineDelete} from 'react-icons/ai';
+import { Card, Button, Form } from 'react-bootstrap';
+import { AiOutlineEdit, AiOutlineDownload, AiOutlineDelete } from 'react-icons/ai';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import admin_problemAPI from '../../../api/admin_problemAPI';
 function ProblemList(props) {
     const [problems, setProblems] = useState([]);
-    useEffect(() =>{
-        const fetchProblemList = async () =>{
+    useEffect(() => {
+        const fetchProblemList = async () => {
             try {
                 const response = await admin_problemAPI.getAll();
                 console.log(response);
@@ -18,11 +18,11 @@ function ProblemList(props) {
             }
         };
         fetchProblemList();
-    },[])
+    }, [])
     return (
         <div>
-            <AdminNavbar/>
-            <Sidebar/>
+            <AdminNavbar />
+            <Sidebar />
             <div className="table-view">
                 <Card>
                     <Card.Header as="h4">Problem List</Card.Header>
