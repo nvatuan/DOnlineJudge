@@ -1,3 +1,4 @@
+
 .cp {
     position: relative;
     left: 210px;
@@ -58,31 +59,28 @@
     padding: 10px 15px;
 }
 .cp-btn {
-    padding: 12px 100px;
+    color: #fff;
+    background-color: #409eff;
+    border-color: #409eff;
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    transition: 0.1s;
+    font-weight: 500;
+    padding: 12px 20px;
     font-size: 20px;
-}
-.td-type {
-    padding-left: 50px;
-}
-.cp-language {
-    width: 30px;
-}
-
-.addButton {
-    margin-top: 0;
-    width: 100%;
-}
-.textArea {
-    width: 98%;
-    height: 100px;
-    border-color: #ccc;
-    margin-bottom: 5px;
-}
-.removeButton {
-    width: 100%;
-    position: relative;
-    top: 80px;
-}
-.cp-visible {
-    width: 50%;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px 20px;
 }

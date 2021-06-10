@@ -38,7 +38,9 @@ function Status_detail({ match }) {
                                     options={{
                                         mode: 'xml',
                                         theme: 'default',
-                                        lineNumbers: true
+                                        lineNumbers: true,
+                                        readOnly: true,
+                                        readOnly: 'nocursor'
                                     }}
                                 />
                             </div>

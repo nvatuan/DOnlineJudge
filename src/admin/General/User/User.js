@@ -1,39 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import '../../Table.scss';
-//
-// import admin_users from '../../../api/admin_usersAPI';
-
-//
+import './User.scss';
 import {useDispatch, useSelector} from 'react-redux';
-import {adminSelector, clearState, UserList} from '../../AdminSlice';
+import {adminSelector, clearState, deleteUser, UserList} from '../../AdminSlice';
+import { Link } from 'react-router-dom';
+import { BsFillPlusCircleFill } from 'react-icons/bs';
 function User(props) {
     const [users, setUsers] = useState([]);
 
     //for redux
     const dispatch = useDispatch();
-    const { admin_users, isFetchUsersSuccess } = useSelector(adminSelector);
+    const { admin_users, isFetchUsersSuccess, deleteSusscess } = useSelector(adminSelector);
+    //delete
+    const handleDeleteUser = (id) => {
+        if (window.confirm("Are you sure?")) {
+            dispatch(deleteUser(id));   
+        }
+    }
+    //
     useEffect(() => {
         dispatch(UserList());
     },[])
     useEffect(() => {
         if(isFetchUsersSuccess){
             setUsers(admin_users);
-            dispatch(clearState);
+            dispatch(clearState());
         }
-    })
-    
+    },[isFetchUsersSuccess]);
+    useEffect(() => {
+        if (deleteSusscess){
+            dispatch(UserList())
+        }
+    },[deleteSusscess])
+
     return (
         <div>
             <AdminNavbar />
             <Sidebar />
             <div className="table-view">
                 <Card>
-                    <Card.Header as="h4">Users</Card.Header>
+                    <Card.Header as="h4" className="user-header">
+                        Users
+                        <div className="create_button">
+                            <Link to={`/admin/users/new`} className="alter_announcement"> <BsFillPlusCircleFill /> New</Link>
+                        </div>
+                    </Card.Header>
                     <Card.Body>
                             < table >
                                 <thead>
@@ -57,17 +72,15 @@ function User(props) {
                                                     <td>{user.create_time}</td>
                                                     <td>{user.last_login}</td>
                                                     <td>{user.email}</td>
-                                                    <td>{user.user_type}</td>
+                                                    <td>{user.admin_type}</td>
                                                     <td>
                                                         <div className="option-cell">
                                                             <div className="option-button">
-                                                                <div className="option-button">
-                                                                    <Button variant="light">
-                                                                        <AiOutlineEdit />
-                                                                    </Button>
+                                                                <div className="option-button__items">
+                                                                        <Link to={`/admin/users/${user.id}`} className="alter-user-button"><AiOutlineEdit /></Link>
                                                                 </div>
-                                                                <div className="option-button">
-                                                                    <Button variant="light">
+                                                                <div className="option-button__items">
+                                                                    <Button variant="light" onClick={() => { handleDeleteUser(user.id)}}>
                                                                         <AiOutlineDelete />
                                                                     </Button>
                                                                 </div>

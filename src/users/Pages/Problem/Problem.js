@@ -7,14 +7,7 @@ import { Link } from 'react-router-dom';
 import Search from '../../Components/Search';
 
 function Problem() {
-    const [problems, setProblems] = useState([]);
-    const [pagination, setPagination] = useState({
-        page: 1
-    })
-    const [currentPage, setCurrentPage] = useState(1);
-    const [coinsPerPage, setcoinsPerPage] = useState(9);
-
-
+    const [problems, setProblems] = useState([])
     const [filters, setFilters] = useState({
         filter_by: [],
         
@@ -41,26 +34,6 @@ function Problem() {
             contains: newValue,
         })
     }
-    // const handleChange = (e) => {
-    //     setSearch(e.target.value);
-    // }
-    // const handlePageChange = (newPage) => {
-    //     console.log('New page: ', newPage);
-    //     setFilters({
-    //         ...filters,
-    //         page: newPage
-    //     })
-    // }
-    //serach feature
-    // const filteredProblem = problems.filter(problem => (
-    //     problem.name.toLowerCase().includes(search.toLowerCase())
-    // ))
-    //get current page 
-    // const indexOfLastProblem = currentPage * problemsPerPage;
-    // const indexOfFirstProblem = indexOfLastProblem - problemsPerPage;
-    // const currentProblem = problems.slice(indexOfFirstProblem, indexOfLastProblem);
-    //page change
-    // const paginate = pageNumber => setCurrentPage(pageNumber);
     return (
         <div>
             <Navbar />

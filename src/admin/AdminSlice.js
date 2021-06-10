@@ -1,12 +1,11 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import admin_users from '../api/admin_usersAPI';
+import admin_usersAPI from '../api/admin_usersAPI';
 import admin_announcementAPI from '../api/admin_announcementAPI';
-import { userSlice } from '../users/UserSlice';
 export const UserList = createAsyncThunk(
     '/admin/users',
     async(thunkAPI) => {
         try {
-            const response = await admin_users.getAll();
+            const response = await admin_usersAPI.getAll();
             return response;
         } catch (error) {
             console.log("fail to get user list");
@@ -32,6 +31,18 @@ export const deleteAnnouncement = createAsyncThunk(
     async(id,thunkAPI) => {
         try {
             await admin_announcementAPI.deleteById(id);
+        } catch (error) {
+            console.log("fail to get user list");
+            thunkAPI.rejectWithValue(error.response.json());
+        }
+    }
+)
+
+export const deleteUser = createAsyncThunk(
+    '/deleteUser',
+    async(id, thunkAPI) => {
+        try {
+            await admin_usersAPI.deleteById(id);
         } catch (error) {
             console.log("fail to get user list");
             thunkAPI.rejectWithValue(error.response.json());
@@ -67,6 +78,14 @@ export const adminSlice = createSlice({
         [UserList.rejected]: () =>{
             console.log("failt to fetch userList");
            
+        },
+            //delete user
+        [deleteUser.fulfilled] : (state) =>{
+            state.deleteSusscess = true;
+        },
+        [deleteUser.rejected] : (state) => {
+            state.deleteSusscess = false;
+            console.log('delete user fail');
         },
         //announcements
         [AnnouncementList.fulfilled]: (state, {payload}) =>{

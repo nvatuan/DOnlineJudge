@@ -3,11 +3,9 @@ import { Form , Button} from 'react-bootstrap'
 import oj_profileAPI from '../../../api/oj_profileAPI';
 import './EditProfile.scss';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router';
 function EditProfile() {
     const [user, setUser] = useState([]);
     const { register, handleSubmit } = useForm();
-    const history = useHistory()
     useEffect(() => {
         const fetchUserData = async () =>{
             const response = await oj_profileAPI.getUserInformation();

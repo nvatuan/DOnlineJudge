@@ -1,30 +1,71 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../../Navbar';
-import avatar from '../../../public/avatar.jpg';
+import { FaCloudUploadAlt } from 'react-icons/fa'
 import Profile from '../Profile/Profile'
 import './Setting.scss'
 import { Link } from 'react-router-dom';
 import EditProfile from '../EditProfile/EditProfile';
+import oj_profileAPI from '../../../api/oj_profileAPI';
+import { Button } from 'react-bootstrap';
 function Setting() {
+    const [userData, setUserData] = useState([]);
     const [toAccount, setToAccount] = useState(false);
-    const [toProfile, setToProfile] = useState(true);
+    const [selectFile, setSelectFile] = useState(null);
     const openAccountPage = () =>{
         setToAccount(true);
-        setToProfile(false);
     }
     const openProfilePage = () =>{
-        setToProfile(true);
         setToAccount(false);
     }
+    const onChangeUploadFile = (e) =>{
+        setSelectFile(e.target.files[0]);        
+    }
+    const uploadFile = () => {
+        const formData = new FormData();
+        formData.append('profile_pic', selectFile);
+        const updateAvatar = async () => {
+            const response = await oj_profileAPI.uploadAvatar(formData);
+            if(response){
+                setUserData(response.data);
+                setSelectFile(null);
+            }
+        }
+        updateAvatar();
+    }
+    useEffect(() => {
+        const fetchUserData = async () =>{
+            const response = await oj_profileAPI.getUserInformation(selectFile);
+            setUserData(response.data);
+        }
+        fetchUserData();
+        return () => {
+        }
+    }, [userData.profile_pic])
     return (
         <div>
             <Navbar/>
             <div className="setting_container">
                 <div className="card_container">
                     <div className="sidebar pages-container">
+                        <div className="save-button">
+                            {selectFile === null ? <div style={{ padding: "10px 0" }}></div> : <Button variant="light" size="sm" onClick={() => uploadFile()}>save</Button>}
+                        </div>
                         <center>
-                            <img src={avatar} className="profile_img" alt="hiu" />
-                            <h4>Nagatoro</h4>
+                            <div className="upload-img">
+                                <div className="container">
+                                    <div className="avatar-upload">
+                                        <div className="avatar-edit">
+                                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" onChange={(e) =>{onChangeUploadFile(e)}}/>
+                                            <label htmlFor="imageUpload"><FaCloudUploadAlt/></label>
+                                        </div>
+                                        <div className="avatar-preview">
+                                            <img src={userData.profile_pic} className="profile_img" style={{style: "background-image"}} alt="hiu" />
+                                        </div>
+                                        <br/>
+                                        <h4>{localStorage.getItem("username")}</h4>
+                                    </div>
+                                </div>
+                            </div>
                         </center>
                         <a href="#" onClick={() => { openProfilePage() }}><i className="far fa-id-badge"></i><span>Profile</span></a>
                         <a href="#" onClick={() => { openAccountPage() }}><i className="fas fa-user-cog"></i><span>Account</span></a>

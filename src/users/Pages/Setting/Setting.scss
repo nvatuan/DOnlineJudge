@@ -33,12 +33,6 @@
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
     
 
-    .profile_img{
-        width: 70%;
-        height: 70%;
-        border-radius: 100px;
-        margin-bottom: 10px;
-    }
     h4{
         color: #ccc;
         margin-bottom: 20px;
@@ -95,4 +89,74 @@
 .sidebar-item:hover{
     background: #3d4c81;
     width: 85%;
+}
+
+
+.upload-img .container {
+    max-width: 960px;
+    margin: 10px auto;
+    padding: 20px;
+}
+
+.upload-img h1 {
+    font-size: 20px;
+    text-align: center;
+    margin: 10px 0 10px;
+    small {
+        display: block;
+        font-size: 15px;
+        padding-top: 8px;
+        color: gray;
+    }
+}
+
+.upload-img .avatar-upload {
+    position: relative;
+    max-width: 205px;
+    margin: 10px auto;
+    .avatar-edit {
+        position: absolute;
+        right: 12px;
+        z-index: 1;
+        top: 10px;
+        input {
+            display: none;
+            + label {
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                margin-bottom: 0;
+                border-radius: 100%;
+                background: #FFFFFF;
+                border: 1px solid transparent;
+                box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+                cursor: pointer;
+                font-weight: normal;
+                transition: all .2s ease-in-out;
+                &:hover {
+                    background: #f1f1f1;
+                    border-color: #d6d6d6;
+                }
+            }
+        }
+    }
+    .avatar-preview {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        border-radius: 100%;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        .profile_img {
+            width: 200px;
+            height: 200px;
+            border-radius: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+}
+.save-button{
+    position: absolute;
+    right: 10px;
 }

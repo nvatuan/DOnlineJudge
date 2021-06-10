@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Form, Button, FormControl } from 'react-bootstrap';
+import React, { useState } from 'react'
+import { Form, FormControl } from 'react-bootstrap';
 function Search(props) {
     const { onSubmit } = props;
     const [searchTerm, setSearchTerm] = useState('');

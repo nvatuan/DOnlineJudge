@@ -1,0 +1,21 @@
+
+.edit-form{
+    display: block;
+    position: relative;
+    padding-top: 30px;
+    padding-left: 17%;
+    width: 90%;
+}
+.UserForm{
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    .UserForm-items{
+        margin: 10px 0;
+    }
+}
+
+.save_button{
+    position: absolute;
+    bottom: 0;
+}

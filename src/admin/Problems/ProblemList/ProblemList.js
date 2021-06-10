@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import '../../Table.scss';
-import { Card, Button, Form, Navbar } from 'react-bootstrap';
-import { AiOutlineEdit, AiOutlineDownload, AiOutlineDelete } from 'react-icons/ai';
+import { Card, Button, Form} from 'react-bootstrap';
+import { AiOutlineEdit, AiOutlineDownload, AiOutlineDelete} from 'react-icons/ai';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import admin_problemAPI from '../../../api/admin_problemAPI';
-import { Link } from 'react-router-dom';
 function ProblemList(props) {
     const [problems, setProblems] = useState([]);
-    useEffect(() => {
-        const fetchProblemList = async () => {
+    useEffect(() =>{
+        const fetchProblemList = async () =>{
             try {
                 const response = await admin_problemAPI.getAll();
                 console.log(response);
@@ -19,11 +18,11 @@ function ProblemList(props) {
             }
         };
         fetchProblemList();
-    }, [])
+    },[])
     return (
         <div>
-            <AdminNavbar />
-            <Sidebar />
+            <AdminNavbar/>
+            <Sidebar/>
             <div className="table-view">
                 <Card>
                     <Card.Header as="h4">Problem List</Card.Header>
@@ -61,12 +60,9 @@ function ProblemList(props) {
                                                         <div className="option-cell">
                                                             <div className="option-button">
                                                                 <div className="option-button">
-                                                                    <Link to={`/admin/problem/${problem.id}`} className="alter_announcement">
-                                                                        <Button variant="light">
-                                                                            <AiOutlineEdit />
-                                                                        </Button>
-                                                                    </Link>
-
+                                                                    <Button variant="light">
+                                                                        <AiOutlineEdit />
+                                                                    </Button>
                                                                 </div>
                                                                 <div className="option-button">
                                                                     <Button variant="light">
@@ -92,13 +88,7 @@ function ProblemList(props) {
                                 </tbody>
                             </table >
                         </Card.Text>
-
-                        <Link to={`/admin/problem/create`} className="alter_announcement">
-                            <Button variant="primary" >
-                                Create
-                            </Button>
-                        </Link>
-
+                        <Button variant="primary">Create</Button>
                     </Card.Body>
                 </Card>
             </div>

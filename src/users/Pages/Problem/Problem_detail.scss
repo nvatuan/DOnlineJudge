@@ -48,14 +48,22 @@
 
 .submit-card{
     text-align: center;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
 }
 
-.right-column h7{
+.right-column p{
     margin-left: 10px;
+    margin-right: 10px;
 }
 .to_statusPage_card{
-    font-weight: 600;   
+    display: flex;
+    justify-content: flex-start;
+    font-weight: 600; 
+    .to_statusPage_card-item{
+        width: 20px;
+        margin-top: 5px;
+    }  
 }
 .to_statusPage_card:hover{
     text-decoration: none;
@@ -70,6 +78,11 @@
     justify-content: space-between;
     text-align: center;
     height: 3rem;
+}
+.problem-information_header{
+    display: flex;
+    width: 100%;
+    height: 60px;
 }
 
 

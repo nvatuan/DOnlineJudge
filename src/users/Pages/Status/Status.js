@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Card, Form, Row, Col } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
@@ -36,7 +36,7 @@ function Status(props) {
     }
     function handleFilterVerdict(e){
         const value = e.target.value
-        const temp = filters.filter_by.push('verdict');
+        filters.filter_by.push('verdict');
         if(value === '') {
             filters.filter_by = filters.filter_by.filter((item) => item !== 'verdict');
             setFilters({
@@ -55,7 +55,7 @@ function Status(props) {
     };
     function handleFilterLanguege(e){
         const value = e.target.value;
-        const temp = filters.filter_by.push('language');
+        filters.filter_by.push('language');
         if (value === '') {
             filters.filter_by = filters.filter_by.filter((item) => item !== 'language');
             setFilters({
@@ -163,8 +163,8 @@ function Status(props) {
                                                         <Link to={`problem/${stat.problem}`} >{stat.problem}</Link>
                                                     </div>
                                                 </td>
-                                                <td>{stat.time}</td>
-                                                <td>{stat.memory}</td>
+                                                <td>{stat.output["time"]}s</td>
+                                                <td>{Math.floor(stat.output['memory']/1024)} byte</td>
                                                 <td>{stat.language}</td>
                                                 <td>{stat.author}</td>
                                                 <td><Link to={`status/${stat.id}`}>detail</Link></td>

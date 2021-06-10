@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useRef } from 'react';
 import JoditEditor from "jodit-react";
 
 function Editor(props) {

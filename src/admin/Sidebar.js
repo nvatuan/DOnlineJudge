@@ -2,7 +2,6 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import React from 'react'
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types'
 import './Sidebar.scss';
 import { AiFillAppstore, AiOutlineBars, AiOutlineCode} from 'react-icons/ai';
 import Logo from './Logo.jpg';
@@ -25,7 +24,7 @@ function Sidebar(props) {
             </MenuItem>
             <MenuItem >
               User
-              <Link to="/admin/user"/>
+              <Link to="/admin/users"/>
             </MenuItem>
           </SubMenu>
           <SubMenu title="Problem" icon={<AiOutlineBars/>}>

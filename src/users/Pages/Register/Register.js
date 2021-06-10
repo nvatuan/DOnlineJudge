@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 
 function Register(props) {
-    const { setShowRegis } = props;
     //Modal handling
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);

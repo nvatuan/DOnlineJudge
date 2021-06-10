@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FcNightPortrait } from 'react-icons/fc'
-import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 import Login from './Pages/Login/Login';
 import './Navbar.css';
 import { useHistory } from 'react-router-dom';
-import { clearState, userSelector, logoutUser } from './UserSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from './UserSlice';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Register from './Pages/Register/Register';
 function Navbar() {
@@ -30,7 +30,6 @@ function Navbar() {
     }
     window.addEventListener('resize', showButton)
     //logout process
-    const { isSuccess, isError} = useSelector(userSelector);
     const dispatch = useDispatch();
     const history = useHistory();
     const onLogout = () => {

@@ -1,7 +1,5 @@
-import React, {useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import Social_icon from '../../Components/Social_icons/Social_icon';
-import { userSelector } from '../../UserSlice';
 import './Profile.scss';
 function Profile() {
     const userInformation = JSON.parse(localStorage.getItem('userInformation'));
@@ -30,7 +28,6 @@ function Profile() {
                             </div>
                         </div>
                     </div>
-
                     <div className="Social">
                         <h3>Social</h3>
                         <div className="social_media">

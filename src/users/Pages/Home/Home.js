@@ -5,12 +5,6 @@ import './Home.scss';
 import {Card} from 'react-bootstrap';
 import oj_announcementAPI from '../../../api/oj_announcementAPI';
 import Announcement from './Announcement';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
-require('codemirror/lib/codemirror.css');
-require('codemirror/theme/material.css');
-require('codemirror/theme/neat.css');
-require('codemirror/mode/xml/xml.js');
-require('codemirror/mode/javascript/javascript.js');
 function Home() {
     const [announcement, setAnnouncement] = useState([]);
     useEffect(() => {

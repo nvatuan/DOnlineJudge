@@ -9,6 +9,13 @@ import { AiOutlineAlignLeft } from 'react-icons/ai'
 import { GrCircleInformation } from 'react-icons/gr'
 import { Link, useHistory } from 'react-router-dom';
 
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+require('codemirror/lib/codemirror.css');
+require('codemirror/theme/material.css');
+require('codemirror/theme/neat.css');
+require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/javascript/javascript.js');
+
 function Problem_detail({ match }) {
     const id = match.params.id;
     const [problem, setProblem] = useState([]); 
@@ -17,7 +24,7 @@ function Problem_detail({ match }) {
     const [checkLogin, setCheckLogin] = useState(false);
     //check content
     const [content, setContent] = useState('');
-    const {register, handleSubmit, error} = useForm();
+    const {register, handleSubmit} = useForm();
 
     function onChangeUploadFile(e) {
         let files = e.target.files;
@@ -28,13 +35,13 @@ function Problem_detail({ match }) {
         }
 
     }
-    function onChangeTextarea(e) {
-        setContent(e.target.value);
+    function onChangeTextarea(editor, data, value) {
+        setContent(value);
     }
     const onSubmit = async (data) => {
         data.content = content;
         data.problem_id = parseInt(data.problem_id);
-        // alert(JSON.stringify(data))
+        alert(JSON.stringify(data))
         try {
             const response = await oj_statusAPI.postProblem(data);
 
@@ -57,10 +64,6 @@ function Problem_detail({ match }) {
         };
         fetchProblem_detail();
     }, [])
-
-    useEffect(() =>{
-        return () => console.log('unmounting...');
-    },[content])
     return (
         <div>
             <Navbar/>
@@ -82,6 +85,7 @@ function Problem_detail({ match }) {
                                         <option value="Python3">Python3</option>
                                         <option value="Python2">Python2</option>
                                         <option value="Java">Java</option>
+                                        <option value="Cpp">C++</option>
                                         <option value="C">C</option>
                                     </Form.Control>
                                     <br /><br />
@@ -102,8 +106,19 @@ function Problem_detail({ match }) {
                                     </div>
                                     
                             </div>
-                            <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }>
-                            </Form.Control>
+                            {/* <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e)} }>
+                            </Form.Control> */}
+                                <div className="editor-container">
+                                <CodeMirror
+                                    value={content}
+                                        onChange={(editor, data, value) => { onChangeTextarea(editor, data, value) }}
+                                    options={{
+                                        mode: 'xml',
+                                        theme: 'default',
+                                        lineNumbers: true
+                                    }}
+                                />
+                            </div>
                                 
                             <br/>   
                             <div className="problem-main__footer">
@@ -124,13 +139,14 @@ function Problem_detail({ match }) {
                     <Card className="submit-card right-column__item">
                         <Card.Body>
                             <Link to='/status' className='to_statusPage_card'>
-                                <AiOutlineAlignLeft /><p>Submissions</p>
+                                <AiOutlineAlignLeft className="to_statusPage_card-item"/>
+                                <p>Submissions</p>
                             </Link>
                         </Card.Body>
                     </Card>
                     <div className="problem-information">
                         <Card className="right-column__item">
-                            <Card.Header><GrCircleInformation /><p> Imformation</p></Card.Header>
+                            <Card.Header className=" problem-information_header "><GrCircleInformation /><p> Imformation</p></Card.Header>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Id</p>
