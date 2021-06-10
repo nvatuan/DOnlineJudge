@@ -62,7 +62,6 @@ function Problem_detail({ match }) {
         };
         fetchProblem_detail();
     }, [])
-<<<<<<< HEAD
 
     useEffect(() => {
         return () => console.log('unmounting...');
@@ -94,8 +93,6 @@ function Problem_detail({ match }) {
     }
 
 
-=======
->>>>>>> a63632f22dc7546a5808193ca3af531f80af8a97
     return (
         <div>
             <Navbar />
@@ -104,7 +101,6 @@ function Problem_detail({ match }) {
                     <Card className="problem-main__item">
                         <Card.Header as="h3">{problem.title}</Card.Header>
                         <Card.Body>
-<<<<<<< HEAD
                             <h2 className="title">{problem.title}</h2>
                             <p className="time_limit"><strong>Time limit:</strong> {problem.time_limit} ms</p>
                             <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} mb</p>
@@ -122,13 +118,6 @@ function Problem_detail({ match }) {
                             <strong>Sample Test:</strong>
                             <br />
                             {JSON.stringify(problem.sample_test)}
-=======
-                            <div className="problem-til">
-                                {problem.statement}
-                            </div>
-                            <strong>Sample Test</strong>
-
->>>>>>> a63632f22dc7546a5808193ca3af531f80af8a97
 
 
                         </Card.Body>
