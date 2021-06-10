@@ -8,7 +8,7 @@ import EditProfile from '../EditProfile/EditProfile';
 import oj_profileAPI from '../../../api/oj_profileAPI';
 import { Button } from 'react-bootstrap';
 function Setting() {
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userInformation')));
     const [toAccount, setToAccount] = useState(false);
     const [selectFile, setSelectFile] = useState(null);
     const openAccountPage = () =>{

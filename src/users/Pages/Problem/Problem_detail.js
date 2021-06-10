@@ -57,40 +57,6 @@ function Problem_detail({ match }) {
         };
         fetchProblem_detail();
     }, [])
-
-    useEffect(() => {
-        return () => console.log('unmounting...');
-    }, [content])
-    function getDescription(str) {
-        str = String(str)
-        let i = str.indexOf('Input')
-        if (i >= 0) {
-            return str.slice(0, i)
-        }
-        else return str
-    }
-    function getInput_description(str) {
-        str = String(str)
-        let i = str.indexOf('Input')
-        let o = str.indexOf('Output')
-        if (i >= 0 && o > i) {
-            return str.slice(i + 7, o)
-        }
-        else return ''
-    }
-    function getOutput_description(str) {
-        str = String(str)
-        let o = str.indexOf('Output')
-        if (o >= 0) {
-            return str.slice(o + 8)
-        }
-        else return ''
-    }
-    function getSample_test() {
-        const str = JSON.stringify(problem.sample_test)
-
-
-    }
     return (
         <div>
             <Navbar />
@@ -99,19 +65,10 @@ function Problem_detail({ match }) {
                     <Card className="problem-main__item">
                         <Card.Header as="h3">{problem.title}</Card.Header>
                         <Card.Body>
-                            {getDescription(problem.statement)}
-                            <br /> <br />
-                            <strong>Input Description</strong>
-                            <br />
-                            {getInput_description(problem.statement)}
-                            <br /> <br />
-                            <strong>Output Description</strong>
-                            <br />
-                            {getOutput_description(problem.statement)}
-                            <br /> <br />
+                            <div className="problem-til">
+                                {problem.statement}
+                            </div>
                             <strong>Sample Test</strong>
-                            <br />
-                            {getSample_test()}
 
 
 

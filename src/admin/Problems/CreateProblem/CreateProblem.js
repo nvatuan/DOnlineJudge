@@ -121,7 +121,6 @@ function Createproblem({ match }) {
             const fetchProblem = async () => {
                 try {
                     const response = await admin_problemAPI.getById(id);
-                    console.log(response);
                     setDisplay_id(response.data.display_id)
                     setTitle(response.data.title);
                     setDescription(getDescription(response.data.statement))
@@ -291,46 +290,46 @@ function Createproblem({ match }) {
                             <i style={{ color: 'red' }}>*</i>
                             <span> Sample</span> <br /> <br />
                             <div className="Sample" >
-                                {sample_test.map((sample, idx) => {
+                                {console.log(sample_test.length)}
+                                {sample_test.length <= 0 ? <h1>none</h1> : sample_test.map((sample, idx) => {
                                     return (
-
                                         <div key={`${sample}-${idx}`}>
-
-                                            <tr>
-                                                <td>
-                                                    <i style={{ color: 'red' }}>*</i>
-                                                    <span> Input</span> <br />
-                                                    <Form.Control as="textarea" rows={5} cols={150}
-                                                        className="textArea"
-                                                        placeholder="Enter input..."
-                                                        value={sample.input || ""}
-                                                        required
-                                                        onChange={e => handleInput(idx, e)}
-                                                    >
-                                                    </Form.Control>
-                                                </td>
-                                                <td>
-                                                    <i style={{ color: 'red' }}>*</i>
-                                                    <span> Output</span> <br />
-                                                    <Form.Control as="textarea" rows={5} cols={150}
-                                                        className="textArea"
-                                                        placeholder="Enter output..."
-                                                        value={sample.output || ""}
-                                                        required
-                                                        onChange={e => handleOutput(idx, e)}
-                                                    >
-                                                    </Form.Control>
-                                                </td>
-                                                <td>
-                                                    <Button className="removeButton" onClick={() => handleRemove(idx)}>
-                                                        X
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <i style={{ color: 'red' }}>*</i>
+                                                            <span> Input</span> <br />
+                                                            <Form.Control as="textarea" rows={5} cols={150}
+                                                                className="textArea"
+                                                                placeholder="Enter input..."
+                                                                value={sample.input || ""}
+                                                                required
+                                                                onChange={e => handleInput(idx, e)}
+                                                            >
+                                                            </Form.Control>
+                                                        </td>
+                                                        <td>
+                                                            <i style={{ color: 'red' }}>*</i>
+                                                            <span> Output</span> <br />
+                                                            <Form.Control as="textarea" rows={5} cols={150}
+                                                                className="textArea"
+                                                                placeholder="Enter output..."
+                                                                value={sample.output || ""}
+                                                                required
+                                                                onChange={e => handleOutput(idx, e)}
+                                                            >
+                                                            </Form.Control>
+                                                        </td>
+                                                        <td>
+                                                            <Button className="removeButton" onClick={() => handleRemove(idx)}>
+                                                                X
                                                     </Button>
-                                                </td>
+                                                        </td>
 
-                                            </tr>
-
-
-
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     );
                                 })}
