@@ -27,7 +27,6 @@ function App() {
   return (
     <Router>
       <Switch>
-        //oj
         <Route path='/' exact component={Home}></Route>
         <Route path='/home' exact component={Home}></Route>
         <Route path='/about' exact component={About}></Route>
@@ -38,19 +37,6 @@ function App() {
         <Route path='/announcement' exact component={Announcement} />
         <Route path='/profile' exact component={Setting} />
 
-        //admin
-
-        <PrivateRoute exact component={Dashboard} path='/admin/' />
-        <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
-        <PrivateRoute exact component={User} path='/admin/users' />
-        <PrivateRoute exact component={ProblemList} path='/admin/problem' />
-        <PrivateRoute exact component={Annoucement} path='/admin/announcement' />
-        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
-        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id' />
-        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
-        <PrivateRoute exact component={EditUser} path='/admin/users/:id' />
-        <PrivateRoute exact component={EditUser} path='/admin/users/new' />
-
         <PrivateRoute exact component={Dashboard} path='/admin/' />
         <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
         <PrivateRoute exact component={User} path='/admin/user' />
@@ -60,6 +46,8 @@ function App() {
         <PrivateRoute exact component={CreateProblem} path='/admin/problem/:id' />
         <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id' />
         <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
+        <PrivateRoute exact component={EditUser} path='/admin/users/:id' />
+        <PrivateRoute exact component={EditUser} path='/admin/users/new' />
       </Switch>
     </Router>
   );

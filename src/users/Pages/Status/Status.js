@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Card, Form } from 'react-bootstrap';
-import { Link , useParams} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';

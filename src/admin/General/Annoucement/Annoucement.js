@@ -26,8 +26,8 @@ function Annoucement(props) {
     useEffect(()=>{
         if (isFetchAnnouncementsSuccess){
             setAnnoucements(admin_announcements);
-            dispatch(clearState());
         }
+        return dispatch(clearState());
     }, [isFetchAnnouncementsSuccess])
     useEffect(() =>{
         if (deleteSusscess){

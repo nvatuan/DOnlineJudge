@@ -22,8 +22,6 @@ function Login(props) {
     const dispatch = useDispatch();
     const history = useHistory();
     const { isLoginSuccess, isLoginError, errorMessage } = useSelector(userSelector);
-
-
     const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
         dispatch(loginUser(data));

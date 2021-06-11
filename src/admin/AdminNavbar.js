@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {Button} from 'react-bootstrap';
 import { FiLogOut } from 'react-icons/fi';
 import { useHistory } from 'react-router';
