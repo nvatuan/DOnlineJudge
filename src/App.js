@@ -50,7 +50,7 @@ function App() {
         <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
         <PrivateRoute exact component={EditUser} path='/admin/users/:id' />
         <PrivateRoute exact component={EditUser} path='/admin/users/new' />
-=======
+
         <PrivateRoute exact component={Dashboard} path='/admin/' />
         <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
         <PrivateRoute exact component={User} path='/admin/user' />

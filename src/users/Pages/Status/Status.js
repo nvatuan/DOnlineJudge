@@ -1,14 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import { Card, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link , useParams} from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
-function Status(props) {
+import queryString from 'query-string';
+function Status() {
+    let href = window.location.href;
+    const id = queryString.parse(href, { parseNumbers: true })
+    console.log(id.author_id);
     const [status, setStatus] = useState([]);
     const [filters, setFilters] = useState({
         sort_by: '-submit_time',
-        filter_by: [],
+        filter_by: ['author_id'],
+        author_id: id.author_id,
     })
     const result = {
         "Accepted": "Accepted",
@@ -21,8 +26,6 @@ function Status(props) {
         "Judging": "Judging"
 
     };
-    
-
 
     //sort by id
     function handleSortChange(e){

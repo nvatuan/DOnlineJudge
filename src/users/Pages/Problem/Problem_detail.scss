@@ -79,6 +79,7 @@
 }
 .problem-information_header {
     display: flex;
+    justify-content: flex-start;
     width: 100%;
     height: 60px;
 }
@@ -98,3 +99,4 @@
     display: flex;
     justify-content: flex-end;
 }
+

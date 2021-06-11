@@ -3,27 +3,57 @@ import { Form , Button} from 'react-bootstrap'
 import oj_profileAPI from '../../../api/oj_profileAPI';
 import './EditProfile.scss';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { logoutUser } from '../../UserSlice';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+
 function EditProfile() {
     const [user, setUser] = useState([]);
     const { register, handleSubmit } = useForm();
+    const history = useHistory();
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const fetchUserData = async () =>{
             const response = await oj_profileAPI.getUserInformation();
             setUser(response.data);
         }
         fetchUserData();
-        return () => {
-        }
     }, [])
     const onSubmit = (data) =>{
         try {
             const fetchUserData = async () => {
                 const response = await oj_profileAPI.editUserInformation(data);
                 setUser(response.data);
-                console.log(response.data);
-                // if(response){
-                //     window.location.reload();
-                // }
+                if(response){
+                    localStorage.setItem('userInformation', JSON.stringify(response.data));
+                    window.location.reload();
+                }
+            }
+            fetchUserData();
+        } catch (error) {
+            console.log("fail to change user data", error);
+        }
+    }
+    
+    const onSubmitPassword = data =>{
+        try {
+            const fetchUserData = async () => {
+                const response = await oj_profileAPI.changePassword(data);
+                if (response) {
+                    dispatch(logoutUser());
+                    toast.success('goodbye!', {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                        autoClose: 1500
+                    });
+                    history.push('/');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('role');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('userInformation');
+                }
             }
             fetchUserData();
         } catch (error) {
@@ -66,20 +96,20 @@ function EditProfile() {
                         <div className="right">
                             <div className="right-items">
                                 <p className="section-title">Change Password</p>
-                                <Form onSubmit={handleSubmit(onSubmit)}>
+                                <Form onSubmit={handleSubmit(onSubmitPassword)}>
                                     <Form.Group >
                                         <Form.Label>Current password</Form.Label>
-                                        <Form.Control type="password" placeholder="Current password" />
+                                        <Form.Control type="password" placeholder="Current password" {...register("old_password")}/>
                                     </Form.Group>
 
                                     <Form.Group >
                                         <Form.Label>New Password</Form.Label>
-                                        <Form.Control type="password" placeholder="New Password" />
+                                        <Form.Control type="password" placeholder="New Password" {...register("new_password1")}/>
                                     </Form.Group>
 
                                     <Form.Group >
                                         <Form.Label>Confirm New Password</Form.Label>
-                                        <Form.Control type="password" placeholder="New Password" {...register("password")}/>
+                                        <Form.Control type="password" placeholder="New Password" {...register("new_password2")}/>
                                     </Form.Group>
                                     <Button variant="primary" type="submit">
                                         Save

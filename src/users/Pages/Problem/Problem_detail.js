@@ -8,7 +8,13 @@ import Navbar from '../../Navbar'
 import { AiOutlineAlignLeft } from 'react-icons/ai'
 import { GrCircleInformation } from 'react-icons/gr'
 import { Link, useHistory } from 'react-router-dom';
-import { render } from '@testing-library/react';
+
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+require('codemirror/lib/codemirror.css');
+require('codemirror/theme/material.css');
+require('codemirror/theme/neat.css');
+require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/javascript/javascript.js');
 
 function Problem_detail({ match }) {
     // console.log("render")
@@ -32,13 +38,12 @@ function Problem_detail({ match }) {
         }
 
     }
-    function onChangeTextarea(e) {
-        setContent(e.target.value);
+    function onChangeTextarea(editor, data, value) {
+        setContent(value);
     }
     const onSubmit = async (data) => {
         data.content = content;
         data.problem_id = parseInt(data.problem_id);
-        // alert(JSON.stringify(data))
         try {
             const response = await oj_statusAPI.postProblem(data);
 
@@ -192,8 +197,17 @@ function Problem_detail({ match }) {
                                     </div>
 
                                 </div>
-                                <Form.Control as="textarea" rows={10} cols={5} {...register("content")} value={content} onChange={(e) => { onChangeTextarea(e) }}>
-                                </Form.Control>
+                                <div className="editor-container">
+                                    <CodeMirror
+                                        value={content}
+                                        onChange={(editor, data, value) => { onChangeTextarea(editor, data, value) }}
+                                        options={{
+                                            mode: 'xml',
+                                            theme: 'default',
+                                            lineNumbers: true
+                                        }}
+                                    />
+                                </div>
 
                                 <br />
                                 <div className="problem-main__footer">
@@ -220,7 +234,7 @@ function Problem_detail({ match }) {
                     </Card>
                     <div className="problem-information">
                         <Card className="right-column__item">
-                            <Card.Header><GrCircleInformation /><p> Imformation</p></Card.Header>
+                            <Card.Header className="problem-information_header"><GrCircleInformation /><p> Imformation</p></Card.Header>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Id</p>

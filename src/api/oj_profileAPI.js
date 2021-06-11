@@ -7,6 +7,12 @@ let config = {
 };
 const oj_profileAPI = {
     getUserInformation: () =>{
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        };
         const url = '/profile/';
         return axiosClient.get(url,config);
     },
@@ -19,7 +25,10 @@ const oj_profileAPI = {
     uploadAvatar: (data) => {
         const url = '/profile/';
         return axiosClient.put(url,data,config);
-
+    },
+    changePassword: (data) => {
+        const url = '/profile/change-password/';
+        return axiosClient.put(url,data,config);
     }
 }
 export default oj_profileAPI;
