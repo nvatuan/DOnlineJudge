@@ -9,7 +9,7 @@ import admin_problemAPI from '../../../api/admin_problemAPI';
 
 
 function Createproblem({ match }) {
-    const { register, handleSubmit } = useForm();
+    const { handleSubmit } = useForm();
     const id = match.params.id;
     const [display_id, setDisplay_id] = useState('');
     const [title, setTitle] = useState('');

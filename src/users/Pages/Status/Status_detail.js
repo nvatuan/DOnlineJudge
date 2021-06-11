@@ -39,7 +39,6 @@ function Status_detail({ match }) {
                                         mode: 'xml',
                                         theme: 'default',
                                         lineNumbers: true,
-                                        readOnly: true,
                                         readOnly: 'nocursor'
                                     }}
                                 />

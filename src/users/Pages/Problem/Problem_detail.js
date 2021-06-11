@@ -228,7 +228,8 @@ function Problem_detail({ match }) {
                     <Card className="submit-card right-column__item">
                         <Card.Body>
                             <Link to='/status' className='to_statusPage_card'>
-                                <AiOutlineAlignLeft /><p>Submissions</p>
+                                <AiOutlineAlignLeft className="to_statusPage_card-item "/>
+                                <p>Submissions</p>
                             </Link>
                         </Card.Body>
                     </Card>
