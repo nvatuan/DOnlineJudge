@@ -100,3 +100,11 @@
     justify-content: flex-end;
 }
 
+textarea{
+    background-color: #fff;
+    resize: none;
+}
+.form-control:disabled, .form-control[readonly]{
+    background-color: #fff;
+}
+

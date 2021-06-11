@@ -14,6 +14,8 @@ require('codemirror/lib/codemirror.css');
 require('codemirror/theme/material.css');
 require('codemirror/theme/neat.css');
 require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/python/python.js');
+require('codemirror/mode/clike/clike.js');
 require('codemirror/mode/javascript/javascript.js');
 
 function Problem_detail({ match }) {
@@ -28,7 +30,8 @@ function Problem_detail({ match }) {
     const [content, setContent] = useState('');
     const { register, handleSubmit, error } = useForm();
     const [sample_test, setSample_test] = useState([])
-
+    //
+    const [language, setLanguage] = useState('Python3');
     function onChangeUploadFile(e) {
         let files = e.target.files;
         let reader = new FileReader();
@@ -102,9 +105,6 @@ function Problem_detail({ match }) {
         }
         else return ''
     }
-
-
-
     return (
         <div>
             <Navbar />
@@ -138,18 +138,16 @@ function Problem_detail({ match }) {
 
                                             <tr>
                                                 <td>
-                                                    <i style={{ color: 'red' }}>*</i>
-                                                    <span> Input</span> <br />
-                                                    <Form.Control as="textarea" rows={5} cols={150}
+                                                    <span> Input {idx+1}</span> <br />
+                                                    <Form.Control  as="textarea" cols={150} readOnly
                                                         className="textArea"
                                                         value={sample.input || ""}
                                                     >
                                                     </Form.Control>
                                                 </td>
                                                 <td>
-                                                    <i style={{ color: 'red' }}>*</i>
-                                                    <span> Output</span> <br />
-                                                    <Form.Control as="textarea" rows={5} cols={150}
+                                                    <span> Output {idx+1}</span> <br />
+                                                    <Form.Control as="textarea" cols={150} readOnly
                                                         className="textArea"
                                                         value={sample.output || ""}
                                                     >
@@ -173,18 +171,19 @@ function Problem_detail({ match }) {
                                 <div className='submit-nav'>
                                     <div className="dropdown-languege submit-nav__item">
                                         <label htmlFor="languege">Language: </label>
-                                        <Form.Control as="select" size="sm" custom {...register("language")}>
+                                        <Form.Control as="select" size="sm" custom {...register("language")} onChange={(e) => setLanguage(e.target.value)}>
                                             <option value="Python3">Python3</option>
                                             <option value="Python2">Python2</option>
                                             <option value="Java">Java</option>
+                                            <option value="Cpp">C++</option>
                                             <option value="C">C</option>
                                         </Form.Control>
                                         <br /><br />
                                     </div>
                                     <div className="problem-id submit-nav__item">
-                                        <Form.Label>Problem </Form.Label>
+                                        <Form.Label></Form.Label>
                                         <Form.Control
-                                            type="text"
+                                            type="hidden"
                                             size="sm"
                                             value={id}
                                             {...register("problem_id")}
@@ -202,9 +201,17 @@ function Problem_detail({ match }) {
                                         value={content}
                                         onChange={(editor, data, value) => { onChangeTextarea(editor, data, value) }}
                                         options={{
-                                            mode: 'xml',
-                                            theme: 'default',
-                                            lineNumbers: true
+                                            matchBrackets: true,
+                                            styleActiveLine: true,
+                                            theme: "material",
+                                            mode: {
+                                                'Python3' : 'python',
+                                                'Python2' : 'python',
+                                                'Java': 'text/x-java',
+                                                'C': 'text/x-csrc',
+                                                'Cpp': 'text/x-c++src',
+                                            }[language],
+                                            lineNumbers: true,
                                         }}
                                     />
                                 </div>

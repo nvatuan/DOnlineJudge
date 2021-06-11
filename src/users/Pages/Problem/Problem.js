@@ -83,7 +83,7 @@ function Problem() {
                         < table >
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Display ID</th>
                                         <th>Tille</th>
                                         <th>Level</th>
                                         <th>Total</th>
@@ -95,7 +95,7 @@ function Problem() {
                                         problems.length > 0 ? (
                                             problems.map((problem) => (
                                                 <tr key={problem.id}>
-                                                    <td>{problem.id}</td>
+                                                    <td>{problem.display_id}</td>
                                                     <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
                                                     <td>
                                                         <div className="table-cell">

@@ -5,6 +5,7 @@ import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
 import queryString from 'query-string';
+import oj_profileAPI from '../../../api/oj_profileAPI';
 function Status() {
     let href = window.location.href;
     const id = queryString.parse(href, { parseNumbers: true })
@@ -15,6 +16,8 @@ function Status() {
         filter_by: ['author_id'],
         author_id: id.author_id,
     })
+    const uid_to_username = {};
+    
     const result = {
         "Accepted": "Accepted",
         "Wrong Answer": "Wrong_answer",
@@ -134,14 +137,14 @@ function Status() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>when</th>
                                     <th>ID</th>
-                                    <th>Status</th>
                                     <th>Problem</th>
+                                    <th>Author</th>
+                                    <th>Status</th>
+                                    <th>Language</th>
                                     <th>Time</th>
                                     <th>Memory</th>
-                                    <th>Language</th>
-                                    <th>Author</th>
+                                    <th>When</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -149,8 +152,13 @@ function Status() {
                                     status.map(stat => {
                                         return (
                                             <tr key={stat.id}>
-                                                <td>{hanldeTime(stat.submit_time)}</td>
                                                 <td>{stat.id}</td>
+                                                <td>
+                                                    <div className="table-cell">
+                                                        <Link to={`problem/${stat.problem}`} >{stat.problem}</Link>
+                                                    </div>
+                                                </td>
+                                                <td>{stat.author}</td>
                                                 <td >
                                                     <div className="table-cell">
                                                         <div className={`result-container ${result[stat.verdict]}`}>
@@ -160,16 +168,11 @@ function Status() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div className="table-cell">
-                                                        <Link to={`problem/${stat.problem}`} >{stat.problem}</Link>
-                                                    </div>
-                                                </td>
-                                                <td>{stat.output["time"]}s</td>
-                                                <td>{Math.floor(stat.output['memory']/1024)} byte</td>
                                                 <td>{stat.language}</td>
-                                                <td>{stat.author}</td>
-                                                <td><Link to={`status/${stat.id}`}>detail</Link></td>
+                                                <td>{stat.output["time"]}s</td>
+                                                <td>{Math.floor(stat.output['memory']/1024)} MB</td>
+                                                <td>{hanldeTime(stat.submit_time)}</td>
+                                                <td><Link to={`status/${stat.id}`}>Detail</Link></td>
                                             </tr>
                                         )
                                     })

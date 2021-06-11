@@ -10,10 +10,23 @@ require('codemirror/theme/material.css');
 require('codemirror/theme/neat.css');
 require('codemirror/mode/xml/xml.js');
 require('codemirror/mode/javascript/javascript.js');
+require('codemirror/mode/python/python.js');
+require('codemirror/mode/clike/clike.js');
 
 
 function Status_detail({ match }) {
     const id = match.params.id;
+    const result = {
+        "Accepted": "Accepted",
+        "Wrong Answer": "Wrong_answer",
+        "Runtime Error": "Runtime_error",
+        "New": "New",
+        "Compilation Error": "Compile_error",
+        "System Error": "System_error",
+        "Judged": "Judged",
+        "Judging": "Judging"
+
+    };
     const [status_detail, setStatus_detail] = useState({});
     useEffect(() => {
         const fetchStatus_detail = async () => {
@@ -36,8 +49,16 @@ function Status_detail({ match }) {
                                 <CodeMirror
                                     value={status_detail.content}
                                     options={{
-                                        mode: 'xml',
-                                        theme: 'default',
+                                        matchBrackets: true,
+                                        styleActiveLine: true,
+                                        theme: "material",
+                                        mode: {
+                                            'Python3': 'python',
+                                            'Python2': 'python',
+                                            'Java': 'text/x-java',
+                                            'C': 'text/x-csrc',
+                                            'Cpp': 'text/x-c++src',
+                                        }[status_detail.language],
                                         lineNumbers: true,
                                         readOnly: 'nocursor'
                                     }}
@@ -66,7 +87,10 @@ function Status_detail({ match }) {
                                     </tr>
                                     <tr>
                                         <td>Status</td>
-                                        <td>{status_detail.verdict}</td>
+                                       
+                                        <td>
+                                            <div className={`verdict-text ${result[status_detail.verdict]}`}>{status_detail.verdict}</div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

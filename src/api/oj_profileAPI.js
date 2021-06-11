@@ -11,6 +11,16 @@ const oj_profileAPI = {
         const url = '/profile/';
         return axiosClient.get(url,config);
     },
+    getById: (id) =>{
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        };
+        const url = `/profile/${id}`;
+        return axiosClient.get(url,config);
+    },
     editUserInformation: (data) =>{
         Object.assign(data, { email: "", "profile_pic": "",});
         const token = localStorage.getItem('token');
