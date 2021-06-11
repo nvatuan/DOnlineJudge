@@ -34,7 +34,7 @@ const admin_problemAPI = {
         const url = `admin/problem/${data.id}/`;
         return axiosClient.put(url, data.formData, config)
     },
-    createAnnouncemt: (data) => {
+    createProblem: (data) => {
         const token = localStorage.getItem('token');
         console.log(data);
         let config = {
