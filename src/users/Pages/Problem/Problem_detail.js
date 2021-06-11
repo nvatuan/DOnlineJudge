@@ -21,7 +21,7 @@ function Problem_detail({ match }) {
     //check content
     const [content, setContent] = useState('');
     const { register, handleSubmit, error } = useForm();
-    const [sample_test, setSample_test] = useState()
+    const [sample_test, setSample_test] = useState([])
 
     function onChangeUploadFile(e) {
         let files = e.target.files;
@@ -52,10 +52,16 @@ function Problem_detail({ match }) {
     };
 
     useEffect(() => {
-        // console.log("abc");
+
         const fetchProblem_detail = async () => {
             const response = await oj_problemAPI.getById(id);
             setProblem(response.data);
+            if (JSON.stringify(response.data.sample_test) === JSON.stringify({})) {
+                setSample_test([])
+            }
+            else {
+                setSample_test(response.data.sample_test)
+            }
             //check login
             if (localStorage.getItem('token') !== null) setCheckLogin(true);
             else setCheckLogin(false);
@@ -79,7 +85,7 @@ function Problem_detail({ match }) {
         let i = str.indexOf('Input')
         let o = str.indexOf('Output')
         if (i >= 0 && o > i) {
-            return str.slice(i + 7, o)
+            return str.slice(i + 6, o)
         }
         else return ''
     }
@@ -87,10 +93,11 @@ function Problem_detail({ match }) {
         str = String(str)
         let o = str.indexOf('Output')
         if (o >= 0) {
-            return str.slice(o + 8)
+            return str.slice(o + 7)
         }
         else return ''
     }
+
 
 
     return (
@@ -118,7 +125,39 @@ function Problem_detail({ match }) {
                             <br /> <br />
                             <strong>Sample Test:</strong>
                             <br />
-                            {JSON.stringify(problem.sample_test)}
+                            {
+                                sample_test.map((sample, idx) => {
+                                    return (
+
+                                        <div key={`${sample}-${idx}`}>
+
+                                            <tr>
+                                                <td>
+                                                    <i style={{ color: 'red' }}>*</i>
+                                                    <span> Input</span> <br />
+                                                    <Form.Control as="textarea" rows={5} cols={150}
+                                                        className="textArea"
+                                                        value={sample.input || ""}
+                                                    >
+                                                    </Form.Control>
+                                                </td>
+                                                <td>
+                                                    <i style={{ color: 'red' }}>*</i>
+                                                    <span> Output</span> <br />
+                                                    <Form.Control as="textarea" rows={5} cols={150}
+                                                        className="textArea"
+                                                        value={sample.output || ""}
+                                                    >
+                                                    </Form.Control>
+                                                </td>
+
+                                            </tr>
+
+                                        </div>
+                                    );
+                                })}
+
+
 
 
                         </Card.Body>
