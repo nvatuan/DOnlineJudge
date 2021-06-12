@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter, BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import About from './users/Pages/About/About';
@@ -25,31 +25,31 @@ import EditUser from './admin/General/User/EditUser'
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path='/' exact component={Home}></Route>
-        <Route path='/home' exact component={Home}></Route>
-        <Route path='/about' exact component={About}></Route>
-        <Route path='/problem/' exact component={Problem}></Route>
-        <Route path='/problem/:id' exact component={Problem_detail}></Route>
-        <Route path='/status' exact component={Status}></Route>
-        <Route path='/status/:id' exact component={Status_detail}></Route>
-        <Route path='/announcement' exact component={Announcement} />
-        <Route path='/profile' exact component={Setting} />
+      <Router>
+        <Switch>
+          <Route path='/' exact component={Home}></Route>
+          <Route path='/home' exact component={Home}></Route>
+          <Route path='/about' exact component={About}></Route>
+          <Route path='/problem' exact component={Problem}></Route>
+          <Route path='/problem/:id' exact component={Problem_detail}></Route>
+          <Route path='/status' exact component={Status}></Route>
+          <Route path='/status/:id' exact component={Status_detail}></Route>
+          <Route path='/announcement' exact component={Announcement} />
+          <Route path='/profile' exact component={Setting} />
 
-        <PrivateRoute exact component={Dashboard} path='/admin/' />
-        <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
-        <PrivateRoute exact component={User} path='/admin/user' />
-        <PrivateRoute exact component={ProblemList} path='/admin/problem' />
-        <PrivateRoute exact component={Annoucement} path='/admin/announcement' />
-        <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
-        <PrivateRoute exact component={CreateProblem} path='/admin/problem/:id' />
-        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id' />
-        <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
-        <PrivateRoute exact component={EditUser} path='/admin/users/:id' />
-        <PrivateRoute exact component={EditUser} path='/admin/users/new' />
-      </Switch>
-    </Router>
+          <PrivateRoute exact component={Dashboard} path='/admin' />
+          <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
+          <PrivateRoute exact component={User} path='/admin/user' />
+          <PrivateRoute exact component={ProblemList} path='/admin/problem' />
+          <PrivateRoute exact component={Annoucement} path='/admin/announcement' />
+          <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
+          <PrivateRoute exact component={CreateProblem} path='/admin/problem/:id' />
+          <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id' />
+          <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
+          <PrivateRoute exact component={EditUser} path='/admin/users/:id' />
+          <PrivateRoute exact component={EditUser} path='/admin/users/new' />
+        </Switch>
+      </Router>    
   );
 }
 
