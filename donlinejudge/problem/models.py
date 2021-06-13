@@ -9,10 +9,14 @@ class ProblemDifficulty(object):
     CHOICES = [(EASY, EASY), (MEDIUM, MEDIUM), (HARD, HARD)]
 
 class ProblemTag(models.Model):
-    tagName = models.TextField()
+    tag_name = models.TextField()
 
     class Meta:
         db_table = "problemtag"
+
+    def __str__(self):
+        if self.tag_name: return self.tag_name
+        return None
 
 
 class Problem(models.Model):
@@ -20,7 +24,6 @@ class Problem(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     visible = models.BooleanField(default=True)
 
-    # author = models.OneToOneField() ## TODO: Foreign key to user
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     #== Content to be displayed
@@ -49,6 +52,18 @@ class Problem(models.Model):
     correct_submission = models.BigIntegerField(default=0)
     statistic_info = models.JSONField(default=dict)
     ### {_.ACCEPTED: 5, _.WRONG_ANSWER: 4, ...}
+
+    #-- Method fields
+    #--- Author
+    def author_id(self):
+        if self.author:
+            return self.author.id
+        return None
+
+    def author_name(self):
+        if self.author:
+            return self.author.username
+        return None
 
     class Meta:
         db_table = "problem"

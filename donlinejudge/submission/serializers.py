@@ -2,14 +2,23 @@ from submission.models import Submission
 from rest_framework import serializers
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    problem_title = serializers.ReadOnlyField()
+    problem_disp_id = serializers.ReadOnlyField()
+    problem_id = serializers.ReadOnlyField()
+
+    author_name = serializers.ReadOnlyField()
+    author_id = serializers.ReadOnlyField()
+    
     class Meta:
         model = Submission 
-        fields = [
-            'id',
+        #fields = "__all__"
+        exclude = ('problem', 'author',)
+        #fields = [
+        #    'id',
 
-            'problem', 'author', 'submit_time',
+        #    'problem_id', 'author_id', 'submit_time',
 
-            'content', 'language',
+        #    'content', 'language',
 
-            'verdict', 'output',
-        ]
+        #    'verdict', 'output',
+        #]

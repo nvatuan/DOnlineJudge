@@ -45,9 +45,9 @@ class ProblemAPI(APIView):
 
             for item in tags:
                 try:
-                    tag = ProblemTag.objects.get(tagName=item)
+                    tag = ProblemTag.objects.get(tag_name=item)
                 except ProblemTag.DoesNotExist:
-                    tag = ProblemTag.objects.create(tagName=item)
+                    tag = ProblemTag.objects.create(tag_name=item)
             
             data["difficulty"] = data.get("difficulty", "Easy")
             if data["difficulty"] not in ProblemDifficulty.DIFF:
@@ -68,7 +68,7 @@ class ProblemAPI(APIView):
             ## == Create object
             problem = Problem.objects.create(**data)
             for item in tags:
-                tag = ProblemTag.objects.get(tagName=item)
+                tag = ProblemTag.objects.get(tag_name=item)
                 problem.tags.add(tag)
 
             return response_ok(ProblemSerializer(problem).data)
@@ -120,13 +120,13 @@ class ProblemDetailAPI(APIView):
             else:
                 for item in tags:
                     try:
-                        tag = ProblemTag.objects.get(tagName=item)
+                        tag = ProblemTag.objects.get(tag_name=item)
                     except ProblemTag.DoesNotExist:
-                        tag = ProblemTag.objects.create(tagName=item)
+                        tag = ProblemTag.objects.create(tag_name=item)
             
             problem.tags.clear()
             for item in tags:
-                problem.tags.add(ProblemTag.objects.get(tagName=item))
+                problem.tags.add(ProblemTag.objects.get(tag_name=item))
 
         if data.get("difficulty") != None:
             dif = data.get("difficulty")

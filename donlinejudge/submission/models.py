@@ -60,6 +60,21 @@ class Submission(models.Model):
     output = models.JSONField(default=dict)
     ### [{input: "asdf", output: "xyz"}, ...]
 
+    def problem_id(self):
+        return self.problem.id
+
+    def author_id(self):
+        return self.author.id
+
+    def problem_disp_id(self):
+        return self.problem.display_id
+
+    def problem_title(self):
+        return Problem.objects.get(id=self.problem.id).title
+
+    def author_name(self):
+        return User.objects.get(id=self.author.id).username
+
     class Meta:
         db_table = "submission"
         ordering = ["id", "submit_time"]

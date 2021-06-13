@@ -2,9 +2,13 @@ from .models import Announcement
 from rest_framework import serializers
 
 class AnnouncementSerializer(serializers.ModelSerializer):
+    author_id = serializers.ReadOnlyField()
+    author_name = serializers.ReadOnlyField()
+
     class Meta:
         model = Announcement
-        fields = "__all__"
+        #fields = "__all__"
+        exclude = ('author',)
 
 
 class CreateAnnouncementSerializer(serializers.Serializer):
