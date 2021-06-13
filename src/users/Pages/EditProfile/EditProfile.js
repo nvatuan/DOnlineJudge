@@ -28,7 +28,7 @@ function EditProfile() {
                 setUser(response.data);
                 if(response){
                     localStorage.setItem('userInformation', JSON.stringify(response.data));
-                    window.location.reload();
+                    // window.location.reload();
                 }
             }
             fetchUserData();
@@ -54,10 +54,11 @@ function EditProfile() {
                     localStorage.removeItem('userId');
                     localStorage.removeItem('userInformation');
                 }
+                console.log(response.status);
             }
             fetchUserData();
         } catch (error) {
-            console.log("fail to change user data", error);
+            console.log("fail to change user data", error.response);
         }
     }
     return (

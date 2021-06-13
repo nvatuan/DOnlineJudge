@@ -49,7 +49,6 @@ function Problem_detail({ match }) {
         data.problem_id = parseInt(data.problem_id);
         try {
             const response = await oj_statusAPI.postProblem(data);
-
             if (response) {
                 history.push('/status');
             }

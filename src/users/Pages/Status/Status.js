@@ -9,14 +9,12 @@ import oj_profileAPI from '../../../api/oj_profileAPI';
 function Status() {
     let href = window.location.href;
     const id = queryString.parse(href, { parseNumbers: true })
-    console.log(id.author_id);
     const [status, setStatus] = useState([]);
     const [filters, setFilters] = useState({
         sort_by: '-submit_time',
         filter_by: ['author_id'],
         author_id: id.author_id,
     })
-    const uid_to_username = {};
     
     const result = {
         "Accepted": "Accepted",
@@ -91,6 +89,7 @@ function Status() {
     const hanldeTime = (time) => {
         return new Date(time).toDateString();  
     }
+   
     return (
         <div>
             <Navbar/>

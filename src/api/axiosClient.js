@@ -22,7 +22,7 @@ axiosClient.interceptors.response.use((response) => {
     }
     return response;
     }, (error) => {
-    toast.error(JSON.stringify(error.response.data), {
+    toast.error((error.response.data.data), {
         position: toast.POSITION.BOTTOM_CENTER,
         autoClose: 1500
     })

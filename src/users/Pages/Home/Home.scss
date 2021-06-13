@@ -1,16 +1,62 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    max-width: 100%;
+    box-sizing: border-box;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
 .home-container{
     display: flex;
     flex-direction: row;
     align-content: center;
     justify-content: space-around;
-    align-items: normal;
-    position: absolute;
-    margin-top: 30px;
+    align-items: center;
     width: 100%;
-    background-color:#eee;
+    //quá củ chuối. Kiếm giải pháp khác
+    height: 89.4vh;
+    background-image: linear-gradient(rgba(0, 0 ,0, 0.7), rgba(0, 0 ,0, 0.7)), url(../../../public/Bakcground.jpg);
 
-    .annoucement-container{
-        width: 80%;
-        background-color: #fff;
+    .home-container__items{
+        flex-basis: 50%;
     }
+    .left-part{
+        margin-left: 100px;
+        h1{
+            color: #fff;
+            font-size: 80px;
+            font-weight: 200;
+        }
+    }
+    .right-part{
+        h1{
+            color: #fff;
+            font-size: 40px;
+            font-weight: 200;
+        }
+    }
+}
+
+.annoucement-container{
+    height: 550px;
+    overflow: scroll;
+    overflow-x: hidden;
+    
+}
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f14b; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

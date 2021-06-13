@@ -17,7 +17,7 @@ function Announcement(props) {
                 onHide={() => setShow(false)}
                 dialogClassName="modal-90w"
                 aria-labelledby="example-custom-modal-styling-title"
-                size = "xl"
+                size="xl"
                 centered
             >
                 <Modal.Header closeButton>
@@ -32,24 +32,24 @@ function Announcement(props) {
         </div>
     )
     return (
-            <div className="announcement-container">
-                <article>
-                    <div className="annou_head">
+        <div className="announcement-container">
+            <article>
+                <div className="annou_head">
                     <h5>From: {author}</h5>
                     <div className="creation_time">
                         <p>{hanldeTime(creation_time)}</p>
                     </div>
-                    </div>
-                    <div className="annou_detail">
-                        <h3>{title}</h3>       
-                    </div>
+                </div>
+                <div className="annou_detail">
+                    <h3>{title}</h3>
+                </div>
 
-                    <div className="more-button">
+                <div className="more-button">
                     <Button onClick={handleShow}>More...</Button>
                     {contentModal}
-                    </div>
-                </article>
-            </div>
+                </div>
+            </article>
+        </div>
     )
 }
 
