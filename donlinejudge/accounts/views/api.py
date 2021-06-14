@@ -9,6 +9,8 @@ from rest_framework import status, generics
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.authtoken.models import Token
 
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 # Python
 import os
 import logging
@@ -45,12 +47,33 @@ class RegisterAPI(APIView):
     serializer = RegisterSerializer
     @unauthenticated_user
     def post(self, request):
-        user = request.data
-        serializer = self.serializer(data=user)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        user_data = serializer.data
-        return response_created(user_data)
+        data = request.data
+        serializer = self.serializer(data=data)
+        username = data.get("username", '')
+        email = data.get("email", '')
+        password =  data.get("password",'')
+        if username != '' and username.isalnum():
+            if User.objects.filter(username=data["username"].lower()).exists():
+                return response_bad_request({"username":"This username already exists"})
+        else: 
+            return response_bad_request({"username":"Username can only contain alphanumeric characters."})
+        if email != '':
+            try:
+                validate_email(email)
+                if User.objects.filter(email=email.lower()).exists():
+                    return response_bad_request({"email":"This email already exists"})
+            except ValidationError:
+                return response_bad_request({"email":"This email is invalid"})
+        else:
+            return response_bad_request({"email":"This field is required."})
+        if password != '' and len(password) >= 8:
+            serializer.is_valid()
+            serializer.save()
+            user_data = serializer.data
+            return response_created(user_data)
+    
+        return response_bad_request({"password":"The password length must be more than 8 with letters and numbers."})
+
 
 class LoginAPI(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
@@ -59,17 +82,22 @@ class LoginAPI(generics.GenericAPIView):
     @unauthenticated_user
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        login(request, user)
-        user_data = User.objects.get(username=request.data['username'])
-        token, created = Token.objects.get_or_create(user=user_data)
-
-        # make_response would break ?
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": str(token)
-        })
+        if request.data.get("username").strip() == "": 
+            return response_bad_request({"username":"This field is required."})
+        if request.data.get("password").strip() == "":
+            return response_bad_request({"password":"This field is required."})
+        if serializer.is_valid():
+            user = serializer.validated_data
+            login(request, user)
+            user_data = User.objects.get(username=request.data['username'])
+            token, created = Token.objects.get_or_create(user=user_data)
+            
+            return response_ok({
+                "user": UserSerializer(user, context=self.get_serializer_context()).data,
+                "token": str(token)
+            })
+        else:
+            return response_bad_request({"username":"Username or Password is incorrect. Try again."})
 
 
 class LogoutAPI(APIView):
