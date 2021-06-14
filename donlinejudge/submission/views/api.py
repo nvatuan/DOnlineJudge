@@ -1,27 +1,37 @@
 from django.shortcuts import render
 from django.db.models import JSONField
-
-from submission.models import Submission, SubmissionVerdict
-from submission.serializers import SubmissionSerializer
-
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 
-from accounts.decorators import login_required, super_admin_required
+from django_q.tasks import async_task
+
+from problem.models import Problem
+from submission.models import Submission, SubmissionVerdict, SubmissionLanguage
+from submission.models import JudgeSubmissionTask
+from judgeserver.models import JudgeServer, JudgeServerStatus
+from submission.serializers import SubmissionSerializer
+
+from accounts.decorators import login_required, admin_required, super_admin_required
+
+from time import sleep
+from json import loads, dumps
+import sys
 
 from utils.make_response import *
-import sys
+from utils.query_set_rearrange import auto_apply 
+
+import asyncio, websockets
 
 class SubmissionAPI(APIView):
     """
-    Get a list of Submission
+    List all problems
     """
     def get(self, request, format=None):
-        probs = Submission.objects.all()
-        seris = SubmissionSerializer(probs, many=True)
+        subs = Submission.objects.all()
+        subs = auto_apply(subs, request)
+        seris = SubmissionSerializer(subs, many=True)
         return response_ok(seris.data)
-    
+
     """
     An user make a submission
     """
@@ -39,7 +49,6 @@ class SubmissionAPI(APIView):
                 return response_not_found("Problem with id=%s does not exist." % str(id))
         
             ## Author ID
-            ## TODO get request.user
             data["author"] = request.user
 
             ## Compile Language
@@ -49,36 +58,38 @@ class SubmissionAPI(APIView):
             data["language"] = lang
 
             ## Content
-            content = data["content"]
-            if not content: 
+            src = data["content"]
+            if not src: 
                 raise KeyError("content")
 
             ## == Create object
             submission = Submission.objects.create(**data)
+            problem = Problem.objects.get(id=prob_id)
+            jstask = JudgeSubmissionTask(submission, problem)
 
-            ## TODO Judge the submission and change update its verdict and output
+            async_task(jstask.main, hook=jstask.hook, ack_failure=True)
 
             return response_created(SubmissionSerializer(submission).data)
         except KeyError as ke:
             return response_bad_request(str(ke) + " is required.")
-        # except: 
+        # except: # TODO Uncomment these
         #     return response_bad_request("Something went wrong.")
-
 
 class SubmissionDetailAPI(APIView):
     """
-    View a specific problem
+		Get a specific submission
     """
     def get(self, request, id):
         try:
             submission = Submission.objects.get(id=id)
         except Submission.DoesNotExist:
-            return response_not_found("Submission with id=%s does not exist." % (str(id)))
+            return response_not_found("Submission does not exist.")
         
+        ## TODO delete testset directory
         return response_ok(SubmissionSerializer(submission).data)
-    
+	
     """
-    Delete a submission 
+		Delete a submission 
     """
     @super_admin_required
     def delete(self, request, id):
@@ -90,3 +101,6 @@ class SubmissionDetailAPI(APIView):
         
         submission.delete()
         return response_no_content("Delete succesful")
+
+
+    

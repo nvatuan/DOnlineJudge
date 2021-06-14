@@ -9,7 +9,7 @@ from accounts.models import User
 
 from utils.make_response import *
 
-class AnnouncementAdminAPI(APIView):
+class AnnouncementAPI(APIView):
     def get(self, request):
         """
         Get announcement list 
@@ -20,7 +20,7 @@ class AnnouncementAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         """
-        Publish announcement
+        Publish an announcement
         """
         data = request.data
 
@@ -30,11 +30,11 @@ class AnnouncementAdminAPI(APIView):
         return response_ok(AnnouncementSerializer(announcement).data)
 
 
-class AnnouncementDetailAdminAPI(APIView):
+class AnnouncementDetailAPI(APIView):
     @super_admin_required
     def put(self, request, id):
         """
-        edit announcement
+        Edit announcement
         """
         data = request.data
         try:
@@ -50,10 +50,9 @@ class AnnouncementDetailAdminAPI(APIView):
         announcement.save()
         return response_ok(AnnouncementSerializer(announcement).data)
 
-    @super_admin_required
     def get(self, request, id):
         """
-        get one announcement
+        Get one announcement
         """
         try:
             announcement = Announcement.objects.get(id=id)
