@@ -7,7 +7,7 @@ class Announcement(models.Model):
     title = models.CharField(max_length=255, null=True)
     content = models.TextField(null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
-
+    is_visible = models.BooleanField(null=True, default=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     #== method fields
@@ -27,6 +27,6 @@ class Announcement(models.Model):
         ordering = ['-creation_time']
     
     def __str__(self):
-        return "Title[{}] Author[{}] Created[{}]".format(self.title, self.author.username, self.creation_time)
+        return "Title[{}] Author[{}] Visible[{}] Created[{}]".format(self.title, self.author, self.is_visible, self.creation_time)
 
 
