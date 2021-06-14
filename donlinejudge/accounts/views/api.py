@@ -44,11 +44,11 @@ class RegisterAPI(APIView):
     '''
     For Registering a new account
     '''
-    serializer = RegisterSerializer
+    serializer_class = RegisterSerializer
     @unauthenticated_user
     def post(self, request):
         data = request.data
-        serializer = self.serializer(data=data)
+        serializer = self.serializer_class(data=data)
         username = data.get("username", '')
         email = data.get("email", '')
         password =  data.get("password",'')

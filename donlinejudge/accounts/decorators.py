@@ -21,7 +21,7 @@ class BasePermissionDecorator(object):
                 return self.error("Your account is disabled")
             return self.func(*args, **kwargs)
         else:
-            return self.error("Please login first")
+            return self.error("You need permission to perform this action.")
 
     def check_permission(self):
         raise NotImplementedError()

@@ -9,13 +9,20 @@ from accounts.models import User
 
 from utils.make_response import *
 
+
 class AnnouncementAPI(APIView):
+    serializer_class = AnnouncementSerializer
+
     def get(self, request):
         """
         Get announcement list 
         """
-        announcement = Announcement.objects.all().order_by("-creation_time")
-        return response_ok(AnnouncementSerializer(announcement, many=True).data)
+        if request.user.is_authenticated and request.user.is_admin_role():
+            announcement = Announcement.objects.all().order_by("-creation_time")
+            return response_ok(AnnouncementSerializer(announcement, many=True).data)
+        else:
+            announcement = Announcement.objects.filter(is_visible=True)
+            return response_ok(AnnouncementSerializer(announcement, many=True).data)
 
     @super_admin_required
     def post(self, request):
@@ -23,14 +30,22 @@ class AnnouncementAPI(APIView):
         Publish an announcement
         """
         data = request.data
+        serializer = self.serializer_class(data=data)
 
-        announcement = Announcement.objects.create(title=data["title"], content=data["content"], author=request.user)
-        
-        announcement.save()
-        return response_ok(AnnouncementSerializer(announcement).data)
+        if data.get("title", '') == "":
+            return response_bad_request({"title": "This field cannot be blank."})
+        if data.get("content", '') == "":
+            return response_bad_request({"content": "This field cannot be blank."})
+        if serializer.is_valid():
+            serializer.save()
+            return response_ok(serializer.data)
+        else:
+            return response_bad_request({"is_visible": "This field must be true or false."})
 
 
 class AnnouncementDetailAPI(APIView):
+    # serializer_class = AnnouncementSerializer
+
     @super_admin_required
     def put(self, request, id):
         """
@@ -40,7 +55,7 @@ class AnnouncementDetailAPI(APIView):
         try:
             announcement = Announcement.objects.get(id=id)
         except Announcement.DoesNotExist:
-            return  response_bad_request("Announcement does not exist.")
+            return response_bad_request("Announcement does not exist.")
 
         for k, v in data.items():
             if hasattr(announcement, k):
@@ -50,6 +65,7 @@ class AnnouncementDetailAPI(APIView):
         announcement.save()
         return response_ok(AnnouncementSerializer(announcement).data)
 
+    @admin_required
     def get(self, request, id):
         """
         Get one announcement
@@ -57,7 +73,7 @@ class AnnouncementDetailAPI(APIView):
         try:
             announcement = Announcement.objects.get(id=id)
         except Announcement.DoesNotExist:
-            return  response_bad_request("Announcement does not exist.")
+            return response_bad_request("Announcement does not exist.")
         return response_ok(AnnouncementSerializer(announcement).data)
 
     @super_admin_required

@@ -7,7 +7,6 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Announcement
-        #fields = "__all__"
         exclude = ('author',)
 
 
