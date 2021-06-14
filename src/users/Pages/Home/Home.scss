@@ -37,9 +37,10 @@
 }
 
 .annoucement-container{
-    height: 550px;
-    overflow: scroll;
-    overflow-x: hidden;
+  height: 550px;
+  border-radius: 10px;
+  overflow: scroll;
+  overflow-x: hidden;
     
 }
 ::-webkit-scrollbar {
