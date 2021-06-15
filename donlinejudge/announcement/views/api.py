@@ -21,7 +21,7 @@ class AnnouncementAPI(APIView):
             announcement = Announcement.objects.all().order_by("-creation_time")
             return response_ok(AnnouncementSerializer(announcement, many=True).data)
         else:
-            announcement = Announcement.objects.filter(is_visible=True)
+            announcement = Announcement.objects.filter(is_visible=True).order_by("-creation_time")
             return response_ok(AnnouncementSerializer(announcement, many=True).data)
 
     @super_admin_required
@@ -29,8 +29,9 @@ class AnnouncementAPI(APIView):
         """
         Publish an announcement
         """
+        announcement = request.data
         data = request.data
-        serializer = self.serializer_class(data=data)
+        serializer = self.serializer_class(data=data, context={'request': request})
 
         if data.get("title", '') == "":
             return response_bad_request({"title": "This field cannot be blank."})
@@ -40,7 +41,7 @@ class AnnouncementAPI(APIView):
             serializer.save()
             return response_ok(serializer.data)
         else:
-            return response_bad_request({"is_visible": "This field must be true or false."})
+            return response_bad_request({"Input data is invalid."})
 
 
 class AnnouncementDetailAPI(APIView):
@@ -65,16 +66,20 @@ class AnnouncementDetailAPI(APIView):
         announcement.save()
         return response_ok(AnnouncementSerializer(announcement).data)
 
-    @admin_required
     def get(self, request, id):
         """
         Get one announcement
         """
         try:
-            announcement = Announcement.objects.get(id=id)
+            if request.user.is_authenticated and request.user.is_admin_role():
+                announcement = Announcement.objects.get(id=id)
+                return response_ok(AnnouncementSerializer(announcement).data)
+            else:
+                announcement = Announcement.objects.get(id=id, is_visible=True)
+                return response_ok(AnnouncementSerializer(announcement).data)
         except Announcement.DoesNotExist:
-            return response_bad_request("Announcement does not exist.")
-        return response_ok(AnnouncementSerializer(announcement).data)
+            return response_not_found("Announcement does not exist.")
+        
 
     @super_admin_required
     def delete(self, request, id):
