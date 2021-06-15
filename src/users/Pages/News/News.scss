@@ -1,0 +1,24 @@
+.news-container{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+    align-items: normal;
+    position: absolute;
+    margin-top: 30px;
+    width: 100%;
+    background-color:#eee;
+
+    .news-card{
+        width: 80%;
+        background-color: #fff;
+    }
+    .card-container{
+        opacity: 1;
+    }
+}
+
+.announcement-header{
+    display: flex;
+    justify-content: space-between;
+}

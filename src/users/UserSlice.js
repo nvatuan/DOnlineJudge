@@ -28,8 +28,8 @@ export const registerUser = createAsyncThunk(
     '/register',
     async (data, thunkAPI) => {
         try {
-            // console.log(data);
-           await registerAPI.register(data);
+            const response = await registerAPI.register(data);
+            console.log(response)
         } catch (error) {
             console.log('Fail to register: ', error);
             thunkAPI.rejectWithValue(error.response.json());
@@ -94,7 +94,8 @@ export const userSlice = createSlice({
             state.isFeching = false;
             state.isRegisterSuccess = true;
         },
-        [registerUser.rejected]: (state, { payload }) => {
+        [registerUser.rejected]: (state, action) => {
+            console.log(action);
             state.isFeching = false;
             state.isRegisterError = true;
             state.errorMessage = 'Register fail';

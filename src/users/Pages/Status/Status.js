@@ -15,7 +15,14 @@ function Status() {
         filter_by: ['author_id'],
         author_id: id.author_id,
     })
-    
+    const [sortById, setSortById] = useState(false);
+    const [sortByProblem, setSortByProblem] = useState(false);
+    const [sortByAuthor, setSortByAuthor] = useState(false);
+    const [sortByStatus, setSortByStatus] = useState(false);
+    const [sortByLanguage, setSortByLanguage] = useState(false);
+    const [sortByTime, setSortByTime] = useState(false);
+    const [sortByMemory, setSortByMemory] = useState(false);
+    const [sortByWhen, setSortByWhen] = useState(false);
     const result = {
         "Accepted": "Accepted",
         "Wrong Answer": "Wrong_answer",
@@ -89,7 +96,64 @@ function Status() {
     const hanldeTime = (time) => {
         return new Date(time).toDateString();  
     }
-   
+    //sort
+    const handleSortById = () =>{
+        setSortById(!sortById);
+        setFilters({
+            ...filters,
+            sort_by: sortById ? '-id' : 'id',
+            
+        })
+    }
+    const handleSortByProblem = () =>{
+        setSortByProblem(!sortByProblem);
+        setFilters({
+            ...filters,
+            sort_by: sortByProblem ? '-problem_title' :'problem_title'
+        })
+    }
+    const handleSortByAuthor = () => {
+        setSortByAuthor(!sortByAuthor);
+        setFilters({
+            ...filters,
+            sort_by: sortByAuthor ? '-author_name' : 'author_name'
+        })
+    }
+    const handleSortByStatus = () => {
+        setSortByStatus(!sortByStatus);
+        setFilters({
+            ...filters,
+            sort_by: sortByStatus ? '-verdict' : 'verdict'
+        })
+    }
+     const handleSortByLanguage = () => {
+        setSortByLanguage(!sortByLanguage);
+        setFilters({
+            ...filters,
+            sort_by: sortByLanguage ? '-language' : 'language'
+        })
+    }
+    const handleSortByTime = () => {
+        setSortByTime(!sortByTime);
+        setFilters({
+            ...filters,
+            sort_by: sortByTime ? '-time' : 'time'
+        })
+    }
+    const handleSortByMemory = () => {
+        setSortByMemory(!sortByMemory);
+        setFilters({
+            ...filters,
+            sort_by: sortByMemory ? '-memory' : 'memory'
+        })
+    }
+    const handleSortByWhen = () => {
+        setSortByWhen(!sortByWhen);
+        setFilters({
+            ...filters,
+            sort_by: sortByWhen ? '-submit_time' : 'submit_time'
+        })
+    }
     return (
         <div>
             <Navbar/>
@@ -136,14 +200,14 @@ function Status() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Problem</th>
-                                    <th>Author</th>
-                                    <th>Status</th>
-                                    <th>Language</th>
-                                    <th>Time</th>
-                                    <th>Memory</th>
-                                    <th>When</th>
+                                    <th onClick={() => handleSortById()}>ID</th>
+                                    <th onClick={() => handleSortByProblem()}>Problem</th>
+                                    <th onClick={() => handleSortByAuthor()}>Author</th>
+                                    <th onClick={() => handleSortByStatus()}>Status</th>
+                                    <th onClick={() => handleSortByLanguage()}>Language</th>
+                                    <th onClick={() => handleSortByTime()}>Time</th>
+                                    <th onClick={() => handleSortByMemory()}>Memory</th>
+                                    <th onClick={() => handleSortByWhen()}>When</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -154,10 +218,10 @@ function Status() {
                                                 <td>{stat.id}</td>
                                                 <td>
                                                     <div className="table-cell">
-                                                        <Link to={`problem/${stat.problem}`} >{stat.problem}</Link>
+                                                        <Link to={`problem/${stat.problem_id}`} >{stat.problem_title}</Link>
                                                     </div>
                                                 </td>
-                                                <td>{stat.author}</td>
+                                                <td>{stat.author_name}</td>
                                                 <td >
                                                     <div className="table-cell">
                                                         <div className={`result-container ${result[stat.verdict]}`}>

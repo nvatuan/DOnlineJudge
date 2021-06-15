@@ -63,6 +63,9 @@ function Navbar() {
                             <Link to='/home' className='nav-links'> Home</Link>
                         </li>
                         <li className="nav-item">
+                            <Link to='/news' className='nav-links'> News</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link to='/problem' className='nav-links'> Problem</Link>
                         </li>
                         <li className="nav-item">

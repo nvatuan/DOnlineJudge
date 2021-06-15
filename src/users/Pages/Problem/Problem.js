@@ -10,8 +10,12 @@ function Problem() {
     const [problems, setProblems] = useState([])
     const [filters, setFilters] = useState({
         filter_by: [],
+        sort_by: '',
         
-    })
+    });
+    const [sortById, setSortById] = useState(false);
+    const [sortByTitle, setSortByTitle] = useState(false);
+    const [sortByLevel, setSortByLevel] = useState(false);
     //difficulty
     const difficulty = {
         "Easy": "Easy",
@@ -34,7 +38,7 @@ function Problem() {
             contains: newValue,
         })
     }
-
+    //filters
     function handleFilterDiff(e) {
         const value = e.target.value;
         filters.filter_by.push('difficulty');
@@ -53,6 +57,28 @@ function Problem() {
 
             })
         }
+    }
+    //sort 
+    const handleSortByDisplayId = () =>{
+        setSortById(!sortById)
+        setFilters({
+            ...filters,
+            sort_by: sortById ? '-display_id' : 'display_id',
+        })
+    }
+    const handleSortByTitle = () => {
+        setSortByTitle(!sortByTitle);
+        setFilters({
+            ...filters,
+            sort_by: sortByTitle ? '-title' : 'title',
+        })
+    };
+    const handleSortByLevel = () => {
+        setSortByLevel(!sortByLevel);
+        setFilters({
+            ...filters,
+        sort_by: sortByLevel ? '-difficulty' : 'difficulty',
+        })
     }
     return (
         <div>
@@ -83,9 +109,9 @@ function Problem() {
                         < table >
                                 <thead>
                                     <tr>
-                                        <th>Display ID</th>
-                                        <th>Tille</th>
-                                        <th>Level</th>
+                                        <th onClick={() => handleSortByDisplayId()}>Display ID</th>
+                                        <th onClick={() => handleSortByTitle()}>Tille</th>
+                                        <th onClick={() => handleSortByLevel()}>Level</th>
                                         <th>Total</th>
                                         <th>AC Rate</th>
                                     </tr>

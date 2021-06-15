@@ -15,7 +15,7 @@ import CreateProblem from './admin/Problems/CreateProblem/CreateProblem'
 //test 
 import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
 import Problem_detail from './users/Pages/Problem/Problem_detail';
-import Announcement from './users/Pages/Home/Announcement'
+import News from './users/Pages/News/News';
 //Private Route
 import { PrivateRoute } from './helpers/PrivateRoute';
 //
@@ -34,7 +34,7 @@ function App() {
           <Route path='/problem/:id' exact component={Problem_detail}></Route>
           <Route path='/status' exact component={Status}></Route>
           <Route path='/status/:id' exact component={Status_detail}></Route>
-          <Route path='/announcement' exact component={Announcement} />
+          <Route path='/news' exact component={News} />
           <Route path='/profile' exact component={Setting} />
 
           <PrivateRoute exact component={Dashboard} path='/admin' />

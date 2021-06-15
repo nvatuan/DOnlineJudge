@@ -47,6 +47,9 @@ table {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    th{
+        cursor: pointer;
+    }
 }
 .Easy{
     background: #337ab7;
