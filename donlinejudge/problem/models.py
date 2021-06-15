@@ -22,7 +22,7 @@ class ProblemTag(models.Model):
 class Problem(models.Model):
     display_id = models.TextField(db_index=True)
     created = models.DateTimeField(auto_now_add=True)
-    visible = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True, null=True)
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 

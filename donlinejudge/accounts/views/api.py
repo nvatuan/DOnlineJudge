@@ -119,7 +119,7 @@ class ChangePasswordAPI(generics.UpdateAPIView):
             old_password = data.get('old_password', '')
 
             if not user.check_password(old_password):
-                return response_bad_request("Your old password was entered incorrectly. Please enter it again.")
+                return response_bad_request({"old_password":"Your old password was entered incorrectly. Please enter it again."})
 
             if data.get('new_password1', '') != '' and data.get('new_password1', '') == data.get('new_password2', ''):
                 user = serializer.save()
@@ -128,9 +128,9 @@ class ChangePasswordAPI(generics.UpdateAPIView):
                     user.auth_token.delete()
                 token, created = Token.objects.get_or_create(user=user)
             # return new token
-                return Response({'token': token.key, 'data': 'success!'}, status=status.HTTP_200_OK)
-            return response_bad_request("The two password fields didn't match.")
-        return response_bad_request("Password is not valid.")
+                return response_ok({'token': token.key, 'noti': 'success!'})
+            return response_bad_request({"entered_password":"The two password fields didn't match."})
+        return response_bad_request({"entered_password":"Password is not valid."})
 
 class OwnProfilePageAPI(generics.GenericAPIView):
     serializer_class = ProfilePageNoPasswordSerializer
@@ -147,7 +147,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
 
         if data.get("username", '') != '':
             if User.objects.filter(username=data["username"].lower()).exclude(id=user.id).exists():
-                return response_bad_request("This username already exists")
+                return response_bad_request({"username":"This username already exists"})
             user.username = data["username"].lower()
 
         if data.get("password", '') != '':
@@ -155,7 +155,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
 
         if data.get("email", '') != '':
             if User.objects.filter(email=data["email"].lower()).exclude(id=user.id).exists():
-                return response_bad_request("This email already exists")
+                return response_bad_request({"email":"This email already exists"})
             user.email = data["email"].lower()
 
         if data.get("first_name", '') != '':
@@ -168,7 +168,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
             if valid_extension(str(data["profile_pic"])):
                 user.profile_pic = data["profile_pic"]
             else:
-                return response_bad_request("The file must have an image extension of .jpg, .jpeg or .png")
+                return response_bad_request({"profile_pic":"The file must have an image extension of .jpg, .jpeg or .png"})
         user.save()
 
         return response_ok(ProfilePageNoPasswordSerializer(user, context=self.get_serializer_context()).data)
