@@ -50,7 +50,7 @@ class AnnouncementAPI(APIView):
 
 
 class AnnouncementDetailAPI(APIView):
-    # serializer_class = AnnouncementSerializer
+    serializer_class = AnnouncementSerializer
 
     @super_admin_required
     def put(self, request, id):

@@ -9,6 +9,10 @@ from problem.models import Problem
 logging.basicConfig(level=logging.DEBUG)
 
 def auto_apply(qset, request):
+    """
+    Automatically apply a Filter, Sort, Contain to a querySet.
+    query_params are extracted from request by the function.
+    """
     from django.http import QueryDict
     qparams = request.query_params
 
@@ -140,6 +144,10 @@ def contains(qset, lookfor):
         LOOK_UP_FIELDS = ["title", "content"]
     elif model_type is Problem:
         LOOK_UP_FIELDS = ["title", "statement"]
+    elif model_type is User:
+        LOOK_UP_FIELDS = ["username", "first_name", "last_name", "email"]
+    elif model_type is Submission:
+        LOOK_UP_FIELDS = []
     else:
         LOOK_UP_FIELDS = []
 

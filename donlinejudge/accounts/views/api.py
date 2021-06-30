@@ -210,7 +210,7 @@ class UserAPI(APIView):
     @super_admin_required
     def get(self, request):
         user = User.objects.all()
-        user = filter_then_sort(user, request.query_params)
+        user = auto_apply(user, request)
         return response_ok(UserSerializer(user, many=True).data)
 
     #@super_admin_required
