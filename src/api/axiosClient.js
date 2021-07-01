@@ -22,10 +22,15 @@ axiosClient.interceptors.response.use((response) => {
     }
     return response;
     }, (error) => {
-    toast.error((error.response.data.data), {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 1500
-    })
+        if(error.response.status === 400){
+            var error_messsage = error.response.data.data;
+            for (let key in error_messsage){
+                toast.error(error_messsage[key], {
+                    position: toast.POSITION.BOTTOM_CENTER,
+                    autoClose: 1500
+                })
+            }
+        }
     throw error;
 });
 export default axiosClient;

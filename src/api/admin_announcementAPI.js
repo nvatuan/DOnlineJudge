@@ -2,7 +2,13 @@ import axiosClient from './axiosClient'
 const admin_announcementAPI = {
     getAll:  () =>{
         const url = 'admin/announcement/';
-        return axiosClient.get(url);
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
+        return axiosClient.get(url, config);
     },
     getById: (id) => {
         const url = `admin/announcement/${id}`;
@@ -44,6 +50,17 @@ const admin_announcementAPI = {
         };
         const url = 'admin/announcement/';
         return axiosClient.post(url,data,config);
+    },
+    updateVisible: (id, visible) => {
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            },
+        }
+        const url = `/admin/announcement/${id}/`;
+        const setVisible = { "is_visible": !visible, };
+        return axiosClient.put(url, setVisible,config);
     }
 }
 

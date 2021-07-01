@@ -35,14 +35,14 @@ function Login(props) {
 
     useEffect(() => {
         if (isLoginError) {
-            toast.error(errorMessage, {
-                position: toast.POSITION.BOTTOM_CENTER,
-                autoClose: 1500
-            });
+            // toast.error(errorMessage, {
+            //     position: toast.POSITION.BOTTOM_CENTER,
+            //     autoClose: 1500
+            // });
             dispatch(clearState());
         }
         if (isLoginSuccess){
-            toast.success('Ohayo onii-chan', {
+            toast.success('Welcome', {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500 
             });

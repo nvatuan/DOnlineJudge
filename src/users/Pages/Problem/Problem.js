@@ -27,7 +27,6 @@ function Problem() {
         const fectchProblems = async () => {
             const response = await oj_problemAPI.getAll(filters);
             setProblems(response.data);
-            // setPagination(filters);
         }
         fectchProblems();
     }, [filters])

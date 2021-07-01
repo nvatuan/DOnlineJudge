@@ -8,11 +8,11 @@ export const loginUser = createAsyncThunk(
         try {
             const response = await loginAPI.login({username, password});
             if(response.token !== null){
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('role', response.user.admin_type);
-                localStorage.setItem('username', response.user.username);
-                localStorage.setItem('userId', response.user.id);
-                localStorage.setItem('userInformation', JSON.stringify(response.user));
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('role', response.data.user.admin_type);
+                localStorage.setItem('username', response.data.user.username);
+                localStorage.setItem('userId', response.data.user.id);
+                localStorage.setItem('userInformation', JSON.stringify(response.data.user));
                 return response;
             }else{
                 alert("fail to fetch tokem Login")
@@ -76,7 +76,7 @@ export const userSlice = createSlice({
     extraReducers:{
         //login feching status
         [loginUser.fulfilled]: (state, {payload}) =>{
-            state.username = payload.user.username;
+            state.username = payload.data.user.username;
             state.isFeching = false;
             state.isLoginSuccess = true;
             return state;
@@ -94,8 +94,7 @@ export const userSlice = createSlice({
             state.isFeching = false;
             state.isRegisterSuccess = true;
         },
-        [registerUser.rejected]: (state, action) => {
-            console.log(action);
+        [registerUser.rejected]: (state) => {
             state.isFeching = false;
             state.isRegisterError = true;
             state.errorMessage = 'Register fail';

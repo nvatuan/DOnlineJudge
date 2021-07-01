@@ -9,6 +9,8 @@ import './Annoucement.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminSelector, AnnouncementList, deleteAnnouncement, clearState } from '../../AdminSlice';
 import { Link } from 'react-router-dom';
+import Switch from "react-switch";
+import admin_announcementAPI from '../../../api/admin_announcementAPI';
 function Annoucement(props) {
     const [annoucements, setAnnoucements] = useState({});
     //for redux
@@ -34,8 +36,31 @@ function Annoucement(props) {
             dispatch(AnnouncementList());
         }
     }, [deleteSusscess])
-
- 
+    //get visible data
+    const [visible, setVisible] = useState([]);
+    useEffect(() =>{
+        const getVisibleList =  () =>{
+            const visibleList = [];
+            for (let i = 0; i < admin_announcements.length; i++) {
+                let announ = admin_announcements[i];
+                console.log(announ);
+                console.log('ok');
+                console.log({ [announ.id]: announ.is_visible });
+                visibleList.push({ [announ.id]: announ.is_visible })
+            }
+            console.log(visibleList);
+            setVisible([...visible, visibleList])
+        };
+        getVisibleList();
+    },[])
+    //set Visible
+    const handleVisible = async (id, is_visible) => {
+        try {
+            await admin_announcementAPI.updateVisible(id, is_visible);
+        } catch (error) {
+            console.log("Fail to set visibility:", error);
+        }
+    }
     return (
         <div className="">
             <AdminNavbar />
@@ -69,12 +94,9 @@ function Annoucement(props) {
                                                     <td>{annoucement.id}</td>
                                                     <td>{annoucement.title}</td>
                                                     <td>{annoucement.creation_time}</td>
-                                                    <td>{annoucement.author}</td>
+                                                    <td>{annoucement.author_name}</td>
                                                     <td>
-                                                        <Form.Check
-                                                            type="switch"
-                                                            id="custom-switch"
-                                                        />
+                                                        <Switch onChange={() => handleVisible(annoucement.id, annoucement.is_visible)} checked={annoucement.is_visible} height={20} width={40}/>
                                                     </td>
                                                     <td>
                                                         <div className="option-cell">
