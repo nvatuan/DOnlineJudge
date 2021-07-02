@@ -12,18 +12,28 @@ from rest_framework.views import APIView
 from accounts.decorators import super_admin_required
 from accounts.decorators import admin_required, super_admin_required
 from utils.make_response import *
-from utils.query_set_rearrange import auto_apply
 
+#from utils.query_set_rearrange import auto_apply
+import utils.serialized_data_rearrange as sdr
 
 class ProblemAPI(APIView):
     def get(self, request, format=None):
+        """
+            Get a list of problems
+        """
         try:
-            if request.user.is_authenticated and request.user.is_admin_role():
+            if request.user.is_authenticated and (
+                request.user.is_admin_role() or request.user.can_mgmt_all_problem()
+            ):
                 problem = Problem.objects.all().order_by("-created")
-                return response_ok(ProblemSerializer(problem, many=True).data)
-            else:
+                problem_ser_data = ProblemSerializer(problem, many=True).data
+                problem_ser_data = sdr.auto_apply(problem_ser_data, request)
+                return response_ok(problem_ser_data)
+            else: ## TODO return not visible problems but are authored by the user
                 problem = Problem.objects.filter(
                     visible=True).order_by("-created")
+                problem_ser_data = ProblemSerializer(problem, many=True).data
+                problem_ser_data = sdr.auto_apply(problem_ser_data, request)
                 return response_ok(ProblemSerializer(problem, many=True).data)
         except Exception:
             return response_bad_request("Request denied.")

@@ -8,7 +8,7 @@ from accounts.decorators import admin_required, super_admin_required
 from accounts.models import User
 
 from utils.make_response import *
-
+import utils.serialized_data_rearrange as sdr
 
 class AnnouncementAPI(APIView):
     serializer_class = AnnouncementSerializer
@@ -20,12 +20,15 @@ class AnnouncementAPI(APIView):
         try:
             if request.user.is_authenticated and request.user.is_admin_role():
                 announcement = Announcement.objects.all().order_by("-creation_time")
-                return response_ok(AnnouncementSerializer(announcement, many=True).data)
+                ann_serialized_data = AnnouncementSerializer(announcement, many=True).data
+                ann_serialized_data = sdr.auto_apply(ann_serialized_data, request)
+                return response_ok(ann_serialized_data)
             else:
                 announcement = Announcement.objects.filter(
                     is_visible=True).order_by("-creation_time")
                 return response_ok(AnnouncementSerializer(announcement, many=True).data)
-        except Exception:
+        except Exception as E:
+            print(E)
             return response_bad_request("Request denied.")
 
     @super_admin_required

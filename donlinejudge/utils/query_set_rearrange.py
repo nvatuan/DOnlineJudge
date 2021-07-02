@@ -5,6 +5,8 @@ import logging
 
 from announcement.models import Announcement
 from problem.models import Problem
+from accounts.models import User
+from submission.models import Submission
 
 logging.basicConfig(level=logging.DEBUG)
 

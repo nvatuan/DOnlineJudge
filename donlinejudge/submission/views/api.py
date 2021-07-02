@@ -17,7 +17,8 @@ from json import loads, dumps
 import sys
 
 from utils.make_response import *
-from utils.query_set_rearrange import auto_apply 
+#from utils.query_set_rearrange import auto_apply 
+import utils.serialized_data_rearrange as sdr
 
 import asyncio, websockets
 
@@ -27,9 +28,10 @@ class SubmissionAPI(APIView):
     """
     def get(self, request, format=None):
         subs = Submission.objects.all()
-        subs = auto_apply(subs, request)
+        #subs = auto_apply(subs, request) ## query_set
         seris = SubmissionSerializer(subs, many=True)
-        return response_ok(seris.data)
+        serisdata = sdr.auto_apply(seris.data, request) ## serialized daa
+        return response_ok(serisdata)
 
     """
     An user make a submission

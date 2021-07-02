@@ -25,8 +25,8 @@ from submission.models import Submission
 
 # Custom made utils lib
 from utils.make_response import *
-from utils.query_set_rearrange import *
-
+#from utils.query_set_rearrange import *
+import utils.serialized_data_rearrange as sdr
 
 """ accounts.management API
     - RegisterAPI
@@ -210,8 +210,10 @@ class UserAPI(APIView):
     @super_admin_required
     def get(self, request):
         user = User.objects.all()
-        user = auto_apply(user, request)
-        return response_ok(UserSerializer(user, many=True).data)
+        #user = auto_apply(user, request)
+        user_sdata = UserSerializer(user, many=True).data
+        user_sdata = sdr.auto_apply(user_sdata, request)
+        return response_ok(user_sdata)
 
     #@super_admin_required
     #def post(self, request):
