@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import { Card, ListGroup, Button, Form, FormControl } from 'react-bootstrap';
-import './EditAnnoucement.scss';
+import './EditAnnouncement.scss';
 import admin_announcementAPI from '../../../api/admin_announcementAPI';
 import { useForm } from 'react-hook-form';
 import AdminNavbar from '../../AdminNavbar';
@@ -8,7 +8,7 @@ import Sidebar from '../../Sidebar';
 import { useHistory } from 'react-router-dom'; 
 
 //
-function EditAnnoucement({match}) {
+function EditAnnouncement({match}) {
     const id = match.params.id;
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -102,5 +102,5 @@ function EditAnnoucement({match}) {
 }
 
 
-export default EditAnnoucement;
+export default EditAnnouncement;
 

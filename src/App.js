@@ -9,11 +9,11 @@ import Problem from './users/Pages/Problem/Problem';
 import Status from './users/Pages/Status/Status';
 import ProblemList from './admin/Problems/ProblemList/ProblemList';
 import User from './admin/General/User/User';
-import Annoucement from './admin/General/Annoucement/Annoucement';
+import Announcement from './admin/General/Announcement/Announcement';
 import Dashboard from './admin/Dashboard/Dashboard';
 import CreateProblem from './admin/Problems/CreateProblem/CreateProblem'
 //test 
-import EditAnnoucement from './admin/General/Annoucement/EditAnnoucement';
+import EditAnnouncement from './admin/General/Announcement/EditAnnouncement';
 import Problem_detail from './users/Pages/Problem/Problem_detail';
 import News from './users/Pages/News/News';
 //Private Route
@@ -41,11 +41,11 @@ function App() {
           <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
           <PrivateRoute exact component={User} path='/admin/user' />
           <PrivateRoute exact component={ProblemList} path='/admin/problem' />
-          <PrivateRoute exact component={Annoucement} path='/admin/announcement' />
+          <PrivateRoute exact component={Announcement} path='/admin/announcement' />
           <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
           <PrivateRoute exact component={CreateProblem} path='/admin/problem/:id' />
-          <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/:id' />
-          <PrivateRoute exact component={EditAnnoucement} path='/admin/announcement/new' />
+          <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/:id' />
+          <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/new' />
           <PrivateRoute exact component={EditUser} path='/admin/users/:id' />
           <PrivateRoute exact component={EditUser} path='/admin/users/new' />
         </Switch>
