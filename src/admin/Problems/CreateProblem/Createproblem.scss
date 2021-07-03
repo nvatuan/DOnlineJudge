@@ -1,8 +1,13 @@
+.problem-container {
+}
+
 .cp {
-    position: relative;
-    left: 210px;
-    top: 55px;
-    width: 86%;
+    margin: auto;
+    // position: relative;
+    // left: 210px;
+    // top: 55px;
+    padding: 55px 0 0 210px;
+    width: 90vw;
 }
 
 .cp-list {
@@ -15,6 +20,10 @@
     color: #212529;
     box-sizing: border-box;
     background-color: #fff;
+
+    min-width: 500px;
+    overflow-x: scroll;
+
     li {
         list-style-type: none;
     }
@@ -26,7 +35,6 @@
     .cp-mem {
         -webkit-appearance: none;
         background-color: #fff;
-        background-image: none;
         border-radius: 4px;
         border: 1px solid #dcdfe6;
         box-sizing: border-box;
@@ -38,13 +46,22 @@
         outline: 0;
         padding: 0 15px;
         transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-        width: 80%;
+    }
+    .cp-displayid,
+    .cp-title {
+        width: 100%;
+    }
+
+    .cp-dif,
+    .cp-time,
+    .cp-mem {
+        width: 100px;
     }
     table {
-        width: 100%;
         .td-dis {
             width: 30%;
         }
+
     }
 }
 .cp-header {
@@ -84,5 +101,25 @@
     top: 80px;
 }
 .cp-visible {
-    width: 50%;
+    width: 100px;
+}
+
+.cp-language-list {
+    width: 300px;
+    height: 90px;
+    
+    background-color: yellow;
+    
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: inline;
+}
+
+#cp-language-wrapper {
+    display: inline;
+    list-style: none;
+    width: 450px;
+    height: 90px;
+    margin: 0;
+    padding: 0;
 }

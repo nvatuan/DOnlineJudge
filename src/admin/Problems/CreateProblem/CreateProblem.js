@@ -16,8 +16,8 @@ function Createproblem({ match }) {
     const [description, setDescription] = useState('');
     const [input_description, setInput_description] = useState('');
     const [output_description, setOutput_description] = useState('');
-    const [time_limit, setTime_limit] = useState('');
-    const [memory_limit, setMemory_limit] = useState('');
+    const [time_limit, setTime_limit] = useState('1000');
+    const [memory_limit, setMemory_limit] = useState('128');
     const [visible, setVisible] = useState('');
     const [difficulty, setDifficulty] = useState('');
     const [sample_test, setSample_test] = useState([]);
@@ -169,28 +169,28 @@ function Createproblem({ match }) {
         setSample_test(values);
     }
     return (
-        <div className="Edit-container">
+        <div className="problem-container">
             <AdminNavbar />
             <Sidebar />
             <div className="cp">
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <ListGroup>
-                        <ListGroup.Item className="cp-header cp-list" >
-                            <h3>Edit problem</h3>
-                        </ListGroup.Item>
+                        <h3>Create new problem</h3>
                         <ListGroup.Item className="cp-list">
                             <table>
                                 <tbody>
                                     <tr>
                                         <td className="td-dis">
                                             <i style={{ color: 'red' }}>*</i>
-                                            <span> Display ID</span> <br /> <br />
+                                            <span> Display ID (Unique human-readable ID)</span> <br /> <br />
                                             <input type="text" placeholder="Display ID" className="cp-displayid" required
                                                 value={display_id} onChange={(e) => { handleDisplay_id(e) }} />
                                         </td>
-                                        <td className="td-til">
+                                    </tr>
+                                    <tr>
+                                        <td className="td-dis">
                                             <i style={{ color: 'red' }}>*</i>
-                                            <span> Title</span> <br /> <br />
+                                            <span> Problem Title </span> <br /> <br />
                                             <input type="text" placeholder="Title" className="cp-title" required
                                                 value={title} onChange={(e) => { handleTitle(e) }} />
                                         </td>
@@ -244,7 +244,7 @@ function Createproblem({ match }) {
                                         <td className="td-dif">
                                             <i style={{ color: 'red' }}>*</i>
                                             <span> Difficult</span> <br /> <br />
-                                            <Form.Control as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
+                                            <Form.Control className='cp-dif' as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
                                                 <option value="Easy">Easy</option>
                                                 <option value="Medium">Medium</option>
                                                 <option value="Hard">Hard</option>
@@ -263,31 +263,54 @@ function Createproblem({ match }) {
                                         <td>
                                             <i style={{ color: 'red' }}>*</i>
                                             <span> Language</span> <br /> <br />
-                                            <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                defaultChecked
-                                                value="C"
-                                            />C
-                                        <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                value="C++"
-                                                defaultChecked
-                                            />C++
-                                        <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                value="Java"
-                                                defaultChecked
-                                            />Java
-                                        <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                value="Python"
-                                                defaultChecked
-                                            />Python
-                                    </td>
+                                            <div className='cp-language-list'>
+                                                <ul id='cp-language-wrapper'>
+                                                    <li>
+                                                        <label>
+                                                        <input className="cp-language"
+                                                            type="checkbox"
+                                                            name="Language"
+                                                            defaultChecked
+                                                            value="C"
+                                                        />C
+                                                        </label>
+                                                    </li>
+
+                                                    <li>
+                                                        <label>
+                                                            <input className="cp-language"
+                                                                type="checkbox"
+                                                                name="Language"
+                                                                value="C++"
+                                                                defaultChecked
+                                                            />C++
+                                                        </label>
+                                                    </li>
+
+                                                    <li>
+                                                        <label>
+                                                            <input className="cp-language"
+                                                                    type="checkbox"
+                                                                    name="Language"
+                                                                    value="Java"
+                                                                    defaultChecked
+                                                                />Java
+                                                        </label>
+                                                    </li>
+
+                                                    <li>
+                                                        <label>
+                                                            <input className="cp-language"
+                                                                type="checkbox"
+                                                                name="Language"
+                                                                value="Python"
+                                                                defaultChecked
+                                                            />Python
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -351,6 +374,8 @@ function Createproblem({ match }) {
                             </Form.Control>
                             {/* <Editor></Editor> */}
                         </ListGroup.Item >
+
+                        {/*
                         <ListGroup.Item className="cp-list">
                             <table>
                                 <tbody>
@@ -375,6 +400,8 @@ function Createproblem({ match }) {
 
                             </table>
                         </ListGroup.Item>
+                        */}
+
                         <Button type="submit" className="cp-btn">Save</Button>
 
                     </ListGroup>
