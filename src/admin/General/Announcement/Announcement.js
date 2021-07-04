@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import Switch from "react-switch";
 import admin_announcementAPI from '../../../api/admin_announcementAPI';
 function Announcement(props) {
-    const [announcements, setAnnouncements] = useState({});
+    const [announcements, setAnnouncements] = useState([]);
     //for redux
     const dispatch = useDispatch();
     const { admin_announcements, isFetchAnnouncementsSuccess, deleteSusscess } = useSelector(adminSelector);
@@ -30,29 +30,12 @@ function Announcement(props) {
             setAnnouncements(admin_announcements);
         }
         return dispatch(clearState());
-    }, [isFetchAnnouncementsSuccess])
+    }, [isFetchAnnouncementsSuccess]);
     useEffect(() =>{
         if (deleteSusscess){
             dispatch(AnnouncementList());
         }
     }, [deleteSusscess])
-    //get visible data
-    const [visible, setVisible] = useState([]);
-    useEffect(() =>{
-        const getVisibleList =  () =>{
-            const visibleList = [];
-            for (let i = 0; i < admin_announcements.length; i++) {
-                let announ = admin_announcements[i];
-                console.log(announ);
-                console.log('ok');
-                console.log({ [announ.id]: announ.is_visible });
-                visibleList.push({ [announ.id]: announ.is_visible })
-            }
-            console.log(visibleList);
-            setVisible([...visible, visibleList])
-        };
-        getVisibleList();
-    },[])
     //set Visible
     const handleVisible = async (id, is_visible) => {
         try {
@@ -60,7 +43,7 @@ function Announcement(props) {
             const newann = res.data;
             setAnnouncements (
                 announcements.map(
-                    (ann) => ann.id === newann.id ? {...ann, is_visible: newann.is_visible } : ann
+                    (ann) => ann.id === newann.id ? {...ann,  is_visible: newann.is_visible} : ann
                 )
             )
             console.log("Update announcements")

@@ -5,17 +5,18 @@
     padding-top: 30px;
     padding-left: 17%;
 }
-.announForm{
-    padding: 20px 0;
+
+.list-group-item{
+    border: none !important;
 }
 .announForm-items{
     padding: 10px 0;
 }
 .save_button{
     display: block;
-    position: absolute;
+    position: relative;
     padding-top: 10px;
-    right: 20px;
+    left: 94%;
     bottom: 10px;
 }
 

@@ -9,13 +9,10 @@
 .UserForm{
     display: block;
     width: 100%;
-    padding: 10px 0;
     .UserForm-items{
         margin: 10px 0;
     }
 }
-
-.save_button{
-    position: absolute;
-    bottom: 0;
+.user-select{
+    padding-top: 10px;
 }

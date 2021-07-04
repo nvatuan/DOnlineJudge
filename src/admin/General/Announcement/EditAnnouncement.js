@@ -6,12 +6,14 @@ import { useForm } from 'react-hook-form';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import { useHistory } from 'react-router-dom'; 
+import Switch from 'react-switch';
 
 //
 function EditAnnouncement({match}) {
     const id = match.params.id;
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [visible, setVisible] = useState(true);
     const { register, handleSubmit } = useForm();
     const history = useHistory();
 
@@ -26,6 +28,7 @@ function EditAnnouncement({match}) {
     const onSubmit = async (formData) => {
         formData.title = title;
         formData.content = content;
+        formData.is_visible = visible;
         if(!isNaN(id)){
             try {
                 const response = await admin_announcementAPI.updateById({ formData, id });
@@ -56,6 +59,7 @@ function EditAnnouncement({match}) {
                     const response = await admin_announcementAPI.getById(id);
                     setTitle(response.data.title);
                     setContent(response.data.content);
+                    setVisible(response.data.is_visible);
                 } catch (error) {
                     console.log("fail to alter announcement: ", error);
                 }
@@ -63,6 +67,9 @@ function EditAnnouncement({match}) {
             fetchAnnouncement();
         }
     },[])
+    const updateVisibility = () =>{
+        setVisible(!visible);
+    }
     return (
         <div className="announcements-container">
             <AdminNavbar />
@@ -91,6 +98,11 @@ function EditAnnouncement({match}) {
                                 </Form.Control>
                             </ListGroup.Item>
                             <br />
+                            <label htmlFor="">Visible</label>
+                            <br/>
+                            <Switch checked={visible} onChange={()=> updateVisibility()}/>
+                            <br />
+                            <hr/>
                             <Button type="submit" className="save_button">Save</Button>
                         </Form>
                     </Card.Body>
