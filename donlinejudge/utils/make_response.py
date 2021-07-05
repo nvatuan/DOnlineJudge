@@ -4,9 +4,17 @@ from rest_framework import status
 ## ============= 2xx
 def response_ok(message):
     resp = {}
-    resp["data"] = message
-    if isinstance(message, list):
-        resp["total"] = len(message)
+    if isinstance(message, dict):
+        resp["data"] = message.get("data", "")
+        for k, v in message.items():
+            resp[k] = v
+        resp["count"] = len(message.get('data', ''))
+    elif isinstance(message, list):
+        resp["data"] = message
+        resp["count"] = len(message)
+    elif isinstance(message, str):
+        resp["data"] = message
+    
     resp["error"] = "none"
     return Response(resp, status=status.HTTP_200_OK)
 

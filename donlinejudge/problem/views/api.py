@@ -15,6 +15,7 @@ from utils.make_response import *
 
 #from utils.query_set_rearrange import auto_apply
 import utils.serialized_data_rearrange as sdr
+from utils.pagination import paginate
 
 class ProblemAPI(APIView):
     def get(self, request, format=None):
@@ -28,12 +29,14 @@ class ProblemAPI(APIView):
                 problem = Problem.objects.all().order_by("-created")
                 problem_ser_data = ProblemSerializer(problem, many=True).data
                 problem_ser_data = sdr.auto_apply(problem_ser_data, request)
+                problem_ser_data = paginate(problem_ser_data, request)
                 return response_ok(problem_ser_data)
             else: ## TODO return not visible problems but are authored by the user
                 problem = Problem.objects.filter(
                     visible=True).order_by("-created")
                 problem_ser_data = ProblemSerializer(problem, many=True).data
                 problem_ser_data = sdr.auto_apply(problem_ser_data, request)
+                problem_ser_data = paginate(problem_ser_data, request)
                 return response_ok(ProblemSerializer(problem, many=True).data)
         except Exception:
             return response_bad_request("Request denied.")

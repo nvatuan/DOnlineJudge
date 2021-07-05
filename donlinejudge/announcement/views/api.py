@@ -9,6 +9,7 @@ from accounts.models import User
 
 from utils.make_response import *
 import utils.serialized_data_rearrange as sdr
+from utils.pagination import paginate
 
 class AnnouncementAPI(APIView):
     serializer_class = AnnouncementSerializer
@@ -22,13 +23,16 @@ class AnnouncementAPI(APIView):
                 announcement = Announcement.objects.all().order_by("-creation_time")
                 ann_serialized_data = AnnouncementSerializer(announcement, many=True).data
                 ann_serialized_data = sdr.auto_apply(ann_serialized_data, request)
+                ann_serialized_data = paginate(ann_serialized_data, request)
                 return response_ok(ann_serialized_data)
             else:
                 announcement = Announcement.objects.filter(
                     is_visible=True).order_by("-creation_time")
-                return response_ok(AnnouncementSerializer(announcement, many=True).data)
+                announcement = AnnouncementSerializer(announcement, many=True).data 
+                announcement = paginate(announcement, request)
+                return response_ok(announcement)
         except Exception as E:
-            print(E)
+            #print(E)
             return response_bad_request("Request denied.")
 
     @super_admin_required

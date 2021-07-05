@@ -17,8 +17,8 @@ from json import loads, dumps
 import sys
 
 from utils.make_response import *
-#from utils.query_set_rearrange import auto_apply 
 import utils.serialized_data_rearrange as sdr
+from utils.pagination import paginate
 
 import asyncio, websockets
 
@@ -31,6 +31,7 @@ class SubmissionAPI(APIView):
         #subs = auto_apply(subs, request) ## query_set
         seris = SubmissionSerializer(subs, many=True)
         serisdata = sdr.auto_apply(seris.data, request) ## serialized daa
+        serisdata = paginate(serisdata, request)
         return response_ok(serisdata)
 
     """
