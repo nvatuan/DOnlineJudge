@@ -11,53 +11,89 @@ import admin_problemAPI from '../../../api/admin_problemAPI';
 function Createproblem({ match }) {
     const { handleSubmit } = useForm();
     const id = match.params.id;
-    const [display_id, setDisplay_id] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [input_description, setInput_description] = useState('');
-    const [output_description, setOutput_description] = useState('');
-    const [time_limit, setTime_limit] = useState('');
-    const [memory_limit, setMemory_limit] = useState('');
-    const [visible, setVisible] = useState('');
-    const [difficulty, setDifficulty] = useState('');
+    const [display_id, setDisplay_id] = useState(() => {
+        const initDisplay_id = localStorage.getItem('display_id') || '';
+        return initDisplay_id;
+    });
+    const [title, setTitle] = useState(() => {
+        const initTitle = localStorage.getItem('title') || '';
+        return initTitle;
+    });
+    const [description, setDescription] = useState(() => {
+        const initDescription = localStorage.getItem('description') || '';
+        return initDescription;
+    });
+    const [input_description, setInput_description] = useState(() => {
+        const initInput_description = localStorage.getItem('input_description') || '';
+        return initInput_description;
+    });
+    const [output_description, setOutput_description] = useState(() => {
+        const initOutput_description = localStorage.getItem('output_description') || '';
+        return initOutput_description;
+    });
+    const [time_limit, setTime_limit] = useState(() => {
+        const initTime_limit = localStorage.getItem('time_limit') || '';
+        return initTime_limit;
+    });
+    const [memory_limit, setMemory_limit] = useState(() => {
+        const initMemory_limit = localStorage.getItem('memory_limit') || '';
+        return initMemory_limit;
+    });
+    const [visible, setVisible] = useState(() => {
+        const initVisible = localStorage.getItem('visible') || '';
+        return initVisible;
+    });
+    const [difficulty, setDifficulty] = useState(() => {
+        const initDifficulty = localStorage.getItem('difficulty') || '';
+        return initDifficulty;
+    });
     const [sample_test, setSample_test] = useState([]);
 
     const history = useHistory();
     const handleDisplay_id = (e) => {
         const value = e.target.value;
         setDisplay_id(value);
+        localStorage.setItem('display_id', value);
     }
     const handleTitle = (e) => {
         const value = e.target.value;
         setTitle(value);
+        localStorage.setItem('title', value);
     }
     const handleDescription = (e) => {
         const value = e.target.value;
         setDescription(value);
+        localStorage.setItem('description', value);
     }
     const handleInput_description = (e) => {
         const value = e.target.value;
         setInput_description(value);
+        localStorage.setItem('input_description', value);
     }
     const handleOutput_description = (e) => {
         const value = e.target.value;
         setOutput_description(value);
+        localStorage.setItem('output_description', value);
     }
     const handleVisible = (e) => {
         const value = e.target.value;
         setVisible(value);
+        localStorage.setItem('visible', value);
     }
     const handleTime_limit = (e) => {
         const value = e.target.value;
         setTime_limit(value);
+        localStorage.setItem('time_limit', value);
     }
     const handleMemory_limit = (e) => {
         const value = e.target.value;
         setMemory_limit(value);
+        localStorage.setItem('memory_limit', value);
     }
     const handleDifficulty = (e) => {
         const value = e.target.value;
         setDifficulty(value);
+        localStorage.setItem('difficulty', value);
     }
     const onSubmit = async (formData) => {
         console.log(formData);
@@ -269,25 +305,25 @@ function Createproblem({ match }) {
                                                 defaultChecked
                                                 value="C"
                                             />C
-                                        <input className="cp-language"
+                                            <input className="cp-language"
                                                 type="checkbox"
                                                 name="Language"
                                                 value="C++"
                                                 defaultChecked
                                             />C++
-                                        <input className="cp-language"
+                                            <input className="cp-language"
                                                 type="checkbox"
                                                 name="Language"
                                                 value="Java"
                                                 defaultChecked
                                             />Java
-                                        <input className="cp-language"
+                                            <input className="cp-language"
                                                 type="checkbox"
                                                 name="Language"
                                                 value="Python"
                                                 defaultChecked
                                             />Python
-                                    </td>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -330,7 +366,7 @@ function Createproblem({ match }) {
                                                     <td>
                                                         <Button className="removeButton" onClick={() => handleRemove(idx)}>
                                                             X
-                                                    </Button>
+                                                        </Button>
                                                     </td>
 
                                                 </tr>
@@ -359,7 +395,7 @@ function Createproblem({ match }) {
                                             <span> Type</span> <br /> <br />
                                             <input type="radio" name="type" value="ACM" /> ACM <br />
                                             <input type="radio" name="type" value="IO" /> IO
-                                    </td>
+                                        </td>
                                         <td className="td-test ">
                                             <span> Test Case</span> <br /> <br />
                                             <input type="file" />
@@ -369,7 +405,7 @@ function Createproblem({ match }) {
                                             <span> IO mode</span> <br /> <br />
                                             <input type="radio" name="io" value="standard" /> Standard IO <br />
                                             <input type="radio" name="io" value="file" /> File IO
-                                    </td>
+                                        </td>
                                     </tr>
                                 </tbody>
 
