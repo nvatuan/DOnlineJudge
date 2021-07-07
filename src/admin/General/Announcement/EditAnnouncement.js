@@ -1,35 +1,43 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, ListGroup, Button, Form, FormControl } from 'react-bootstrap';
 import './EditAnnouncement.scss';
 import admin_announcementAPI from '../../../api/admin_announcementAPI';
 import { useForm } from 'react-hook-form';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
-import { useHistory } from 'react-router-dom'; 
+import { useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
 
 //
-function EditAnnouncement({match}) {
+function EditAnnouncement({ match }) {
     const id = match.params.id;
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(() => {
+        const initTitle = localStorage.getItem('ann_title') || '';
+        return initTitle;
+    });
+    const [content, setContent] = useState(() => {
+        const initCotent = localStorage.getItem('ann_content') || '';
+        return initCotent;
+    });
     const [visible, setVisible] = useState(true);
     const { register, handleSubmit } = useForm();
     const history = useHistory();
 
-    const handleTitle = (e) =>{
+    const handleTitle = (e) => {
         const value = e.target.value;
         setTitle(value);
+        localStorage.setItem('ann_title', value)
     }
-    const handleContent = (e) =>{
+    const handleContent = (e) => {
         const value = e.target.value;
         setContent(value);
+        localStorage.setItem('ann_content', value)
     }
     const onSubmit = async (formData) => {
         formData.title = title;
         formData.content = content;
         formData.is_visible = visible;
-        if(!isNaN(id)){
+        if (!isNaN(id)) {
             try {
                 const response = await admin_announcementAPI.updateById({ formData, id });
 
@@ -40,7 +48,7 @@ function EditAnnouncement({match}) {
                 console.log("Fail to put problem: ", error);
             }
         }
-        else{
+        else {
             try {
                 const response = await admin_announcementAPI.createAnnouncemt(formData);
                 if (response) {
@@ -53,7 +61,7 @@ function EditAnnouncement({match}) {
 
     };
     useEffect(() => {
-        if(!isNaN(id)){
+        if (!isNaN(id)) {
             const fetchAnnouncement = async () => {
                 try {
                     const response = await admin_announcementAPI.getById(id);
@@ -66,14 +74,14 @@ function EditAnnouncement({match}) {
             };
             fetchAnnouncement();
         }
-    },[])
-    const updateVisibility = () =>{
+    }, [])
+    const updateVisibility = () => {
         setVisible(!visible);
     }
     return (
         <div className="announcements-container">
             <AdminNavbar />
-            <Sidebar/>
+            <Sidebar />
             <div className="edit_form">
                 <Card>
                     <Card.Header as="h3">Edit</Card.Header>
@@ -93,21 +101,21 @@ function EditAnnouncement({match}) {
                             <ListGroup.Item className="announForm-items">
                                 <i style={{ color: 'red' }}>*</i>
                                 <span> Content</span> <br /> <br />
-                                <Form.Control as="textarea" rows={10} cols={150} {...register("content")} 
+                                <Form.Control as="textarea" rows={10} cols={150} {...register("content")}
                                     value={content} onChange={(e) => { handleContent(e) }}>
                                 </Form.Control>
                             </ListGroup.Item>
                             <br />
                             <label htmlFor="">Visible</label>
-                            <br/>
-                            <Switch checked={visible} onChange={()=> updateVisibility()}/>
                             <br />
-                            <hr/>
+                            <Switch checked={visible} onChange={() => updateVisibility()} />
+                            <br />
+                            <hr />
                             <Button type="submit" className="save_button">Save</Button>
                         </Form>
                     </Card.Body>
                 </Card>
-                
+
             </div>
         </div>
     )
