@@ -1,8 +1,14 @@
 import axiosClient from "./axiosClient";
 const admin_problemAPI = {
     getAll: () => {
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
         const url = 'admin/problem/';
-        return axiosClient.get(url);
+        return axiosClient.get(url,config);
     },
     getById: (id) => {
         const url = `admin/problem/${id}`;
@@ -36,7 +42,6 @@ const admin_problemAPI = {
     },
     createProblem: (data) => {
         const token = localStorage.getItem('token');
-        console.log(data);
         let config = {
             headers: {
                 'Authorization': 'Token ' + token,
@@ -44,6 +49,17 @@ const admin_problemAPI = {
         };
         const url = 'admin/problem/';
         return axiosClient.post(url, data, config);
+    },
+    updateVisible: (id, isVisible) =>{
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        };
+        const url = `admin/problem/${id}/`;
+        const visible = {visible: !isVisible};
+        return axiosClient.put(url,visible,config);
     }
 }
 

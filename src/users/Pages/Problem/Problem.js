@@ -26,6 +26,7 @@ function Problem() {
     useEffect(() => {
         const fectchProblems = async () => {
             const response = await oj_problemAPI.getAll(filters);
+            console.log(response.data);
             setProblems(response.data);
         }
         fectchProblems();

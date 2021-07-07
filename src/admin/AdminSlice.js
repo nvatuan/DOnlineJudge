@@ -22,7 +22,7 @@ export const AnnouncementList = createAsyncThunk(
             const response = await admin_announcementAPI.getAll();
             return response;
         } catch (error) {
-            console.log("fail to get problem list");
+            console.log("fail to get announcement list");
             thunkAPI.rejectWithValue(error.response.json());
         }
     }

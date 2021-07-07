@@ -8,7 +8,9 @@ import admin_problemAPI from '../../../api/admin_problemAPI';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminSelector, deleteProblem, clearState } from '../../AdminSlice';
-
+import Switch from 'react-switch';
+import { BsFillPlusCircleFill } from 'react-icons/bs';
+import './ProblemList.scss';
 function ProblemList(props) {
     const [problems, setProblems] = useState([]);
     //redux 
@@ -32,14 +34,30 @@ function ProblemList(props) {
         };
         fetchProblemList();
     }, [deleteSusscess])
-
+    const handleVisible = (id, isVisible) => {
+        const update = async () =>{
+            const response = await admin_problemAPI.updateVisible(id, isVisible);
+            const newProblem = response.data;
+            setProblems(
+                problems.map(
+                    (problem) => {return newProblem.id === problem.id ? {...problem, visible: newProblem.visible} : problem}
+                )
+            )
+        };
+        update();
+    }
     return (
         <div>
             <AdminNavbar />
             <Sidebar />
             <div className="table-view">
                 <Card>
-                    <Card.Header as="h4">Problem List</Card.Header>
+                    <Card.Header as="h3" className="problemList-header">
+                        Problem List
+                        <div className="create_button">
+                            <Link to={`/admin/problem/create`}  className="alter_announcement"> <BsFillPlusCircleFill /> New</Link>
+                        </div>
+                    </Card.Header>
                     <Card.Body>
                         <Card.Text>
                             < table >
@@ -61,13 +79,14 @@ function ProblemList(props) {
                                                 <tr key={problem.id}>
                                                     <td>{problem.id}</td>
                                                     <td>{problem.display_id}</td>
-                                                    <td>{problem.author}</td>
+                                                    <td>{problem.author_name}</td>
                                                     <td>{problem.title}</td>
                                                     <td>{problem.created}</td>
                                                     <td>
-                                                        <Form.Check
-                                                            type="switch"
-                                                            id="custom-switch"
+                                                        <Switch 
+                                                            checked={problem.visible}
+                                                            height={20} width={40}
+                                                            onChange={() => handleVisible(problem.id, problem.visible)}
                                                         />
                                                     </td>
                                                     <td>
@@ -105,10 +124,6 @@ function ProblemList(props) {
                                 </tbody>
                             </table >
                         </Card.Text>
-                        <Link to={`/admin/problem/create`} >
-                            <Button variant="primary">Create</Button>
-                        </Link>
-
                     </Card.Body>
                 </Card>
             </div>
