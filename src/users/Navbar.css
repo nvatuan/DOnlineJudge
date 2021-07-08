@@ -26,6 +26,7 @@
   margin-left: auto;
   padding-right: 50px;
   padding-left: 50px;
+  position: fixed;
 }
 
 .navbar-logo {
@@ -57,7 +58,7 @@
 }
 
 .nav-item:hover {
-  border-bottom: 1px solid #f00946;
+  border-bottom: 1px solid #fff;
 }
 
 .nav-links {
