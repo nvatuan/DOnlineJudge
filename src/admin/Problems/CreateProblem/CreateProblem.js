@@ -11,53 +11,89 @@ import admin_problemAPI from '../../../api/admin_problemAPI';
 function Createproblem({ match }) {
     const { handleSubmit } = useForm();
     const id = match.params.id;
-    const [display_id, setDisplay_id] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [input_description, setInput_description] = useState('');
-    const [output_description, setOutput_description] = useState('');
-    const [time_limit, setTime_limit] = useState('1000');
-    const [memory_limit, setMemory_limit] = useState('128');
-    const [visible, setVisible] = useState('');
-    const [difficulty, setDifficulty] = useState('');
+    const [display_id, setDisplay_id] = useState(() => {
+        const initDisplay_id = localStorage.getItem('display_id') || '';
+        return initDisplay_id;
+    });
+    const [title, setTitle] = useState(() => {
+        const initTitle = localStorage.getItem('title') || '';
+        return initTitle;
+    });
+    const [description, setDescription] = useState(() => {
+        const initDescription = localStorage.getItem('description') || '';
+        return initDescription;
+    });
+    const [input_description, setInput_description] = useState(() => {
+        const initInput_description = localStorage.getItem('input_description') || '';
+        return initInput_description;
+    });
+    const [output_description, setOutput_description] = useState(() => {
+        const initOutput_description = localStorage.getItem('output_description') || '';
+        return initOutput_description;
+    });
+    const [time_limit, setTime_limit] = useState(() => {
+        const initTime_limit = localStorage.getItem('time_limit') || '';
+        return initTime_limit;
+    });
+    const [memory_limit, setMemory_limit] = useState(() => {
+        const initMemory_limit = localStorage.getItem('memory_limit') || '';
+        return initMemory_limit;
+    });
+    const [visible, setVisible] = useState(() => {
+        const initVisible = localStorage.getItem('visible') || '';
+        return initVisible;
+    });
+    const [difficulty, setDifficulty] = useState(() => {
+        const initDifficulty = localStorage.getItem('difficulty') || '';
+        return initDifficulty;
+    });
     const [sample_test, setSample_test] = useState([]);
 
     const history = useHistory();
     const handleDisplay_id = (e) => {
         const value = e.target.value;
         setDisplay_id(value);
+        localStorage.setItem('display_id', value);
     }
     const handleTitle = (e) => {
         const value = e.target.value;
         setTitle(value);
+        localStorage.setItem('title', value);
     }
     const handleDescription = (e) => {
         const value = e.target.value;
         setDescription(value);
+        localStorage.setItem('description', value);
     }
     const handleInput_description = (e) => {
         const value = e.target.value;
         setInput_description(value);
+        localStorage.setItem('input_description', value);
     }
     const handleOutput_description = (e) => {
         const value = e.target.value;
         setOutput_description(value);
+        localStorage.setItem('output_description', value);
     }
     const handleVisible = (e) => {
         const value = e.target.value;
         setVisible(value);
+        localStorage.setItem('visible', value);
     }
     const handleTime_limit = (e) => {
         const value = e.target.value;
         setTime_limit(value);
+        localStorage.setItem('time_limit', value);
     }
     const handleMemory_limit = (e) => {
         const value = e.target.value;
         setMemory_limit(value);
+        localStorage.setItem('memory_limit', value);
     }
     const handleDifficulty = (e) => {
         const value = e.target.value;
         setDifficulty(value);
+        localStorage.setItem('difficulty', value);
     }
     const onSubmit = async (formData) => {
         console.log(formData);
@@ -169,28 +205,28 @@ function Createproblem({ match }) {
         setSample_test(values);
     }
     return (
-        <div className="problem-container">
+        <div className="Edit-container">
             <AdminNavbar />
             <Sidebar />
             <div className="cp">
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <ListGroup>
-                        <h3>Create new problem</h3>
+                        <ListGroup.Item className="cp-header cp-list" >
+                            <h3>Edit problem</h3>
+                        </ListGroup.Item>
                         <ListGroup.Item className="cp-list">
                             <table>
                                 <tbody>
                                     <tr>
                                         <td className="td-dis">
                                             <i style={{ color: 'red' }}>*</i>
-                                            <span> Display ID (Unique human-readable ID)</span> <br /> <br />
+                                            <span> Display ID</span> <br /> <br />
                                             <input type="text" placeholder="Display ID" className="cp-displayid" required
                                                 value={display_id} onChange={(e) => { handleDisplay_id(e) }} />
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="td-dis">
+                                        <td className="td-til">
                                             <i style={{ color: 'red' }}>*</i>
-                                            <span> Problem Title </span> <br /> <br />
+                                            <span> Title</span> <br /> <br />
                                             <input type="text" placeholder="Title" className="cp-title" required
                                                 value={title} onChange={(e) => { handleTitle(e) }} />
                                         </td>
@@ -244,7 +280,7 @@ function Createproblem({ match }) {
                                         <td className="td-dif">
                                             <i style={{ color: 'red' }}>*</i>
                                             <span> Difficult</span> <br /> <br />
-                                            <Form.Control className='cp-dif' as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
+                                            <Form.Control as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
                                                 <option value="Easy">Easy</option>
                                                 <option value="Medium">Medium</option>
                                                 <option value="Hard">Hard</option>
@@ -263,53 +299,30 @@ function Createproblem({ match }) {
                                         <td>
                                             <i style={{ color: 'red' }}>*</i>
                                             <span> Language</span> <br /> <br />
-                                            <div className='cp-language-list'>
-                                                <ul id='cp-language-wrapper'>
-                                                    <li>
-                                                        <label>
-                                                        <input className="cp-language"
-                                                            type="checkbox"
-                                                            name="Language"
-                                                            defaultChecked
-                                                            value="C"
-                                                        />C
-                                                        </label>
-                                                    </li>
-
-                                                    <li>
-                                                        <label>
-                                                            <input className="cp-language"
-                                                                type="checkbox"
-                                                                name="Language"
-                                                                value="C++"
-                                                                defaultChecked
-                                                            />C++
-                                                        </label>
-                                                    </li>
-
-                                                    <li>
-                                                        <label>
-                                                            <input className="cp-language"
-                                                                    type="checkbox"
-                                                                    name="Language"
-                                                                    value="Java"
-                                                                    defaultChecked
-                                                                />Java
-                                                        </label>
-                                                    </li>
-
-                                                    <li>
-                                                        <label>
-                                                            <input className="cp-language"
-                                                                type="checkbox"
-                                                                name="Language"
-                                                                value="Python"
-                                                                defaultChecked
-                                                            />Python
-                                                        </label>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <input className="cp-language"
+                                                type="checkbox"
+                                                name="Language"
+                                                defaultChecked
+                                                value="C"
+                                            />C
+                                            <input className="cp-language"
+                                                type="checkbox"
+                                                name="Language"
+                                                value="C++"
+                                                defaultChecked
+                                            />C++
+                                            <input className="cp-language"
+                                                type="checkbox"
+                                                name="Language"
+                                                value="Java"
+                                                defaultChecked
+                                            />Java
+                                            <input className="cp-language"
+                                                type="checkbox"
+                                                name="Language"
+                                                value="Python"
+                                                defaultChecked
+                                            />Python
                                         </td>
                                     </tr>
                                 </tbody>
@@ -353,7 +366,7 @@ function Createproblem({ match }) {
                                                     <td>
                                                         <Button className="removeButton" onClick={() => handleRemove(idx)}>
                                                             X
-                                                    </Button>
+                                                        </Button>
                                                     </td>
 
                                                 </tr>
@@ -374,8 +387,6 @@ function Createproblem({ match }) {
                             </Form.Control>
                             {/* <Editor></Editor> */}
                         </ListGroup.Item >
-
-                        {/*
                         <ListGroup.Item className="cp-list">
                             <table>
                                 <tbody>
@@ -384,7 +395,7 @@ function Createproblem({ match }) {
                                             <span> Type</span> <br /> <br />
                                             <input type="radio" name="type" value="ACM" /> ACM <br />
                                             <input type="radio" name="type" value="IO" /> IO
-                                    </td>
+                                        </td>
                                         <td className="td-test ">
                                             <span> Test Case</span> <br /> <br />
                                             <input type="file" />
@@ -394,14 +405,12 @@ function Createproblem({ match }) {
                                             <span> IO mode</span> <br /> <br />
                                             <input type="radio" name="io" value="standard" /> Standard IO <br />
                                             <input type="radio" name="io" value="file" /> File IO
-                                    </td>
+                                        </td>
                                     </tr>
                                 </tbody>
 
                             </table>
                         </ListGroup.Item>
-                        */}
-
                         <Button type="submit" className="cp-btn">Save</Button>
 
                     </ListGroup>
