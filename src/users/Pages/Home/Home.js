@@ -11,6 +11,7 @@ function Home() {
         const fetchAnnouncement = async () => {
             try {
                 const response = await oj_announcementAPI.getAll();
+                console.log(response);
                 setAnnouncement(response.data);
             } catch (error) {
                 console.log('fail to announcement: ', error);

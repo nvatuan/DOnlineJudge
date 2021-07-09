@@ -35,14 +35,14 @@ function Register(props) {
 
     useEffect(() => {
         if (isRegisterError) {
-            toast.error(errorMessage, {
-                position: toast.POSITION.BOTTOM_CENTER,
-                autoClose: 1500
-            });
+            // toast.error(errorMessage, {
+            //     position: toast.POSITION.BOTTOM_CENTER,
+            //     autoClose: 1500
+            // });
             dispatch(clearState());
         }
         if (isRegisterSuccess) {
-            toast.success('kanseishitayoo onii-chan', {
+            toast.success('Welcome', {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             });

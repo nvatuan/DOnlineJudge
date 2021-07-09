@@ -2,16 +2,24 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import React from 'react'
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types'
 import './Sidebar.scss';
 import { AiFillAppstore, AiOutlineBars, AiOutlineCode } from 'react-icons/ai';
 import Logo from './Logo.png';
 function Sidebar() {
+  const handleCollapsed = () => {
+    if(window.innerWidth <= 960){
+      document.querySelector('.menu-sidebar').classList.add('collapsed');
+    }
+    else{
+      document.querySelector('.menu-sidebar').classList.remove('collapsed');
+    }
+    
+  }
+  window.addEventListener('resize', handleCollapsed)
   return (
     <div className="sidebar-container">
-      <ProSidebar className="menu-sidebar">
-        <div className="logo">
-          <img src={Logo} alt="" />
+      <ProSidebar className="menu-sidebar" >
+        <div className="logo" style={{ marginTop: 200}}>
         </div>
         <Menu iconShape="circle" >
           <MenuItem icon={<AiOutlineCode />}>
