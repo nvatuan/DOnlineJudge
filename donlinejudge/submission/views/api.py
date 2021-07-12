@@ -23,6 +23,7 @@ from utils.pagination import paginate
 import asyncio, websockets
 
 class SubmissionAPI(APIView):
+    serializer_class = SubmissionSerializer
     """
     List all problems
     """
