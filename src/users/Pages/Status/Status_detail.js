@@ -53,6 +53,8 @@ function Status_detail({ match }) {
                                         styleActiveLine: true,
                                         theme: "material",
                                         mode: {
+                                            'PyPy3': 'python',
+                                            'PyPy': 'python',
                                             'Python3': 'python',
                                             'Python2': 'python',
                                             'Java': 'text/x-java',

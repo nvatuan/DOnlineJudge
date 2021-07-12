@@ -1,9 +1,9 @@
 {
   "name": "DOnlineJudge",
-  "homepage": "http://nvatazure.southeastasia.cloudapp.azure.com:8080/",
+  "homepage": "http://45.117.171.223:8080/",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://nvatazure.southeastasia.cloudapp.azure.com:7000",
+  "proxy": "http://45.117.171.223:5000/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
     "@testing-library/jest-dom": "^5.11.10",
