@@ -241,14 +241,18 @@ class UserDetailAPI(APIView):
         Update a specific user
         """
         data = request.data
-        fields = ["username", "password", "email", "first_name", "last_name",
+        UPDATE_FIELDS = ["username", "password", "email", "first_name", "last_name",
             "admin_type", "problem_permission", "is_staff"]
+        # Initializer all keywith empty string
+        for field in UPDATE_FIELDS:
+            data[field] = data.get(field, '')
+
+        # Reports unknown fields
         for field in request.data:
-            if field in fields:
-                data[field] = data.get(field, '')
-            else:
+            if field not in fields:
                 return response_bad_request(f"Unexpected field {field} in the request body")
 
+        # Try validate
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
