@@ -1,0 +1,63 @@
+.aboutus-container{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+    align-items: normal;
+    position: absolute;
+    margin-top: 30px;
+    width: 100%;
+    background-color:#eee;
+
+    .aboutus-card{
+        width: 80%;
+        background-color: #fff;
+    }
+    .card-container{
+        opacity: 1;
+    }
+}
+
+.aboutus-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.Collapsible__trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  background-color: #eee;
+  padding: 10px 20px;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Text trong tung cau hoi FAQ*/
+div.Collapsible {
+  background-color: rgba(156, 156, 156, 0.1);
+  margin-bottom: 3px;
+}
+
+div.Collapsible ul, div.Collapsible p {
+  margin: 20px;
+}
+div.Collapsible ul {
+  margin: 20px;
+  padding-left: 40px;
+  list-style: square;
+}
+
+/* Khoang trong o ben duoi FAQ*/
+.faq-collapsible-footer {
+  border: 3px solid transparent;
+}
+
+/* Animation moi lan click*/
+.Collapsible__trigger.is-open svg {
+  transform: rotate(180deg);
+}
