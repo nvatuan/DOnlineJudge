@@ -42,7 +42,7 @@ function Register(props) {
             dispatch(clearState());
         }
         if (isRegisterSuccess) {
-            toast.success('Welcome', {
+            toast.success('Register successful', {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             });

@@ -27,7 +27,7 @@ axiosClient.interceptors.response.use((response) => {
             for (let key in error_messsage){
                 toast.error(error_messsage[key], {
                     position: toast.POSITION.BOTTOM_CENTER,
-                    autoClose: 1500
+                    autoClose: 2500
                 })
             }
         }

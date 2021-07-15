@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
 import { FaCloudUploadAlt } from 'react-icons/fa'
 import Profile from '../Profile/Profile'
@@ -11,21 +11,21 @@ function Setting() {
     const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userInformation')));
     const [toAccount, setToAccount] = useState(false);
     const [selectFile, setSelectFile] = useState(null);
-    const openAccountPage = () =>{
+    const openAccountPage = () => {
         setToAccount(true);
     }
-    const openProfilePage = () =>{
+    const openProfilePage = () => {
         setToAccount(false);
     }
-    const onChangeUploadFile = (e) =>{
-        setSelectFile(e.target.files[0]);        
+    const onChangeUploadFile = (e) => {
+        setSelectFile(e.target.files[0]);
     }
     const uploadFile = () => {
         const formData = new FormData();
         formData.append('profile_pic', selectFile);
         const updateAvatar = async () => {
             const response = await oj_profileAPI.uploadAvatar(formData);
-            if(response){
+            if (response) {
                 setUserData(response.data);
                 setSelectFile(null);
             }
@@ -33,7 +33,7 @@ function Setting() {
         updateAvatar();
     }
     useEffect(() => {
-        const fetchUserData = async () =>{
+        const fetchUserData = async () => {
             const response = await oj_profileAPI.getUserInformation(selectFile);
             setUserData(response.data);
         }
@@ -43,7 +43,7 @@ function Setting() {
     }, [userData.profile_pic])
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className="setting_container">
                 <div className="card_container">
                     <div className="sidebar pages-container">
@@ -52,16 +52,16 @@ function Setting() {
                         </div>
                         <center>
                             <div className="upload-img">
-                                <div className="container">
+                                <div className="img-container">
                                     <div className="avatar-upload">
                                         <div className="avatar-edit">
-                                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" onChange={(e) =>{onChangeUploadFile(e)}}/>
-                                            <label htmlFor="imageUpload"><FaCloudUploadAlt/></label>
+                                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" onChange={(e) => { onChangeUploadFile(e) }} />
+                                            <label htmlFor="imageUpload"><FaCloudUploadAlt /></label>
                                         </div>
                                         <div className="avatar-preview">
-                                            <img src={userData.profile_pic} className="profile_img" style={{style: "background-image"}} alt="hiu" />
+                                            <img src={userData.profile_pic} className="profile_img" style={{ style: "background-image" }} alt="hiu" />
                                         </div>
-                                        <br/>
+                                        <br />
                                         <h4>{localStorage.getItem("username")}</h4>
                                     </div>
                                 </div>
@@ -72,15 +72,15 @@ function Setting() {
                         <div className="sidebar-item">
                             <Link className="profile_submission" to={`status/?filter_by=author_id&author_id=${localStorage.getItem("userId")}`}>
                                 <i className="fas fa-history"></i>
-                                 Submission
+                                Submission
                             </Link>
                         </div>
                     </div>
                     <div className="right_container ">
-                        {toAccount ? <EditProfile/> : <Profile />}
+                        {toAccount ? <EditProfile /> : <Profile />}
                     </div>
                 </div>
-                
+
             </div>
         </div>
     )
