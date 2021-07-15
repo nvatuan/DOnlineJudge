@@ -3,27 +3,35 @@ import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 import './Dashboard.scss';
 function Dashboard(props) {
-    // const [name, SetName] = useState('admin');
-    // const [role, Setrole] = useState('Super Admin');
-    // const [image, setImage] = useState('http://nvatazure.southeastasia.cloudapp.azure.com/public/avatar/default.png')
 
     return (
         <div className="admin-content">
             <AdminNavbar />
             <Sidebar />
-            <div className="dashboard" >
-                <div className="admin-img">
-                    {/* <img src={image} alt="" width="100%" height="100%" /> */}
+            <div className="admin-dashboard">
+                <div className="dashboard__list">
+                    <div className="dashboard__item dashboard__item--admin-name">
+                        <div className="item__icon item__icon--first"></div>
+                        <div className="item__title">Admin Name</div>
+                        <div className="item__content">{"admin"}</div>
+                    </div>
+                    <div className="dashboard__item dashboard__item--admin-type">
+                        <div className="item__icon item__icon--second"></div>
+                        <div className="item__title">Amin Type</div>
+                        <div className="item__content">{"Regular"}</div>
+                    </div>
+                    <div className="dashboard__item dashboard__item--last-login">
+                        <div className="item__icon item__icon--third"></div>
+                        <div className="item__title">Last Login</div>
+                        <div className="item__content"></div>
+                    </div>
+                    <div className="dashboard__item dashboard__item--problems">
+                        <div className="item__icon item__icon--fourth"></div>
+                        <div className="item__title">Problems</div>
+                        <div className="item__content"></div>
+                    </div>
                 </div>
-                <hr />
-                <div className="admin-info">
-                    {/* <p className="admin-name"> {name} </p>
-                    <p className="admin-role"> {role} </p> */}
-
-                </div>
-
-            </div >
-
+            </div>
         </div >
     )
 }
