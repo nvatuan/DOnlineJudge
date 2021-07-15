@@ -1,47 +1,48 @@
 * {
-    margin: 0px;
-    padding: 0px;
-    max-width: 100%;
-    box-sizing: border-box;
-    -webkit-font-smoothing: subpixel-antialiased;
+  margin: 0px;
+  padding: 0px;
+  max-width: 100%;
+  box-sizing: border-box;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
-.home-container{
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    //quá củ chuối. Kiếm giải pháp khác
-    height: 89.4vh;
-    background-image: linear-gradient(rgba(0, 0 ,0, 0.7), rgba(0, 0 ,0, 0.7)), url(../../../public/Bakcground.jpg);
+.home-container {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  //quá củ chuối. Kiếm giải pháp khác
+  height: 89.4vh;
+  // background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url();
 
-    .home-container__items{
-        flex-basis: 50%;
+  .home-container__items {
+    flex-basis: 50%;
+  }
+  .left-part {
+    margin-left: 100px;
+    h1 {
+      color: #fff;
+      font-size: 80px;
+      font-weight: 500;
     }
-    .left-part{
-        margin-left: 100px;
-        h1{
-            color: #fff;
-            font-size: 80px;
-            font-weight: 200;
-        }
+    z-index: 100;
+  }
+  .right-part {
+    h1 {
+      color: #fff;
+      font-size: 40px;
+      font-weight: 500;
     }
-    .right-part{
-        h1{
-            color: #fff;
-            font-size: 40px;
-            font-weight: 200;
-        }
-    }
+    z-index: 100;
+  }
 }
 
-.annoucement-container{
+.annoucement-container {
   height: 550px;
   border-radius: 10px;
   overflow: scroll;
   overflow-x: hidden;
-    
 }
 ::-webkit-scrollbar {
   width: 7px;
@@ -49,15 +50,24 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f14b; 
+  background: #f1f1f14b;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
+}
+
+.myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  opacity: 0.8;
 }
