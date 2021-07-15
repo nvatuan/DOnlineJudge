@@ -8,15 +8,21 @@
 }
 .admin-dashboard {
     position: relative;
-    top: 32px;
+    top: 40px;
     left: 220px;
     width: 84%;
     // margin: 0 auto;
+    .dashboard__title {
+        .dashboard__title-icon {
+            transform: translateY(-14%);
+        }
+        color: #333;
+    }
     .dashboard__list {
         height: 128px;
         display: flex;
         justify-content: space-around;
-
+        margin-top: 50px;
         .dashboard__item + .dashboard__item {
             margin-left: 40px;
         }
@@ -39,11 +45,17 @@
                 position: relative;
                 transform: translate(20%, -20%);
                 box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+                .item__icon-font {
+                    height: 60px;
+                    width: 60px;
+                    margin: 13px;
+                    color: #fff;
+                }
             }
             .item__title {
                 color: #999;
                 position: absolute;
-                right: 10px;
+                right: 20px;
                 top: 10px;
             }
             .item__content::before {
@@ -53,6 +65,7 @@
                 width: 80%;
                 margin: auto;
                 opacity: 0.8;
+                color: #333;
             }
             .item__content {
                 text-align: center;
