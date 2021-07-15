@@ -59,7 +59,7 @@ function Setting() {
                                             <label htmlFor="imageUpload"><FaCloudUploadAlt /></label>
                                         </div>
                                         <div className="avatar-preview">
-                                            <img src={userData.profile_pic} className="profile_img" style={{ style: "background-image" }} alt="hiu" />
+                                            <img src={userData.profile_pic} className="profile_img" style={{ style: "background-image" }} alt="error" />
                                         </div>
                                         <br />
                                         <h4>{localStorage.getItem("username")}</h4>

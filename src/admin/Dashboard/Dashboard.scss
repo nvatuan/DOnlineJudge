@@ -1,7 +1,58 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+.Admin_profile {
+    position: relative;
+    padding-top: 30px;
+    border-radius: 4px;
+
+    margin-top: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.87);
+    width: 60%;
+    border: 0;
+    display: flex;
+    position: relative;
+    font-size: .875rem;
+    min-width: 0;
+    word-wrap: break-word;
+    background: #FFF;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0 , 14%);
+    border-radius: 6px;
+    margin-bottom: 30px;
+    flex-direction: column;
+    .admin_header{
+        margin: -120px auto 0;
+        overflow: hidden;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        .admin_image{
+            width: 200px;
+            height: 200px;
+            border-radius: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+    .admin_information{
+        flex: 1 1 auto;
+        padding: 0.9375rem 20px;
+        position: relative;
+        -webkit-box-flex: 1;
+        margin-top: 15px;
+
+        h4{
+                color: #3C4858;
+            margin-top: 0;
+            min-height: auto;
+            font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            font-weight: 300;
+            margin-bottom: 3px;
+            text-decoration: none;
+        }
+    }
 }
 .admin-content {
     background-color: rgb(238, 238, 238);

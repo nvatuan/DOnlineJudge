@@ -8,9 +8,10 @@
 }
 
 .menu-sidebar{
-    overflow: auto;
-    width: 205  px;
+    overflow: hidden;
     height: 100%;
+    min-width: 200px;
+    width: 200px;
     position: fixed!important;
     display: flex;
     z-index: 100;
@@ -25,7 +26,6 @@
         align-items: center;
     }
     img{
-        margin: 20px 0;
         z-index: 102;
         width: 150px;
         height: 150px;

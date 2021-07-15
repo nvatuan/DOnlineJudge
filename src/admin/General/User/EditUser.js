@@ -92,7 +92,7 @@ function EditUser({match}) {
                                 <div className="user-select">
                                     <label htmlFor="Admin type">Admin type: </label>
                                     <Form.Control as="select" size="sm" custom {...register("admin_type")} >
-                                        <option value="none" defaultValue disabled hidden >{userData.admin_type}</option>
+                                        <option value="" selected disabled hidden>{userData.admin_type}</option>
                                         <option value="Regular Users">Regular Users</option>
                                         <option value="Admin">Admin</option>
                                         <option value="Super Admin">Super Admin</option>
@@ -101,15 +101,15 @@ function EditUser({match}) {
                                 <div className="user-select">
                                     <label htmlFor="Is staff">Is staff: </label>
                                     <Form.Control as="select" size="sm" custom {...register("is_staff")}>
-                                        <option value="none" defaultValue disabled hidden >{userData.is_staff}</option>
+                                        <option value="" selected disabled hidden>{`${userData.is_staff}`}</option>
                                         <option value="true">True</option>
-                                        <option value="false">Flase</option>
+                                        <option value="false">False</option>
                                     </Form.Control>
                                 </div>
                                 <div className="user-select">
                                     <label htmlFor="Problem permission">Problem permission: </label>
                                     <Form.Control as="select" size="sm" custom {...register("problem_permission")}>
-                                        <option value="none" defaultValue disabled hidden >{userData.problem_permission}</option>
+                                        <option value="" selected disabled hidden>{userData.problem_permission}</option>
                                         <option value="None">None</option>
                                         <option value="Own">Own</option>
                                         <option value="All">All</option>

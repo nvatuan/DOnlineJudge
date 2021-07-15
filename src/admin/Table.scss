@@ -98,8 +98,11 @@ table {
     line-height: 23px;
   }
   .option-button{
-    display: inline-block;
+    display: flex;
     margin-left: 0.1rem;
+    .option-button__items{
+      padding-right: 5px;
+    }
   }
   //Color alternating rows
   // tr:nth-child(even) {

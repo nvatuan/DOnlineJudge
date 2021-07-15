@@ -1,11 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect}from 'react';
+import oj_profileAPI from '../../api/oj_profileAPI';
 import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 import './Dashboard.scss';
 import { AiOutlineUser, AiOutlineLogin, AiOutlineCode, AiOutlineDashboard } from "react-icons/ai";
 import { RiAdminLine } from "react-icons/ri";
-function Dashboard(props) {
-
+function Dashboard() {
+    const [userData, setUserData] = useState([]);
+    useEffect(() =>{
+        const fetchAdminInformation = async () =>{
+            const response = await oj_profileAPI.getUserInformation();
+            if(response){
+                setUserData(response.data);
+            }
+        };
+        fetchAdminInformation();
+    },[])
+    console.log(userData);
     return (
         <div className="admin-content">
             <AdminNavbar />
@@ -42,10 +53,21 @@ function Dashboard(props) {
                         <div className="item__content"></div>
                     </div>
                 </div>
+
+                <div className="Admin_profile">
+                    <div className="admin_header">
+                        <img src={userData.profile_pic} className="admin_image"alt="error" />
+                    </div>
+                    <div className="admin_information">
+                        <h4>Introduction</h4>
+                        <hr />
+                        <p>Thuốc đắng giả tật, nhạc giật lên luôn</p>
+                    </div>
+                </div >
             </div>
-        </div >
+            
+        </div>
     )
 }
-
 export default Dashboard
 
