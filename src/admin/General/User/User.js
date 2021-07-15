@@ -45,9 +45,9 @@ function User(props) {
                 <Card>
                     <Card.Header as="h4" className="user-header">
                         Users
-                        <div className="create_button">
+                        {/* <div className="create_button">
                             <Link to={`/admin/users/new`} className="alter_announcement"> <BsFillPlusCircleFill /> New</Link>
-                        </div>
+                        </div> */}
                     </Card.Header>
                     <Card.Body>
                             < table >

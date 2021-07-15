@@ -1,29 +1,32 @@
-import React from 'react';
+import React, {useState, useEffect}from 'react';
+import oj_profileAPI from '../../api/oj_profileAPI';
 import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 import './Dashboard.scss';
-function Dashboard(props) {
-    // const [name, SetName] = useState('admin');
-    // const [role, Setrole] = useState('Super Admin');
-    // const [image, setImage] = useState('http://nvatazure.southeastasia.cloudapp.azure.com/public/avatar/default.png')
-
+function Dashboard() {
+    const [userData, setUserData] = useState([]);
+    useEffect(() =>{
+        const fetchAdminInformation = async () =>{
+            const response = await oj_profileAPI.getUserInformation();
+            if(response){
+                setUserData(response.data);
+            }
+        };
+        fetchAdminInformation();
+    },[])
+    console.log(userData);
     return (
         <div className="admin-content">
             <AdminNavbar />
             <Sidebar />
-            <div className="dashboard" >
-                <div className="admin-img">
-                    {/* <img src={image} alt="" width="100%" height="100%" /> */}
+            <div className="Admin_profile">
+                <div className="admin_image">
+                    <img src={userData.profile_pic} alt="error"/>
                 </div>
-                <hr />
-                <div className="admin-info">
-                    {/* <p className="admin-name"> {name} </p>
-                    <p className="admin-role"> {role} </p> */}
-
+                <div className="admin_information">
+                <h4>Quote</h4>
                 </div>
-
-            </div >
-
+            </div>
         </div >
     )
 }
