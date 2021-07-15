@@ -5,6 +5,7 @@ import './Home.scss';
 import { Card } from 'react-bootstrap';
 import oj_announcementAPI from '../../../api/oj_announcementAPI';
 import Announcement from './Announcement';
+import Background from '../../../public/Background.mp4'
 function Home() {
     const [announcement, setAnnouncement] = useState([]);
     useEffect(() => {
@@ -22,6 +23,10 @@ function Home() {
     return (
         <div>
             <Navbar />
+            <video autoPlay loop muted className="myVideo">
+                <source src={Background} type="video/mp4" />
+            </video>
+
             <div className="pages-container">
                 <div className="home-container">
                     <div className="left-part home-container__items">

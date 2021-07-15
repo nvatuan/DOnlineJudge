@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from '../../Navbar';
-import { Card  } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import Collapsible from 'react-collapsible'
 import './About.scss';
 import { BsChevronDown } from "react-icons/bs"; //react-icon
-import {GoPrimitiveDot} from "react-icons/go";
+import { GoPrimitiveDot } from "react-icons/go";
 
-function RenderAnswer({ans}) {
+function RenderAnswer({ ans }) {
     if (ans.length == 0) return <p></p>;
     if (ans.charAt(0) === '{') {
         let tmp = ans.substring(1).split(',');
@@ -24,14 +24,14 @@ function RenderAnswer({ans}) {
     }
 }
 
-function FaqCollapsible({question, answer}) {
+function FaqCollapsible({ question, answer }) {
     var lines = answer.split('\n');
     console.log(lines);
     return (
         <>
-            <Collapsible trigger={[question, <BsChevronDown/>]} easing='ease'>
+            <Collapsible trigger={[question, <BsChevronDown />]} easing='ease'>
                 {
-                    lines.map((line) => (<RenderAnswer ans={line}/>))
+                    lines.map((line) => (<RenderAnswer ans={line} />))
                 }
             </Collapsible>
             <div className="faq-collapsible-footer"></div>
@@ -53,7 +53,7 @@ function About() {
                             <h5>Về nhóm và sản phẩm</h5>
                             <hr></hr>
                             {/* Question 1: Chúng tôi là ai?*/}
-                            <Collapsible trigger={["Chúng tôi là ai?", <BsChevronDown/>]} easing='ease'>
+                            <Collapsible trigger={["Chúng tôi là ai?", <BsChevronDown />]} easing='ease'>
                                 <p>Chúng tôi là sinh viên K18 của trường Đại học Bách Khoa Đà Nẵng bao gồm 4 người.</p>
                                 <ul>
                                     <li>Ngô Văn Anh Tuấn (lead project)</li>
@@ -63,31 +63,31 @@ function About() {
                                 </ul>
                             </Collapsible>
 
-                            {/* Question 2: DOnlineJudge là gì?*/ }
-                            <Collapsible trigger={["DOnlineJudge là gì?", <BsChevronDown/>]} easing='ease'>
+                            {/* Question 2: DOnlineJudge là gì?*/}
+                            <Collapsible trigger={["DOnlineJudge là gì?", <BsChevronDown />]} easing='ease'>
                                 <p>DOnlineJudge là một trình chấm code trực tuyến (online judge) được thiết kế để biên dịch (compile) và chấm kết quả (grading) một bài code của người dùng một cách tự động, thông qua các kiểm thử được thiết kế từ trước bởi người ra đề.</p>
                             </Collapsible>
 
-                            {/* Question 3: Mục đích của DOnlineJudge?*/ }
-                            <Collapsible trigger={["Mục đích của DOnlineJudge?", <BsChevronDown/>]} easing='ease'>
+                            {/* Question 3: Mục đích của DOnlineJudge?*/}
+                            <Collapsible trigger={["Mục đích của DOnlineJudge?", <BsChevronDown />]} easing='ease'>
                                 <p>Tự động hóa quá trình chấm code (tính đúng đắn của thuật toán) thông qua kiểm tra output. Hỗ trợ người dùng luyện tập khả năng tư duy thuật toán của họ.</p>
                             </Collapsible>
 
-                            <br/>
+                            <br />
                             <h5>Chi tiết triển khai (Implementation details)</h5>
                             <hr></hr>
                             {/* Question*/}
-                            <Collapsible trigger={["Front-end", <BsChevronDown/>]} easing='ease'>
+                            <Collapsible trigger={["Front-end", <BsChevronDown />]} easing='ease'>
                                 <p>Front-end được sử dụng framework ReactJS để phát triển.</p>
                             </Collapsible>
 
                             {/* Question*/}
-                            <Collapsible trigger={["Back-end", <BsChevronDown/>]} easing='ease'>
+                            <Collapsible trigger={["Back-end", <BsChevronDown />]} easing='ease'>
                                 <p>Back-end cho web server là một API server, sử dụng Django REST framework.</p>
                             </Collapsible>
 
                             {/* Question*/}
-                            <Collapsible trigger={["Back-end giao tiếp với Server chấm như thế nào?", <BsChevronDown/>]} easing='ease'>
+                            <Collapsible trigger={["Back-end giao tiếp với Server chấm như thế nào?", <BsChevronDown />]} easing='ease'>
                                 <p>
                                     Khi nhận code của người dùng nộp lên sẽ được đưa vào một hàng chờ, và backend sẽ tìm
                                     một server chấm thích hợp. Nếu chưa tìm được, backend sẽ chờ một khoảng thời gian trước khi tìm tiếp.
@@ -104,7 +104,7 @@ function About() {
                             </Collapsible>
 
                             {/* Question*/}
-                            <Collapsible trigger={["Server chấm code như thế nào?", <BsChevronDown/>]} easing='ease'>
+                            <Collapsible trigger={["Server chấm code như thế nào?", <BsChevronDown />]} easing='ease'>
                                 <p>
                                     Server chấm sử dụng công nghệ Docker để biên dịch và thực thi code trong cô lập.
                                     Trong container Docker, có một script dùng để bắt đầu và kết thúc quá trình này.

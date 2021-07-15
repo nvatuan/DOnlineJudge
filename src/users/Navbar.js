@@ -10,6 +10,7 @@ import { logoutUser } from './UserSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Register from './Pages/Register/Register';
+import logo from '../public/Logo_dhbkdn.jpg'
 function Navbar() {
     const [check, setCheck] = useState(false);
 
@@ -52,7 +53,7 @@ function Navbar() {
             <div className="navbar">
                 <div className="navbar-container container">
                     <Link to='/home' className="navbar-logo">
-                        <FcNightPortrait className='navbar-icon'></FcNightPortrait>
+                        <img className="navbar-logo" src={logo} alt="logo" />
                         <h2>DOnlineJudge</h2>
                     </Link>
                     <div className="menu-icon" onClick={handleClick}>
@@ -76,11 +77,11 @@ function Navbar() {
                         </li>
                         <li className="nav-btn ">
                             {!check ? (
-                                    <Login/>
+                                <Login />
                             ) : <DropdownButton variant="secondary" title={localStorage.getItem('username')}>
-                                    <Link to='/profile' className="dropdown-items">Settings</Link>
-                                    <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
-                                </DropdownButton>}
+                                <Link to='/profile' className="dropdown-items">Settings</Link>
+                                <Dropdown.Item onClick={onLogout}>Logout</Dropdown.Item>
+                            </DropdownButton>}
                         </li>
                         <li className="nav-btn">
                             {!check ? (

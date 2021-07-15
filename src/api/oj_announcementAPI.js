@@ -11,7 +11,7 @@ const oj_announcementAPI = {
         }
         const paramString = queryString.stringify(data);
         const url = `/announcement/?${paramString}`;
-        return axiosClient.get(url);
+        return axiosClient.get(url, config);
     },
 }
 export default oj_announcementAPI;

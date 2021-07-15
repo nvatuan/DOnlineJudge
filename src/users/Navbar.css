@@ -8,6 +8,14 @@
   position: sticky;
   top: 0;
   z-index: 100;
+
+}
+.navbar-logo {
+  margin-right: 4px;
+  transform: translateY(-4px);
+  border-radius: 2px;
+  width: 54px;
+  height: 54px;
 }
 .navbar a:hover{
   text-decoration: none !important;

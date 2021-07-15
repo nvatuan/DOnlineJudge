@@ -1,32 +1,31 @@
-.announcement-container{
+.announcement-container {
     margin-top: 30px;
     display: flex;
     justify-content: center;
     width: 95%;
-    
 }
-article{
+article {
     position: relative;
     display: flex;
-    background-color:  #c4c4cc;
-    opacity: 0.4;
+    background-color: #c4c4cc;
+    opacity: 0.8;
     box-sizing: border-box;
     border: none;
-    box-shadow: 2px 2px 6px 0px rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
     text-align: center;
     width: 100%;
     max-height: 160px;
-    transition: trasform .3s;
+    transition: trasform 0.3s;
     min-height: 200px;
-}   
+}
 
-article:hover{
+article:hover {
     transform: translateY(5px);
-    box-shadow: 2px 2px 26px 0px rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 26px 0px rgba(0, 0, 0, 0.3);
     opacity: 1;
 }
-.annou_head{
+.annou_head {
     background-color: #2a3358;
     flex: 1;
     color: rgba(255, 255, 255, 0.945);
@@ -37,32 +36,32 @@ article:hover{
     border-bottom-right-radius: 120px;
     margin-left: 10px;
     margin-top: 10px;
-    h5{
+    h5 {
         font-size: 15px;
     }
 }
 
-.annou_detail{
+.annou_detail {
     display: flex;
     position: relative;
     flex-direction: column;
     flex: 5;
     padding: 20px 20px;
 }
-.annou_detail h4{
+.annou_detail h4 {
     word-wrap: break-word;
 }
-.creation_time{
+.creation_time {
     bottom: 7%;
     font-size: 15px;
     font-weight: 500;
 }
-.more-button{
+.more-button {
     bottom: 10%;
     right: 10%;
 }
 
-.more-button Button{
+.more-button Button {
     position: absolute;
     bottom: 5%;
     right: 1%;
@@ -77,10 +76,9 @@ article:hover{
     cursor: pointer;
 }
 
-.more-button Button:hover{
+.more-button Button:hover {
     background-color: rgb(47, 47, 77) !important ;
 }
-.more-button Button:focus{
+.more-button Button:focus {
     background-color: #1c2237;
 }
-
