@@ -167,6 +167,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
 
         if data.get("profile_pic", '') != '':
             if valid_extension(str(data["profile_pic"])):
+                user.reset_profile_pic()
                 user.profile_pic = data["profile_pic"]
             else:
                 return response_bad_request({"profile_pic":"The file must have an image extension of .jpg, .jpeg or .png"})
@@ -243,11 +244,8 @@ class UserDetailAPI(APIView):
         data = request.data
         fields = ["username", "password", "email", "first_name", "last_name",
             "admin_type", "problem_permission", "is_staff"]
-        for field in request.data:
-            if field in fields:
-                data[field] = data.get(field, '')
-            else:
-                return response_bad_request(f"Unexpected field {field} in the request body")
+        for field in fields:
+            data[field] = data.get(field, '')
 
         try:
             user = User.objects.get(id=id)
