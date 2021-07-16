@@ -16,7 +16,6 @@ function Dashboard() {
         };
         fetchAdminInformation();
     },[])
-    console.log(userData);
     return (
         <div className="admin-content">
             <AdminNavbar />

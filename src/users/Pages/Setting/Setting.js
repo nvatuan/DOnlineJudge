@@ -28,6 +28,7 @@ function Setting() {
             if (response) {
                 setUserData(response.data);
                 setSelectFile(null);
+                window.location.reload();
             }
         }
         updateAvatar();

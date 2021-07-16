@@ -100,7 +100,7 @@ function Status_detail({ match }) {
                     </Card>
                 </div>
             </div>
-        </div>
+    </div>
     )
 }
 

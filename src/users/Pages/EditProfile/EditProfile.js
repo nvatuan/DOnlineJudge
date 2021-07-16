@@ -28,7 +28,7 @@ function EditProfile() {
                 setUser(response.data);
                 if(response){
                     localStorage.setItem('userInformation', JSON.stringify(response.data));
-                    // window.location.reload();
+                    window.location.reload();
                 }
             }
             fetchUserData();

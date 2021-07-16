@@ -11,7 +11,7 @@ const oj_problemAPI = {
         }
         const paramString = queryString.stringify(data);
         const url = `problem/?${paramString}`;
-        console.log(url);
+        if (token === null) return axiosClient.get(url);
         return axiosClient.get(url, config);
     },
     getById: (id) => {
@@ -22,7 +22,8 @@ const oj_problemAPI = {
             }
         }
         const url = `problem/${id}`;
-        return axiosClient.get(url, config);  
+        if (token === null) return axiosClient.get(url);
+        return axiosClient.get(url, config);
     }
     
 }
