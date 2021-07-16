@@ -34,7 +34,7 @@ function Dashboard() {
                         <div className="item__icon item__icon--second">
                             <RiAdminLine className="item__icon-font"></RiAdminLine>
                         </div>
-                        <div className="item__title">Amin Type</div>
+                        <div className="item__title">Admin Type</div>
                         <div className="item__content">{"Regular"}</div>
                     </div>
                     <div className="dashboard__item dashboard__item--last-login">

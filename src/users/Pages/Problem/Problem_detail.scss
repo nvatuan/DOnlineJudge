@@ -93,18 +93,18 @@
 .description,
 .input_description,
 .output_description {
-    text-indent: 20px;
+    word-wrap: break-word;
 }
 .problem-main__footer {
     display: flex;
     justify-content: flex-end;
 }
 
-textarea{
+textarea {
     background-color: #fff;
     resize: none;
 }
-.form-control:disabled, .form-control[readonly]{
+.form-control:disabled,
+.form-control[readonly] {
     background-color: #fff;
 }
-

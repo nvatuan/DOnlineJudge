@@ -16,10 +16,10 @@ function Sidebar() {
     }
   });
   const handleCollapsed = () => {
-    if(window.innerWidth <= 960){
+    if (window.innerWidth <= 960) {
       setCollapsed(true);
     }
-    else{
+    else {
       setCollapsed(false);
     }
 
@@ -28,7 +28,8 @@ function Sidebar() {
   return (
     <div className="sidebar-container">
       <ProSidebar className="menu-sidebar" collapsed={collapsed} image={sidebarImage}>
-        <div className="logo" style={{ marginTop: 200}}>
+        <div className="logo" >
+          <img src={Logo} alt="" className="sidebar__logo" />
         </div>
         <Menu iconShape="circle" >
           <MenuItem icon={<AiOutlineCode />}>
