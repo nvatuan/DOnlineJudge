@@ -8,8 +8,10 @@ import Navbar from '../../Navbar'
 import { AiOutlineAlignLeft } from 'react-icons/ai'
 import { GrCircleInformation } from 'react-icons/gr'
 import { Link, useHistory } from 'react-router-dom';
-
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import 'katex/dist/katex.min.css'
+import Latex from 'react-latex-next'
+
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/material.css');
 require('codemirror/theme/neat.css');
@@ -104,6 +106,7 @@ function Problem_detail({ match }) {
         }
         else return ''
     }
+    const LaTeX = 'We give illustrations for the three processes $e^+e^-$, gluon-gluon and $\\gamma\\gamma \\to W t\\bar b$.'
     return (
         <div>
             <Navbar />
@@ -117,15 +120,16 @@ function Problem_detail({ match }) {
                             <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} mb</p>
                             <br />
                             <strong>Problem Description:</strong>
-                            <p className="description">{getDescription(problem.statement)}</p>
+                            <br />
+                            <Latex className="description">{getDescription(problem.statement)}</Latex>
                             <br /> <br />
                             <strong>Input Description:</strong>
                             <br />
-                            <p className="input_description">{getInput_description(problem.statement)}</p>
+                            <Latex className="input_description">{getInput_description(problem.statement)}</Latex>
                             <br /> <br />
                             <strong>Output Description:</strong>
                             <br />
-                            <p className="output_description">{getOutput_description(problem.statement)}</p>
+                            <Latex className="output_description">{getOutput_description(problem.statement)}</Latex>
                             <br /> <br />
                             <strong>Sample Test:</strong>
                             <br />
@@ -137,15 +141,15 @@ function Problem_detail({ match }) {
 
                                             <tr>
                                                 <td>
-                                                    <span> Input {idx+1}</span> <br />
-                                                    <Form.Control  as="textarea" cols={150} readOnly
+                                                    <span> Input {idx + 1}</span> <br />
+                                                    <Form.Control as="textarea" cols={150} readOnly
                                                         className="textArea"
                                                         value={sample.input || ""}
                                                     >
                                                     </Form.Control>
                                                 </td>
                                                 <td>
-                                                    <span> Output {idx+1}</span> <br />
+                                                    <span> Output {idx + 1}</span> <br />
                                                     <Form.Control as="textarea" cols={150} readOnly
                                                         className="textArea"
                                                         value={sample.output || ""}
@@ -204,8 +208,8 @@ function Problem_detail({ match }) {
                                             styleActiveLine: true,
                                             theme: "material",
                                             mode: {
-                                                'Python3' : 'python',
-                                                'Python2' : 'python',
+                                                'Python3': 'python',
+                                                'Python2': 'python',
                                                 'Java': 'text/x-java',
                                                 'C': 'text/x-csrc',
                                                 'Cpp': 'text/x-c++src',
@@ -234,7 +238,7 @@ function Problem_detail({ match }) {
                     <Card className="submit-card right-column__item">
                         <Card.Body>
                             <Link to='/status' className='to_statusPage_card'>
-                                <AiOutlineAlignLeft className="to_statusPage_card-item "/>
+                                <AiOutlineAlignLeft className="to_statusPage_card-item " />
                                 <p>Submissions</p>
                             </Link>
                         </Card.Body>
