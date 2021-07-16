@@ -242,11 +242,12 @@ class UserDetailAPI(APIView):
         Update a specific user
         """
         data = request.data
-        fields = ["username", "password", "email", "first_name", "last_name",
+        UPDATE_FIELDS = ["username", "password", "email", "first_name", "last_name",
             "admin_type", "problem_permission", "is_staff"]
         for field in fields:
             data[field] = data.get(field, '')
 
+        # Try validate
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:

@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.conf import settings
 from django.db import models
 from PIL import Image
+import os
 
 from utils.file_upload import FileUploadUtils 
 
@@ -87,6 +88,16 @@ class User(AbstractBaseUser, PermissionsMixin):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.profile_pic.path)
+
+    def is_using_default_profile_pic(self):
+        return self.profile_pic == User._meta.get_field('profile_pic').get_default() 
+
+    def reset_profile_pic(self):
+        if not self.is_using_default_profile_pic():
+            if os.path.exists(self.profile_pic.path):
+                os.remove(self.profile_pic.path)
+            self.profile_pic = User._meta.get_field('profile_pic').get_default()
+            self.save()
 
     def is_admin(self):
         return self.admin_type == AdminType.ADMIN

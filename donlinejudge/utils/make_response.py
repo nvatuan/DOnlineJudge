@@ -5,10 +5,13 @@ from rest_framework import status
 def response_ok(message):
     resp = {}
     if isinstance(message, dict):
-        resp["data"] = message.get("data", "")
-        for k, v in message.items():
-            resp[k] = v
-        resp["count"] = len(message.get('data', ''))
+        if message.get("data"):
+            resp["data"] = message.get("data", "")
+            for k, v in message.items():
+                resp[k] = v
+            resp["count"] = len(message.get('data', ''))
+        else:
+            resp["data"] = message
     elif isinstance(message, list):
         resp["data"] = message
         resp["count"] = len(message)

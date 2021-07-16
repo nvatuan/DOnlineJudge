@@ -18,6 +18,7 @@ import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
 
 class ProblemAPI(APIView):
+    serializer_class = ProblemSerializer
     def get(self, request, format=None):
         """
             Get a list of problems

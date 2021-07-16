@@ -3,6 +3,8 @@ def get_page_size():
 	return PAGINATION_PAGE_SIZE
 
 def paginate(listobj, request):
+	if len(listobj) == 0:
+                return listobj
 	page_params = request.query_params.getlist("page", [])
 	if len(page_params) == 0:
 		return get_page(listobj, 1)
