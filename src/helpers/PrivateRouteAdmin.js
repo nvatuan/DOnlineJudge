@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import { Redirect, Route } from 'react-router-dom';
-
 export const PrivateRouteAdmin = ({ component: Component, ...rest }) => {
     return (
         <Route

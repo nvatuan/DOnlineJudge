@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Register from './Pages/Register/Register';
 import logo from '../public/Logo_dhbkdn.jpg'
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 function Navbar() {
     const [check, setCheck] = useState(false);
 
@@ -80,9 +81,8 @@ function Navbar() {
                                 <Login />
                             ) : <DropdownButton  variant="secondary" title={localStorage.getItem('username')}>
                                 <Dropdown.Item><Link to='/profile' className="dropdown-items">Settings</Link></Dropdown.Item>
-                                <Dropdown.Item>{localStorage.getItem('role') === "Super Admin" || localStorage.getItem('role') === " Admin" ?
-                                    <Link to='/admin' className="dropdown-items ">Admin page</Link> : <></>}
-                                </Dropdown.Item>
+                                {localStorage.getItem('role') === "Super Admin" || localStorage.getItem('role') === " Admin" ?
+                                        <Dropdown.Item><Link to='/admin' className="dropdown-items ">Admin page</Link></Dropdown.Item> : <></>}
                                 <Dropdown.Divider />
                                 <Dropdown.Item className="dropdown-items" onClick={onLogout} >Logout</Dropdown.Item>
                             </DropdownButton>}
