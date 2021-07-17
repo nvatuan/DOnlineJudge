@@ -83,6 +83,7 @@
   align-items: center;
   width: 100%;
   margin-right: 10px;
+
 }
 .fa-bars {
   color: #fff;
@@ -91,17 +92,17 @@
 .menu-icon {
   display: none;
 }
+
 .dropdown-items{
-    display: block;
-    width: 100%;
-    padding: .25rem 1.5rem;
-    clear: both;
-    font-weight: 400;
-    color: #212529;
-    text-align: inherit;
-    white-space: nowrap;
-    background-color: transparent;
-    border: 0;
+  display: block;
+  width: 100%;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
 }
 @media screen and (max-width: 960px) {
   .NavbarItems {

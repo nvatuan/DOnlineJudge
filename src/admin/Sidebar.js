@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import sidebarImage from './sidebar.png';
 import './Sidebar.scss';
-import { AiFillAppstore, AiOutlineBars, AiOutlineCode } from 'react-icons/ai';
+import { AiFillAppstore, AiOutlineBars, AiOutlineCode, AiFillHome } from 'react-icons/ai';
 import Logo from '../public/logo.jpg'
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(() => {
@@ -56,6 +56,10 @@ function Sidebar() {
               <Link to='/admin/problem/create' />
             </MenuItem>
           </SubMenu>
+          <MenuItem icon={<AiFillHome />} >
+            Back to home
+            <Link to='/'/>
+          </MenuItem>
         </Menu>
       </ProSidebar>
 

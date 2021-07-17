@@ -12,10 +12,7 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  //quá củ chuối. Kiếm giải pháp khác
-  height: 89.4vh;
-  // background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url();
-
+  height: auto;
   .home-container__items {
     flex-basis: 50%;
   }
@@ -34,7 +31,7 @@
       font-size: 40px;
       font-weight: 500;
     }
-    z-index: 100;
+    z-index: 10;
   }
 }
 

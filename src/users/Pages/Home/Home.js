@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
 import '../Page.scss';
 import './Home.scss';
-import { Card } from 'react-bootstrap';
 import oj_announcementAPI from '../../../api/oj_announcementAPI';
 import Announcement from './Announcement';
 import Background from '../../../public/Background.mp4'

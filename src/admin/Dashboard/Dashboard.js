@@ -20,7 +20,7 @@ function Dashboard() {
         <div className="admin-content">
             <AdminNavbar />
             <Sidebar />
-            <div className="admin-dashboard">
+            <div className="admin-dashboard pages-container">
                 <h2 className="dashboard__title"> <AiOutlineDashboard className="dashboard__title-icon"></AiOutlineDashboard> Dashboard</h2>
                 <div className="dashboard__list">
                     <div className="dashboard__item dashboard__item--admin-name">
