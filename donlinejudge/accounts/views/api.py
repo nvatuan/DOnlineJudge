@@ -244,7 +244,7 @@ class UserDetailAPI(APIView):
         data = request.data
         UPDATE_FIELDS = ["username", "password", "email", "first_name", "last_name",
             "admin_type", "problem_permission", "is_staff"]
-        for field in fields:
+        for field in UPDATE_FIELDS:
             data[field] = data.get(field, '')
 
         # Try validate
