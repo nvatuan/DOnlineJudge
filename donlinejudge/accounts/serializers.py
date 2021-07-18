@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout, password_validation
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.password_validation import validate_password
 
+from problem.serializers import ProblemBriefSerializer
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=80, min_length=8)
@@ -44,20 +45,22 @@ class UserLoginSerializer(serializers.Serializer):
 
 class ProfilePageSerializer(serializers.ModelSerializer):
     profile_pic = serializers.ImageField(default='avatar/__default__.png')
+    authored_problem = ProblemBriefSerializer(many=True, read_only=True) 
+    solved_problem = ProblemBriefSerializer(many=True, read_only=True) 
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name',
-                  'last_name', 'profile_pic', 'solved_problem']
+        fields = '__all__'
 
 
 class ProfilePageNoPasswordSerializer(serializers.ModelSerializer):
     profile_pic = serializers.ImageField(default='avatar/__default__.png')
+    authored_problem = ProblemBriefSerializer(many=True, read_only=True) 
+    solved_problem = ProblemBriefSerializer(many=True, read_only=True) 
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name',
-                  'last_name', 'profile_pic', 'solved_problem']
+        exclude = ('password',)
 
 
 class ChangePasswordSerializer(serializers.Serializer):

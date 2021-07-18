@@ -30,3 +30,14 @@ class ProblemSerializer(serializers.ModelSerializer):
             'statistic_info'
         ]
 
+class ProblemBriefSerializer(serializers.ModelSerializer):
+    tags = ProblemTagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Problem
+        fields = [
+            'id', 'display_id',  
+            'title', 'difficulty', 
+            'visible', 'tags',
+        ]
+

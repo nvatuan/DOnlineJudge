@@ -4,6 +4,8 @@ from django.db import models
 from PIL import Image
 import os
 
+from django.apps import apps
+
 from utils.file_upload import FileUploadUtils 
 
 class AdminType(object):
@@ -79,6 +81,9 @@ class User(AbstractBaseUser, PermissionsMixin):
                      "create_time", "admin_type", "problem_permission", "is_active"]
 
     objects = UserManager()
+
+    def authored_problem(self):
+        return self.problem_set.all()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
