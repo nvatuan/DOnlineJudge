@@ -35,7 +35,10 @@ def auto_apply(sdata, request):
         else:
             logging.debug(f"Filter criteria {criteria} doesn't have a value in the parameters")
     
+    print(filt_qdict)
+    print(sdata)
     sdata = filter(sdata, filt_qdict)
+    print(sdata)
 
     ## Sort
     sort_qdict = QueryDict('', mutable=True)
@@ -87,14 +90,14 @@ def filter(sdata, qdict):
         else:
             logging.debug(f"Filter criteria {criteria} doesn't have a value in the parameters")
     
-    logging.debug(f"Filter key-value map: {filter_crit_value}")
+    logging.debug(f"@Filter: key-value map: {filter_crit_value}")
 
     newsdata = []
     for data in sdata:
         is_selected = True
         for key, val in filter_crit_value.items():
             try:
-                if data[key] != val:
+                if str(data[key]) != val:
                     is_selected = False # if there is a mismatch, do not add this item in
                     break
             except Exception as e:
