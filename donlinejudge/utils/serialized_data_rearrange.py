@@ -35,10 +35,7 @@ def auto_apply(sdata, request):
         else:
             logging.debug(f"Filter criteria {criteria} doesn't have a value in the parameters")
     
-    print(filt_qdict)
-    print(sdata)
     sdata = filter(sdata, filt_qdict)
-    print(sdata)
 
     ## Sort
     sort_qdict = QueryDict('', mutable=True)
