@@ -45,9 +45,14 @@ class TestZipHandler:
 				elif stripfpath.endswith('.out'):
 					outmap[stripfpath] = self.archive.read(fpath) 
 		
+		#print('Inmap', inmap)
+		#print('Outmap', outmap)
+
 		tests = []
-		for name in inmap.keys():
-			tests.append((inmap[name], outmap[name]))
+		for inname in inmap.keys():
+			outname = inname[:-3]+'.out'
+			tests.append((inmap[inname].decode(), outmap[outname].decode()))
+		#print('Tests', tests)
 		return tests
 
 

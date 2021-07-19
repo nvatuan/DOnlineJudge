@@ -175,11 +175,11 @@ class ProblemDetailAPI(APIView):
             problem.difficulty = dif
 
         # Sample tests
-        if data.get("sample_test") != '':
+        if data.get("sample_test", '') != '':
             problem.sample_test = data['sample_test']
 
         # Testdir
-        if data.get('test_zip') != '':
+        if data.get('test_zip', '') != '':
             problem.test_zip = data['test_zip']
 
             uploadedzipfile = request.FILES['test_zip']

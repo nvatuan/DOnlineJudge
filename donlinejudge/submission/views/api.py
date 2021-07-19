@@ -150,12 +150,12 @@ class JudgeSubmissionTask:
         ## Appending actual tests
         if self.prob.test_zip.name: # Problem has hidden tests
             tzh = TestZipHandler(self.prob.test_zip.path)
-            hidden_tests = tzh.get_testdata
+            hidden_tests = tzh.get_testdata()
             for fin, fout in hidden_tests:
-                if not fin.endswith(b'\n'):
-                    fin += b'\n'
-                if not fout.endswith(b'\n'):
-                    fout += b'\n'
+                #if not fin.endswith(b'\n'):
+                #    fin += b'\n'
+                #if not fout.endswith(b'\n'):
+                #    fout += b'\n'
                 tests.append((fin, fout))
 
         self.kwargs = {'source':src,'processor':lang,'tests':tests,'config':{}}
