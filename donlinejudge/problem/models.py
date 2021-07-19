@@ -3,6 +3,8 @@ from accounts.models import User
 from utils.validators import lowerAlphanumeric
 from utils.file_upload import FileUploadUtils
 
+import os
+
 class ProblemDifficulty(object):
     HARD = "Hard"
     MEDIUM = "Medium"
@@ -50,7 +52,6 @@ class Problem(models.Model):
     time_limit = models.IntegerField(default=1000)      ## millisecond
     memory_limit = models.IntegerField(default=256)    ## MB
 
-
     #== Statistics
     total_submission = models.BigIntegerField(default=0)
     correct_submission = models.BigIntegerField(default=0)
@@ -58,6 +59,21 @@ class Problem(models.Model):
     ### {_.ACCEPTED: 5, _.WRONG_ANSWER: 4, ...}
 
     #-- Method fields
+    def remove_test_zip(self):
+        if self.test_zip:
+            try:
+                if os.path.exists(self.test_zip.path):
+                    os.remove(self.test_zip.path)
+            except:
+                pass
+            self.test_zip = None
+            self.save()
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+
+    
     #--- Author
     def author_id(self):
         if self.author:

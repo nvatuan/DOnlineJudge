@@ -170,14 +170,4 @@ Q_CLUSTER = {
 }
 
 #== User's defined global variables
-VALID_IMAGE_EXTENSIONS = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-]
-
-def valid_extension(path, extension_list=VALID_IMAGE_EXTENSIONS):
-    return any([path.endswith(e) for e in extension_list])
-
 PAGINATION_PAGE_SIZE = 20

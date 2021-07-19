@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import JSONField
 from django.core.exceptions import ValidationError
+from django.utils.crypto import get_random_string
 
 from problem.models import Problem, ProblemTag
 from problem.models import ProblemDifficulty
@@ -18,6 +19,7 @@ from utils.validators import lowerAlphanumeric
 #from utils.query_set_rearrange import auto_apply
 import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
+from utils.test_zip import TestZipHandler
 
 class ProblemAPI(APIView):
     serializer_class = ProblemSerializer
@@ -111,6 +113,7 @@ class ProblemAPI(APIView):
 
 
 class ProblemDetailAPI(APIView):
+    serializer_class = ProblemSerializer
     """
     List a specific problem
     """
@@ -172,13 +175,22 @@ class ProblemDetailAPI(APIView):
             problem.difficulty = dif
 
         # Sample tests
-        if data.get("sample_test"):
+        if data.get("sample_test") != '':
             problem.sample_test = data['sample_test']
 
         # Testdir
+        if data.get('test_zip') != '':
+            problem.test_zip = data['test_zip']
+
+            uploadedzipfile = request.FILES['test_zip']
+            tmpzipfile = f"/tmp/{get_random_string(32)}.zip"
+            with open(tmpzipfile, "wb") as f:
+                for chunk in uploadedzipfile:
+                    f.write(chunk)
+            TestZipHandler(tmpzipfile) # automatic validate
 
         # Constaints
-        if data.get("time_limit") != None:
+        if data.get("time_limit", '') != '':
             try:
                 tlimit = int(data.get("time_limit", '1000'))
             except:
@@ -189,18 +201,17 @@ class ProblemDetailAPI(APIView):
             problem.time_limit = tlimit
 
         #visible
-        if data.get("is_visible") != None:
+        if data.get("is_visible", '') != '':
             if data.get("is_visible") in [True, False]:
                 problem.is_visible = data.get("is_visible")
             else:
                 raise ValueError("Attribute 'is_visible' should be boolean ("+data.get("is_visible")+")")
 
-        if data.get("memory_limit") != None:
-            if data.get("memory_limit") != None:
-                try:
-                    mlimit = int(data.get("memory_limit", '256'))
-                except:
-                    return response_bad_request("Cannot parse memory_limit to an integer")
+        if data.get("memory_limit", '') != '':
+            try:
+                mlimit = int(data.get("memory_limit", '256'))
+            except:
+                return response_bad_request("Cannot parse memory_limit to an integer")
             if mlimit < 0:
                 mlimit = 256
             problem.memory_limit = mlimit

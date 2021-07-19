@@ -19,6 +19,7 @@ import sys
 from utils.make_response import *
 import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
+from utils.test_zip import TestZipHandler
 
 import asyncio, websockets
 
@@ -134,13 +135,28 @@ class JudgeSubmissionTask:
         self.sub = sub
         self.prob = prob
         self.jserver = None
+        self.sample_test_count = 0
 
         # Prepping kwargs
         src = self.sub.content
         lang = self.sub.language
+
         tests = []
+        ## Appending sample tests
         for kv in self.prob.sample_test:       
             tests.append((kv["input"], kv["output"]))
+        self.sample_test_count = len(tests)
+
+        ## Appending actual tests
+        if self.prob.test_zip.name: # Problem has hidden tests
+            tzh = TestZipHandler(self.prob.test_zip.path)
+            hidden_tests = tzh.get_testdata
+            for fin, fout in hidden_tests:
+                if not fin.endswith(b'\n'):
+                    fin += b'\n'
+                if not fout.endswith(b'\n'):
+                    fout += b'\n'
+                tests.append((fin, fout))
 
         self.kwargs = {'source':src,'processor':lang,'tests':tests,'config':{}}
 
@@ -153,7 +169,7 @@ class JudgeSubmissionTask:
 
             self.sub.output = {
                 "sample_test": [],
-                "test": [],
+                "hidden_test": [],
                 "compile_message": compile_result,
                 "time": 0,
                 "memory": 0,
@@ -162,7 +178,9 @@ class JudgeSubmissionTask:
 
             maxtime, maxmem = 0, 0 
             ## Sample tests
-            for i, jres in enumerate(judge_results):
+            for i in range(self.sample_test_count):
+                jres = judge_results[i]
+                #
                 test_verdict = jres[0]
                 if self.sub.verdict == SubmissionVerdict.AC and test_verdict != self.sub.verdict:
                     self.sub.verdict = test_verdict
@@ -181,7 +199,28 @@ class JudgeSubmissionTask:
                     }
                 )
             
-            ## TODO Handle hidden tests
+            ## Hidden tests
+            for i in range(self.sample_test_count, len(judge_results)):
+                jres = judge_results[i]
+
+                test_verdict = jres[0]
+                if self.sub.verdict == SubmissionVerdict.AC and test_verdict != self.sub.verdict:
+                    self.sub.verdict = test_verdict
+                
+                maxtime = max(maxtime, float(jres[2]))
+                maxmem  = max(maxmem, int(jres[3]))
+                
+                self.sub.output["hidden_test"].append(
+                    {
+                        "test_id": i,
+                        "verdict": test_verdict,
+                        #"stdout": jres[1][0],
+                        #"stderr": jres[1][1],
+                        "cpu time": jres[2],
+                        "memory used": jres[3]
+                    }
+                )
+
             ## Update stats
             self.sub.output["time"] = maxtime
             self.sub.output["memory"] = maxmem

@@ -17,7 +17,7 @@ import logging
 from PIL import Image
 
 # Project's
-from donlinejudge.settings import MEDIA_ROOT, valid_extension
+from donlinejudge.settings import MEDIA_ROOT
 from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer, ChangePasswordSerializer
 from accounts.decorators import unauthenticated_user, login_required, super_admin_required
 from accounts.models import *
@@ -25,9 +25,9 @@ from submission.models import Submission
 
 # Custom made utils lib
 from utils.make_response import *
-#from utils.query_set_rearrange import *
 import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
+from utils.validators import ImageExtensionValidator as IEV
 
 """ accounts.management API
     - RegisterAPI
@@ -166,7 +166,7 @@ class OwnProfilePageAPI(generics.GenericAPIView):
             user.last_name = data["last_name"]
 
         if data.get("profile_pic", '') != '':
-            if valid_extension(str(data["profile_pic"])):
+            if IEV.validate(str(data["profile_pic"])):
                 user.reset_profile_pic()
                 user.profile_pic = data["profile_pic"]
             else:

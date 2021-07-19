@@ -22,7 +22,7 @@ class ProblemSerializer(serializers.ModelSerializer):
             'title', 'statement',
             'difficulty', 'tags', 'source',
 
-            'sample_test',
+            'sample_test', 'test_zip',
 
             'time_limit', 'memory_limit',
 
