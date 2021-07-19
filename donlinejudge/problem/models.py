@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import User
+from utils.validators import lowerAlphanumeric
+from utils.file_upload import FileUploadUtils
 
 class ProblemDifficulty(object):
     HARD = "Hard"
@@ -20,9 +22,9 @@ class ProblemTag(models.Model):
 
 
 class Problem(models.Model):
-    display_id = models.TextField(db_index=True)
+    display_id = models.CharField(db_index=True, unique=True, max_length=64, validators=[lowerAlphanumeric])
     created = models.DateTimeField(auto_now_add=True)
-    visible = models.BooleanField(default=True, null=True)
+    is_visible = models.BooleanField(default=True, null=True)
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
@@ -39,8 +41,10 @@ class Problem(models.Model):
     ### [{input: "hello", output: "world"}, {input: "i am", output: "django"}]
 
     #== The Problem tests location
-    testset_dir = models.TextField(null=True)
-    testset_count = models.PositiveIntegerField(default=0)
+    test_zip = models.FileField(
+        default=None, null=True, blank=True,
+        upload_to=FileUploadUtils().upload_to_path_and_rename('tests/', False)
+    )
 
     #== Problem constraints
     time_limit = models.IntegerField(default=1000)      ## millisecond

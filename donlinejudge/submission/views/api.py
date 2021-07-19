@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import JSONField
+from django.db.models import JSONField, Q
 from rest_framework.views import APIView
 from rest_framework import status
 
@@ -28,12 +28,27 @@ class SubmissionAPI(APIView):
     List all problems
     """
     def get(self, request, format=None):
-        subs = Submission.objects.all()
-        #subs = auto_apply(subs, request) ## query_set
-        seris = SubmissionSerializer(subs, many=True)
-        serisdata = sdr.auto_apply(seris.data, request) ## serialized daa
-        serisdata = paginate(serisdata, request)
-        return response_ok(serisdata)
+        subs=None
+        try:
+            if request.user.is_authenticated: 
+                if (request.user.is_admin_role() or request.user.can_mgmt_all_problem()):
+                    subs = Submission.objects.all()
+                else: 
+                    visible_problem = Problem.objects.filter(
+                        Q(is_visible=True) | Q(author=request.user)
+                    )
+                    subs = Submission.objects.filter(problem__in=visible_problem)
+            else:
+                public_problem = Problem.objects.filter(is_visible=True)
+                subs = Submission.objects.filter(problem__in=public_problem)
+        except Exception as e:
+            return response_bad_request("Request denied. ({})".format(e))
+
+        subsdata = SubmissionSerializer(subs, many=True).data
+        subsdata = sdr.auto_apply(subsdata, request)
+        subsdata = paginate(subsdata, request)
+        return response_ok(subsdata)
+
 
     """
     An user make a submission
@@ -85,6 +100,11 @@ class SubmissionDetailAPI(APIView):
     def get(self, request, id):
         try:
             submission = Submission.objects.get(id=id)
+            if not submission.is_visible():
+                if request.user.is_authenticated and ((not request.user.is_admin_role()) or (request.user != submission.author)):
+                    return response_unauthorized("This submission cannot be viewed")
+                else:
+                    return response_unauthorized("This submission cannot be viewed")
         except Submission.DoesNotExist:
             return response_not_found("Submission does not exist.")
         

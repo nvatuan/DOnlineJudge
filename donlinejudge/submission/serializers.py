@@ -8,17 +8,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     author_name = serializers.ReadOnlyField()
     author_id = serializers.ReadOnlyField()
+
+    is_visible = serializers.ReadOnlyField()
     
     class Meta:
         model = Submission 
-        #fields = "__all__"
         exclude = ('problem', 'author',)
-        #fields = [
-        #    'id',
-
-        #    'problem_id', 'author_id', 'submit_time',
-
-        #    'content', 'language',
-
-        #    'verdict', 'output',
-        #]

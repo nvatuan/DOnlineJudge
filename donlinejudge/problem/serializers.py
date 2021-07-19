@@ -16,7 +16,7 @@ class ProblemSerializer(serializers.ModelSerializer):
         model = Problem
         fields = [
             'id',
-            'display_id', 'created', 'visible', 
+            'display_id', 'created', 'is_visible', 
             'author_id', 'author_name',
 
             'title', 'statement',
@@ -38,6 +38,6 @@ class ProblemBriefSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'display_id',  
             'title', 'difficulty', 
-            'visible', 'tags',
+            'is_visible', 'tags',
         ]
 

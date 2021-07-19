@@ -60,6 +60,9 @@ class Submission(models.Model):
     output = models.JSONField(default=dict)
     ### [{input: "asdf", output: "xyz"}, ...]
 
+    def is_visible(self):
+        return self.problem.is_visible
+
     def problem_id(self):
         return self.problem.id
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import JSONField
+from django.core.exceptions import ValidationError
 
 from problem.models import Problem, ProblemTag
 from problem.models import ProblemDifficulty
@@ -12,6 +13,7 @@ from rest_framework.views import APIView
 from accounts.decorators import super_admin_required
 from accounts.decorators import admin_required, super_admin_required
 from utils.make_response import *
+from utils.validators import lowerAlphanumeric
 
 #from utils.query_set_rearrange import auto_apply
 import utils.serialized_data_rearrange as sdr
@@ -27,14 +29,13 @@ class ProblemAPI(APIView):
             if request.user.is_authenticated and (
                 request.user.is_admin_role() or request.user.can_mgmt_all_problem()
             ):
-                problem = Problem.objects.all().order_by("-created")
+                problem = Problem.objects.all()
                 problem_ser_data = ProblemSerializer(problem, many=True).data
                 problem_ser_data = sdr.auto_apply(problem_ser_data, request)
                 problem_ser_data = paginate(problem_ser_data, request)
                 return response_ok(problem_ser_data)
             else: ## TODO return not visible problems but are authored by the user
-                problem = Problem.objects.filter(
-                    visible=True).order_by("-created")
+                problem = Problem.objects.filter(is_visible=True)
                 problem_ser_data = ProblemSerializer(problem, many=True).data
                 problem_ser_data = sdr.auto_apply(problem_ser_data, request)
                 problem_ser_data = paginate(problem_ser_data, request)
@@ -47,13 +48,18 @@ class ProblemAPI(APIView):
         resperror = ""
         respdata = ""
 
-        data = request.data
+        data = request.data.copy()
 
         try:
-            # Display ID
+            ## Display ID
             disp_id = data["display_id"]
             if not disp_id:
                 raise KeyError("display_id")
+            disp_id = disp_id.lower()
+            try:
+                lowerAlphanumeric(disp_id) 
+            except ValidationError:
+                return response_bad_request("'display_id' should contains lowercase, alphanumerics only")
             if Problem.objects.filter(display_id=disp_id).exists():
                 return response_bad_request("Problem with display_id=%s already exists" % disp_id)
 
@@ -78,20 +84,18 @@ class ProblemAPI(APIView):
             data["author"] = request.user
 
             # Testdir
-            data["testset_dir"] = disp_id
-            data["testset_count"] = data.get("testset_count", 0)
-            if data["testset_count"] < 0:
-                data["testset_count"] = 0
+            if data.get("test_zip"):
+                pass
 
             # Constaints
             # Statistics
             data["statistic_info"] = SubmissionVerdict._get_default_dict()
 
             #visible
-            if data['visible'] == '':
-                data['visible'] = True
-            elif not data['visible'] in [True, False]:
-                return response_bad_request({"visible":"This field must be true or false"})                    
+            if data['is_visible'] == '':
+                data['is_visible'] = True
+            elif not data['is_visible'] in [True, False]:
+                return response_bad_request({"visible":"This field must either be true or false"})                    
 
             # == Create object
             problem = Problem.objects.create(**data)
@@ -117,11 +121,10 @@ class ProblemDetailAPI(APIView):
                 problem = Problem.objects.get(id=id)
                 return response_ok(ProblemSerializer(problem).data)
             else:
-                problem = Problem.objects.get(id=id, visible=True)
+                problem = Problem.objects.get(id=id, is_visible=True)
                 return response_ok(ProblemSerializer(problem).data)
         except Problem.DoesNotExist:
             return response_not_found("Problem does not exist.")
-
 
 
     """
@@ -134,9 +137,9 @@ class ProblemDetailAPI(APIView):
         except Problem.DoesNotExist:
             return response_not_found("Problem with id=%s does not exist." % str(id))
 
-        if not request.user.can_mgmt_all_problem():
+        if (not request.user.can_mgmt_all_problem()) and (not request.user.is_super_admin()):
             if (problem.author is None) or (not request.user == problem.author):
-                return response_unauthorized("You don't have permission to the problem")
+                return response_unauthorized("You don't have permission to edit the problem")
 
         data = request.data
 
@@ -173,11 +176,6 @@ class ProblemDetailAPI(APIView):
             problem.sample_test = data['sample_test']
 
         # Testdir
-        if data.get("testset_count") != None:
-            tscount = data.get("testset_count", 0)
-            if tscount < 0:
-                tscount = 0
-            problem.testset_count = tscount
 
         # Constaints
         if data.get("time_limit") != None:
@@ -191,8 +189,11 @@ class ProblemDetailAPI(APIView):
             problem.time_limit = tlimit
 
         #visible
-        if data.get("visible") != '' and data.get("visible") in [True, False]:
-            problem.visible = data.get("visible")
+        if data.get("is_visible") != None:
+            if data.get("is_visible") in [True, False]:
+                problem.is_visible = data.get("is_visible")
+            else:
+                raise ValueError("Attribute 'is_visible' should be boolean ("+data.get("is_visible")+")")
 
         if data.get("memory_limit") != None:
             if data.get("memory_limit") != None:
