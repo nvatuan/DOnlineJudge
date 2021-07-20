@@ -22,12 +22,16 @@ function Announcement(props) {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="example-custom-modal-styling-title">
-                        Annoucement #{id}
+                        {title}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {content}
                 </Modal.Body>
+                <Modal.Footer className="modal__footer">
+                    <div className="creation_time">{new Date(creation_time).toString()}</div>
+                    <div className="author">By: <strong>{author}</strong></div>
+                </Modal.Footer>
             </Modal>
         </div>
     )
@@ -41,7 +45,7 @@ function Announcement(props) {
                     </div>
                 </div>
                 <div className="annou_detail">
-                    <h3>{title}</h3>
+                    <h2>{title}</h2>
                 </div>
 
                 <div className="more-button">

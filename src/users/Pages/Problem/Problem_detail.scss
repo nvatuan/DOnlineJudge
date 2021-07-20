@@ -62,6 +62,7 @@
         width: 20px;
         margin-top: 5px;
     }
+    height: 20px;
 }
 .to_statusPage_card:hover {
     text-decoration: none;
@@ -108,16 +109,15 @@ textarea {
 .form-control[readonly] {
     background-color: #fff;
 }
-.input-header{
-    display: flex;
+.input-header {
     position: relative;
     justify-content: space-between;
     padding-right: 15px;
     margin-bottom: 3px;
-    .copy-btn{
+    .copy-btn {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 10px;
+        right: 10px;
         display: block;
         padding: 0 10px;
         font-size: 15px;
@@ -127,9 +127,16 @@ textarea {
         border: 1px solid #ccc;
         border-radius: 0 10px 0 10px;
     }
-    .copy-btn:hover{
+    .copy-btn:hover {
         color: #fff;
         background-color: #563d7c;
         border-color: #563d7c;
     }
+}
+.pd__sample {
+    display: flex;
+}
+
+.problem-information {
+    transform: translateY(-56px);
 }
