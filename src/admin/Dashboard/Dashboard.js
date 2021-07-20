@@ -9,12 +9,12 @@ import { profileSelector, userProfile } from '../../users/Pages/Profile/profileS
 import { RiAdminLine } from "react-icons/ri";
 function Dashboard() {
     const dispatch = useDispatch();
-    const {id, username, admin_type, profile_pic, last_login, authored_problem, solved_problem } = useSelector(profileSelector);
+    const { id, username, admin_type, profile_pic, last_login, authored_problem, solved_problem } = useSelector(profileSelector);
     useEffect(() => {
         dispatch(userProfile());
     }, [])
     const hanldeTime = (time) => {
-        return new Date(time).toString();
+        return new Date(time).toString().replace("Indochina", "Hanoi");
     }
     return (
         <div className="admin-content">
@@ -63,7 +63,7 @@ function Dashboard() {
                     </div>
                 </div >
                 <div className="admin__section">
-                    
+
                     <div className="admin__my-problems">
                         <h4>Created Problems</h4>
                         < table >
