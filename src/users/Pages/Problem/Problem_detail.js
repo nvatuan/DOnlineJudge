@@ -145,31 +145,29 @@ function Problem_detail({ match }) {
                                 sample_test.map((sample, idx) => {
                                     return (
 
-                                        <div key={`${sample}-${idx}`}>
+                                        <div className="pd__sample" key={`${sample}-${idx}`}>
 
-                                            <tr>
-                                                <td>
-                                                    <div className="input-header">
-                                                        <p>Input {idx + 1}</p>
-                                                        <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
-                                                    </div>
-                                                    <Form.Control id={`input_${idx}`} as="textarea" cols={150} readOnly
-                                                        className="textArea"
-                                                        value={sample.input || ""}
-                                                    >
-                                                    </Form.Control>
-                                                    
-                                                </td>
-                                                <td>
-                                                    <span> Output {idx + 1}</span> <br />
-                                                    <Form.Control as="textarea" cols={150} readOnly
-                                                        className="textArea"
-                                                        value={sample.output || ""}
-                                                    >
-                                                    </Form.Control>
-                                                </td>
+                                            <div className="input-header">
+                                                <div>Input {idx + 1}</div>
+                                                <Form.Control id={`input_${idx}`} as="textarea" cols={150} readOnly
+                                                    className="textArea"
+                                                    value={sample.input || ""}
+                                                >
+                                                </Form.Control>
+                                                <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
+                                            </div>
 
-                                            </tr>
+
+
+                                            <div className="input-header">
+                                                <div>Output {idx + 1}</div>
+                                                <Form.Control id={`output_${idx}`} as="textarea" cols={150} readOnly
+                                                    className="textArea"
+                                                    value={sample.output || ""}
+                                                >
+                                                </Form.Control>
+                                                <button className="copy-btn" onClick={() => copyToClipboard(`output_${idx}`)}>copy</button>
+                                            </div>
                                         </div>
                                     );
                                 })}
@@ -256,7 +254,7 @@ function Problem_detail({ match }) {
                     </Card>
                     <div className="problem-information">
                         <Card className="right-column__item">
-                            <Card.Header className="problem-information_header"><GrCircleInformation /><p> Imformation</p></Card.Header>
+                            <Card.Header className="problem-information_header"><GrCircleInformation /><p> Information</p></Card.Header>
                             <ListGroup variant="flush">
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Id</p>
