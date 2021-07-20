@@ -29,7 +29,7 @@ function Announcement(props) {
                     {content}
                 </Modal.Body>
                 <Modal.Footer className="modal__footer">
-                    <div className="creation_time">{new Date(creation_time).toString()}</div>
+                    <div className="creation_time">{new Date(creation_time).toString().replace("Indochina", "Hanoi")}</div>
                     <div className="author">By: <strong>{author}</strong></div>
                 </Modal.Footer>
             </Modal>
