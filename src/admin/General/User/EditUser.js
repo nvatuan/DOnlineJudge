@@ -17,7 +17,7 @@ function EditUser({match}) {
             try {
                 const response = await admin_usersAPI.editUser(data, id);
                 if (response) {
-                    history.push('/admin/users/');
+                    history.push('/admin/user/');
                 }
             } catch (error) {
                 console.log("Fail to put problem: ", error);

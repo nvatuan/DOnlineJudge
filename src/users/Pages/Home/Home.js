@@ -4,14 +4,14 @@ import '../Page.scss';
 import './Home.scss';
 import oj_announcementAPI from '../../../api/oj_announcementAPI';
 import Announcement from './Announcement';
-import Background from '../../../public/Background.mp4'
+import Background from '../../../public/Background.mp4';
+import { userProfile } from '../Profile/profileSlice';
 function Home() {
     const [announcement, setAnnouncement] = useState([]);
     useEffect(() => {
         const fetchAnnouncement = async () => {
             try {
                 const response = await oj_announcementAPI.getAll();
-                console.log(response);
                 setAnnouncement(response.data);
             } catch (error) {
                 console.log('fail to announcement: ', error);

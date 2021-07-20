@@ -54,7 +54,7 @@ function News() {
                                         return <Announcement title={annou.title}
                                             content={annou.content}
                                             creation_time={annou.creation_time}
-                                            author={annou.author} key={annou.id}
+                                            author={annou.author_name} key={annou.id}
                                             id={annou.id} />
                                     })
                                 }

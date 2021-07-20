@@ -5,7 +5,6 @@ import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
 import queryString from 'query-string';
-import oj_profileAPI from '../../../api/oj_profileAPI';
 function Status() {
     let href = window.location.href;
     const id = queryString.parse(href, { parseNumbers: true })

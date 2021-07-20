@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect, Route } from 'react-router-dom';
-export const PrivateRouteSuperAdmin = ({ component: Component, ...rest }) => {
+export const PrivateRouteSAdmin = ({ component: Component, ...rest }) => {
     return (
         <Route
             {...rest}
@@ -8,10 +8,9 @@ export const PrivateRouteSuperAdmin = ({ component: Component, ...rest }) => {
                 localStorage.getItem('role') === "Super Admin" ? (
                     <Component {...props} />
                 ) : (
-                    <Redirect to={{ pathname: '/404', state: { from: props.location } }} />
+                    <Redirect to={{ pathname: '404', state: { from: props.location } }} />
                 )
             }
         />
     )
 }
-

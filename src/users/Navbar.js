@@ -81,7 +81,7 @@ function Navbar() {
                                 <Login />
                             ) : <DropdownButton  variant="secondary" title={localStorage.getItem('username')}>
                                 <Dropdown.Item><Link to='/profile' className="dropdown-items">Settings</Link></Dropdown.Item>
-                                {localStorage.getItem('role') === "Super Admin" || localStorage.getItem('role') === " Admin" ?
+                                {localStorage.getItem('role') === "Super Admin" || localStorage.getItem('role') === "Admin" ?
                                         <Dropdown.Item><Link to='/admin' className="dropdown-items ">Admin page</Link></Dropdown.Item> : <></>}
                                 <Dropdown.Divider />
                                 <Dropdown.Item className="dropdown-items" onClick={onLogout} >Logout</Dropdown.Item>
