@@ -108,3 +108,28 @@ textarea {
 .form-control[readonly] {
     background-color: #fff;
 }
+.input-header{
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    padding-right: 15px;
+    margin-bottom: 3px;
+    .copy-btn{
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        padding: 0 10px;
+        font-size: 15px;
+        color: #767676;
+        cursor: pointer;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 0 10px 0 10px;
+    }
+    .copy-btn:hover{
+        color: #fff;
+        background-color: #563d7c;
+        border-color: #563d7c;
+    }
+}

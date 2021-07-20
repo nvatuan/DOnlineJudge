@@ -11,7 +11,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'katex/dist/katex.min.css'
 import Latex from 'react-latex-next'
-
+import { toast } from 'react-toastify';
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/material.css');
 require('codemirror/theme/neat.css');
@@ -21,8 +21,6 @@ require('codemirror/mode/clike/clike.js');
 require('codemirror/mode/javascript/javascript.js');
 
 function Problem_detail({ match }) {
-    // console.log("render")
-
     const id = match.params.id;
     const [problem, setProblem] = useState([]);
     const history = useHistory();
@@ -106,6 +104,16 @@ function Problem_detail({ match }) {
         }
         else return ''
     }
+
+    function copyToClipboard(element) {
+        let copyText = document.getElementById(element);
+        copyText.select();
+        document.execCommand("copy");
+        toast.success('Copied', {
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 1000,
+        });
+    }
     const LaTeX = 'We give illustrations for the three processes $e^+e^-$, gluon-gluon and $\\gamma\\gamma \\to W t\\bar b$.'
     return (
         <div>
@@ -141,12 +149,16 @@ function Problem_detail({ match }) {
 
                                             <tr>
                                                 <td>
-                                                    <span> Input {idx + 1}</span> <br />
-                                                    <Form.Control as="textarea" cols={150} readOnly
+                                                    <div className="input-header">
+                                                        <p>Input {idx + 1}</p>
+                                                        <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
+                                                    </div>
+                                                    <Form.Control id={`input_${idx}`} as="textarea" cols={150} readOnly
                                                         className="textArea"
                                                         value={sample.input || ""}
                                                     >
                                                     </Form.Control>
+                                                    
                                                 </td>
                                                 <td>
                                                     <span> Output {idx + 1}</span> <br />
@@ -158,7 +170,6 @@ function Problem_detail({ match }) {
                                                 </td>
 
                                             </tr>
-
                                         </div>
                                     );
                                 })}
