@@ -1,59 +1,3 @@
-.Admin_profile {
-    position: relative;
-    padding-top: 30px;
-    border-radius: 4px;
-
-    margin-top: 120px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.87);
-    width: 60%;
-    border: 0;
-    display: flex;
-    position: relative;
-    font-size: 0.875rem;
-    min-width: 0;
-    word-wrap: break-word;
-    background: #fff;
-    box-shadow: 0 1px 4px 0 rgba(75, 52, 52, 0.2);
-    border-radius: 6px;
-    margin-bottom: 30px;
-    flex-direction: column;
-    .admin_header {
-        margin: -120px auto 0;
-        overflow: hidden;
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
-        .admin_image {
-            width: 200px;
-            height: 200px;
-            border-radius: 100%;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-    }
-    .admin_information {
-        flex: 1 1 auto;
-        padding: 0.9375rem 20px;
-        position: relative;
-        -webkit-box-flex: 1;
-        margin-top: 15px;
-
-        h4 {
-            color: #3c4858;
-            margin-top: 0;
-            min-height: auto;
-            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-            font-weight: 300;
-            margin-bottom: 3px;
-            text-decoration: none;
-        }
-    }
-}
 .admin-content {
     background-color: rgb(238, 238, 238);
 }
@@ -70,7 +14,7 @@
         color: #333;
     }
     .dashboard__list {
-        height: 132px;
+        height: 146px;
         display: flex;
         justify-content: space-around;
         margin-top: 50px;
@@ -124,6 +68,12 @@
                 font-size: 24px;
                 font-weight: 600;
             }
+            .item__last-login {
+                text-align: center;
+                color: #333;
+                font-size: 16px;
+                font-weight: 600;
+            }
         }
         @media (min-width: 1280px) {
             .dashboard__item {
@@ -149,7 +99,79 @@
         }
     }
 }
+.admin__section {
+    display: flex;
+    .Admin_profile {
+        position: relative;
+        padding-top: 30px;
+        border-radius: 4px;
 
+        margin-top: 120px;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.87);
+        width: 48%;
+        border: 0;
+        display: flex;
+        position: relative;
+        font-size: 0.875rem;
+        min-width: 0;
+        word-wrap: break-word;
+        background: #fff;
+        box-shadow: 0 1px 4px 0 rgba(75, 52, 52, 0.2);
+        border-radius: 6px;
+        margin-bottom: 30px;
+        flex-direction: column;
+        .admin_header {
+            margin: -120px auto 0;
+            overflow: hidden;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
+            .admin_image {
+                width: 200px;
+                height: 200px;
+                border-radius: 100%;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        }
+        .admin_information {
+            flex: 1 1 auto;
+            padding: 0.9375rem 20px;
+            position: relative;
+            -webkit-box-flex: 1;
+            margin-top: 15px;
+
+            h4 {
+                color: #3c4858;
+                margin-top: 0;
+                min-height: auto;
+                font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                font-weight: 300;
+                margin-bottom: 3px;
+                text-decoration: none;
+            }
+        }
+    }
+    .admin__my-problems {
+        width: 48%;
+        transform: translateY(80px);
+        h3 {
+            color: #333;
+        }
+    }
+    table {
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        color: #333;
+        thead {
+            background-image: linear-gradient(60deg, #26c6da, #00acc1);
+        }
+    }
+    justify-content: space-around;
+}
 .item__icon--first {
     background-image: linear-gradient(60deg, #ffa726, #fb8c00);
 }
@@ -161,4 +183,8 @@
 }
 .item__icon--fourth {
     background-image: linear-gradient(60deg, #26c6da, #00acc1);
+}
+
+tr {
+    // border-top: 1px solid #000;
 }
