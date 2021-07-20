@@ -4,14 +4,17 @@ import Sidebar from '../Sidebar';
 import './Dashboard.scss';
 import { AiOutlineUser, AiOutlineLogin, AiOutlineCode, AiOutlineDashboard } from "react-icons/ai";
 import { useSelector, useDispatch } from 'react-redux';
-import { profileSelector, userProfile  } from '../../users/Pages/Profile/profileSlice'; 
+import { profileSelector, userProfile } from '../../users/Pages/Profile/profileSlice';
 import { RiAdminLine } from "react-icons/ri";
 function Dashboard() {
     const dispatch = useDispatch();
-    const {username, admin_type, profile_pic, last_login} = useSelector(profileSelector);
+    const { username, admin_type, profile_pic, last_login, authored_problem } = useSelector(profileSelector);
     useEffect(() => {
         dispatch(userProfile());
     }, [])
+    const hanldeTime = (time) => {
+        return new Date(time).toString();
+    }
     return (
         <div className="admin-content">
             <AdminNavbar />
@@ -38,29 +41,64 @@ function Dashboard() {
                             <AiOutlineLogin className="item__icon-font"></AiOutlineLogin>
                         </div>
                         <div className="item__title">Last Login</div>
-                        <div className="item__content">{last_login}</div>
+                        <div className="item__content item__last-login">{hanldeTime(last_login)}</div>
                     </div>
                     <div className="dashboard__item dashboard__item--problems">
                         <div className="item__icon item__icon--fourth">
                             <AiOutlineCode className="item__icon-font"></AiOutlineCode>
                         </div>
                         <div className="item__title">Problems</div>
-                        <div className="item__content"></div>
+                        <div className="item__content">{authored_problem.length}</div>
                     </div>
                 </div>
 
-                <div className="Admin_profile">
-                    <div className="admin_header">
-                        <img src={profile_pic} className="admin_image"alt="error" />
+                <div className="admin__section">
+                    <div className="Admin_profile">
+                        <div className="admin_header">
+                            <img src={profile_pic} className="admin_image" alt="error" />
+                        </div>
+                        <div className="admin_information">
+                            <h4>Introduction</h4>
+                            <hr />
+                            <p>Thuốc đắng giả tật, nhạc giật lên luôn</p>
+                        </div>
+                    </div >
+                    <div className="admin__my-problems">
+                        <h3>My Problems</h3>
+                        < table >
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Display ID</th>
+                                    <th>Tille</th>
+                                    <th>difficulty</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    authored_problem.length > 0 ? (
+                                        authored_problem.map((problem) => (
+                                            <tr key={problem.id}>
+                                                <td>{problem.id}</td>
+                                                <td>{problem.display_id}</td>
+                                                <td>{problem.title}</td>
+                                                <td>{problem.difficulty}</td>
+
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={5}>Nothing</td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table >
                     </div>
-                    <div className="admin_information">
-                        <h4>Introduction</h4>
-                        <hr />
-                        <p>Thuốc đắng giả tật, nhạc giật lên luôn</p>
-                    </div>
-                </div >
+                </div>
             </div>
-            
+
         </div>
     )
 }
