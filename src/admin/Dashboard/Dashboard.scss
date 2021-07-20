@@ -99,17 +99,16 @@
         }
     }
 }
-.admin__section {
-    display: flex;
-    .Admin_profile {
+ .Admin_profile {
         position: relative;
         padding-top: 30px;
         border-radius: 4px;
+        margin: auto;
 
         margin-top: 120px;
         text-align: center;
         color: rgba(0, 0, 0, 0.87);
-        width: 48%;
+        width: 90%;
         border: 0;
         display: flex;
         position: relative;
@@ -155,19 +154,22 @@
             }
         }
     }
+.admin__section {
+    display: flex;
     .admin__my-problems {
         width: 48%;
-        transform: translateY(80px);
+        transform: translateY(10px);
         h3 {
             color: #333;
         }
     }
     table {
+        margin-bottom: 30px;
         box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
         border-radius: 4px;
         color: #333;
         thead {
-            background-image: linear-gradient(60deg, #26c6da, #00acc1);
+            background-image: linear-gradient(60deg, #fff, #ccc);
         }
     }
     justify-content: space-around;

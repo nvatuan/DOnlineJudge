@@ -31,6 +31,13 @@ axiosClient.interceptors.response.use((response) => {
                 })
             }
         }
+        else{
+            var error_messsage = error.response.data.data;
+            toast.error(error_messsage, {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 2500
+            })
+        }
     throw error;
 });
 export default axiosClient;

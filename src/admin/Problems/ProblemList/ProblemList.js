@@ -40,7 +40,7 @@ function ProblemList(props) {
             const newProblem = response.data;
             setProblems(
                 problems.map(
-                    (problem) => {return newProblem.id === problem.id ? {...problem, visible: newProblem.visible} : problem}
+                    (problem) => {return newProblem.id === problem.id ? {...problem, is_visible: newProblem.is_visible} : problem}
                 )
             )
         };
@@ -84,9 +84,9 @@ function ProblemList(props) {
                                                     <td>{problem.created}</td>
                                                     <td>
                                                         <Switch 
-                                                            checked={problem.visible}
+                                                            checked={problem.is_visible}
                                                             height={20} width={40}
-                                                            onChange={() => handleVisible(problem.id, problem.visible)}
+                                                            onChange={() => handleVisible(problem.id, problem.is_visible)}
                                                         />
                                                     </td>
                                                     <td>

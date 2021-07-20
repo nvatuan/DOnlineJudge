@@ -96,7 +96,6 @@ function Createproblem({ match }) {
         localStorage.setItem('difficulty', value);
     }
     const onSubmit = async (formData) => {
-        console.log(formData);
         formData.id = id;
         formData.display_id = display_id;
         formData.title = title;

@@ -58,7 +58,7 @@ const admin_problemAPI = {
             }
         };
         const url = `admin/problem/${id}/`;
-        const visible = {visible: !isVisible};
+        const visible = {is_visible: !isVisible};
         return axiosClient.put(url,visible,config);
     }
 }

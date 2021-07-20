@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 import './Dashboard.scss';
-import { AiOutlineUser, AiOutlineLogin, AiOutlineCode, AiOutlineDashboard } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineLogin, AiOutlineDashboard } from "react-icons/ai";
+import { HiOutlineIdentification } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux';
 import { profileSelector, userProfile } from '../../users/Pages/Profile/profileSlice';
 import { RiAdminLine } from "react-icons/ri";
 function Dashboard() {
     const dispatch = useDispatch();
-    const { username, admin_type, profile_pic, last_login, authored_problem } = useSelector(profileSelector);
+    const {id, username, admin_type, profile_pic, last_login, authored_problem, solved_problem } = useSelector(profileSelector);
     useEffect(() => {
         dispatch(userProfile());
     }, [])
@@ -45,26 +46,26 @@ function Dashboard() {
                     </div>
                     <div className="dashboard__item dashboard__item--problems">
                         <div className="item__icon item__icon--fourth">
-                            <AiOutlineCode className="item__icon-font"></AiOutlineCode>
+                            <HiOutlineIdentification className="item__icon-font"></HiOutlineIdentification>
                         </div>
-                        <div className="item__title">Problems</div>
-                        <div className="item__content">{authored_problem.length}</div>
+                        <div className="item__title">ID</div>
+                        <div className="item__content">{id}</div>
                     </div>
                 </div>
-
+                <div className="Admin_profile">
+                    <div className="admin_header">
+                        <img src={profile_pic} className="admin_image" alt="error" />
+                    </div>
+                    <div className="admin_information">
+                        <h4>Introduction</h4>
+                        <hr />
+                        <p>Thuốc đắng giả tật, nhạc giật lên luôn</p>
+                    </div>
+                </div >
                 <div className="admin__section">
-                    <div className="Admin_profile">
-                        <div className="admin_header">
-                            <img src={profile_pic} className="admin_image" alt="error" />
-                        </div>
-                        <div className="admin_information">
-                            <h4>Introduction</h4>
-                            <hr />
-                            <p>Thuốc đắng giả tật, nhạc giật lên luôn</p>
-                        </div>
-                    </div >
+                    
                     <div className="admin__my-problems">
-                        <h3>My Problems</h3>
+                        <h4>Created Problems</h4>
                         < table >
                             <thead>
                                 <tr>
@@ -79,6 +80,40 @@ function Dashboard() {
                                 {
                                     authored_problem.length > 0 ? (
                                         authored_problem.map((problem) => (
+                                            <tr key={problem.id}>
+                                                <td>{problem.id}</td>
+                                                <td>{problem.display_id}</td>
+                                                <td>{problem.title}</td>
+                                                <td>{problem.difficulty}</td>
+
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={5}>Nothing</td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table >
+                    </div>
+
+                    <div className="admin__my-problems">
+                        <h4>Sovled Problems</h4>
+                        < table >
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Display ID</th>
+                                    <th>Tille</th>
+                                    <th>difficulty</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    solved_problem.length > 0 ? (
+                                        solved_problem.map((problem) => (
                                             <tr key={problem.id}>
                                                 <td>{problem.id}</td>
                                                 <td>{problem.display_id}</td>
