@@ -32,19 +32,19 @@ function Createproblem({ match }) {
         return initOutput_description;
     });
     const [time_limit, setTime_limit] = useState(() => {
-        const initTime_limit = localStorage.getItem('time_limit') || '';
+        const initTime_limit = localStorage.getItem('time_limit') || '1000';
         return initTime_limit;
     });
     const [memory_limit, setMemory_limit] = useState(() => {
-        const initMemory_limit = localStorage.getItem('memory_limit') || '';
+        const initMemory_limit = localStorage.getItem('memory_limit') || '64';
         return initMemory_limit;
     });
-    const [visible, setVisible] = useState(() => {
-        const initVisible = localStorage.getItem('visible') || '';
+    const [is_visible, setVisible] = useState(() => {
+        const initVisible = localStorage.getItem('is_visible') || true;
         return initVisible;
     });
     const [difficulty, setDifficulty] = useState(() => {
-        const initDifficulty = localStorage.getItem('difficulty') || '';
+        const initDifficulty = localStorage.getItem('difficulty') || 'Easy';
         return initDifficulty;
     });
     const [sample_test, setSample_test] = useState([]);
@@ -78,7 +78,7 @@ function Createproblem({ match }) {
     const handleVisible = (e) => {
         const value = e.target.value;
         setVisible(value);
-        localStorage.setItem('visible', value);
+        localStorage.setItem('is_visible', value);
     }
     const handleTime_limit = (e) => {
         const value = e.target.value;
@@ -99,7 +99,7 @@ function Createproblem({ match }) {
         formData.id = id;
         formData.display_id = display_id;
         formData.title = title;
-        formData.visible = true;
+        formData.is_visible = true;
         formData.time_limit = time_limit;
         formData.memory_limit = memory_limit;
         formData.difficulty = difficulty;
@@ -290,7 +290,7 @@ function Createproblem({ match }) {
                                     <tr>
                                         <td>
                                             <span> Visible</span> <br /> <br />
-                                            <Form.Control className="cp-visible" as="select" size="sm" custom value={visible} onChange={(e) => { handleVisible(e) }} >
+                                            <Form.Control className="cp-visible" as="select" size="sm" custom value={is_visible} onChange={(e) => { handleVisible(e) }} >
                                                 <option value={true}>true</option>
                                                 <option value={false}>false</option>
                                             </Form.Control>
@@ -334,9 +334,8 @@ function Createproblem({ match }) {
                                 {
                                     sample_test.map((sample, idx) => {
                                         return (
-
                                             <div key={`${sample}-${idx}`}>
-
+                                                <table>
                                                 <tr>
                                                     <td>
                                                         <i style={{ color: 'red' }}>*</i>
@@ -369,9 +368,7 @@ function Createproblem({ match }) {
                                                     </td>
 
                                                 </tr>
-
-
-
+                                                </table>
                                             </div>
                                         );
                                     })}

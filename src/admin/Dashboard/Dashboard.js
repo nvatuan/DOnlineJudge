@@ -65,7 +65,7 @@ function Dashboard() {
                 <div className="admin__section">
 
                     <div className="admin__my-problems">
-                        <h4>Created Problems</h4>
+                        <h4>Authored Problems</h4>
                         < table >
                             <thead>
                                 <tr>
@@ -99,7 +99,7 @@ function Dashboard() {
                     </div>
 
                     <div className="admin__my-problems">
-                        <h4>Sovled Problems</h4>
+                        <h4>Solved problems</h4>
                         < table >
                             <thead>
                                 <tr>

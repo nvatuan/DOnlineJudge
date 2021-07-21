@@ -246,7 +246,7 @@ function Problem_detail({ match }) {
                 <div className="right-column">
                     <Card className="submit-card right-column__item">
                         <Card.Body>
-                            <Link to='/status' className='to_statusPage_card'>
+                            <Link to={`/status`} className='to_statusPage_card'>
                                 <AiOutlineAlignLeft className="to_statusPage_card-item " />
                                 <p>Submissions</p>
                             </Link>
@@ -270,7 +270,7 @@ function Problem_detail({ match }) {
                                 </ListGroup.Item>
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Create by</p>
-                                    <p>{problem.author}</p>
+                                    <p>{problem.author_name}</p>
                                 </ListGroup.Item>
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Level</p>

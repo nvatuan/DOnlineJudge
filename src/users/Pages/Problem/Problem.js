@@ -110,7 +110,7 @@ function Problem() {
                                 <thead>
                                     <tr>
                                         <th onClick={() => handleSortByDisplayId()}>Display ID</th>
-                                        <th onClick={() => handleSortByTitle()}>Tille</th>
+                                        <th onClick={() => handleSortByTitle()}>Title</th>
                                         <th onClick={() => handleSortByLevel()}>Level</th>
                                         <th>Total</th>
                                         <th>AC Rate</th>
