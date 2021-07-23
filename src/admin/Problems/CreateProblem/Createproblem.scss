@@ -1,29 +1,18 @@
+* {
+    border-sizing: border-box;
+}
 .cp {
-    position: relative;
-    left: 210px;
-    top: 55px;
-    width: 86%;
+    padding: 4px;
+    padding-left: 200px;
 }
 
 .cp-list {
-    position: relative;
-    padding: 1rem;
-    border: 0.2rem solid #ececec;
-    border-radius: 8px;
-    margin-right: 0;
-    margin-left: 0;
-    color: #212529;
-    box-sizing: border-box;
-    background-color: #fff;
-    li {
-        list-style-type: none;
-    }
-
     .cp-displayid,
     .cp-title,
     .cp-dif,
     .cp-time,
-    .cp-mem {
+    .cp-mem,
+    .cp-visible {
         -webkit-appearance: none;
         background-color: #fff;
         background-image: none;
@@ -38,13 +27,12 @@
         outline: 0;
         padding: 0 15px;
         transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-        width: 80%;
     }
-    table {
-        width: 100%;
-        .td-dis {
-            width: 30%;
-        }
+    .cp-title {
+        width: 1100px;
+    }
+    .cp-displayid {
+        width: 300px;
     }
 }
 .cp-header {
@@ -59,12 +47,10 @@
 }
 .cp-btn {
     padding: 12px 100px;
-    margin: 20px 0;
+    margin: 20px;
     font-size: 20px;
 }
-.td-type {
-    padding-left: 50px;
-}
+
 .cp-language {
     width: 30px;
 }
@@ -74,16 +60,37 @@
     width: 100%;
 }
 .textArea {
-    width: 98%;
+    width: 690px;
     height: 100px;
     border-color: #ccc;
     margin-bottom: 5px;
 }
 .removeButton {
-    width: 100%;
     position: relative;
-    top: 80px;
+    top: 50%;
 }
 .cp-visible {
-    width: 50%;
+    width: 100px;
+}
+.cp-first {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+@media screen and (max-width: 960px) {
+    .cp {
+        padding-left: 86px;
+    }
+}
+.div-mem {
+    margin-right: 20px;
+}
+.cp-second {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.textArea-2 {
+    margin-left: 10px;
 }
