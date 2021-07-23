@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
-import { Card, Button, Form} from 'react-bootstrap';
+import { Card, Button, Form } from 'react-bootstrap';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
 import '../../Table.scss';
@@ -18,21 +18,21 @@ function Announcement(props) {
     const { admin_announcements, isFetchAnnouncementsSuccess, deleteSusscess } = useSelector(adminSelector);
     //delete announcement
     const HandleDeleteAnnouncement = (id) => {
-        if(window.confirm("Are you sure?")){
+        if (window.confirm("Are you sure?")) {
             dispatch(deleteAnnouncement(id));
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(AnnouncementList());
     }, [])
-    useEffect(()=>{
-        if (isFetchAnnouncementsSuccess){
+    useEffect(() => {
+        if (isFetchAnnouncementsSuccess) {
             setAnnouncements(admin_announcements);
         }
         return dispatch(clearState());
     }, [isFetchAnnouncementsSuccess]);
-    useEffect(() =>{
-        if (deleteSusscess){
+    useEffect(() => {
+        if (deleteSusscess) {
             dispatch(AnnouncementList());
         }
     }, [deleteSusscess])
@@ -41,9 +41,9 @@ function Announcement(props) {
         try {
             const res = await admin_announcementAPI.updateVisible(id, is_visible);
             const newann = res.data;
-            setAnnouncements (
+            setAnnouncements(
                 announcements.map(
-                    (ann) => ann.id === newann.id ? {...ann,  is_visible: newann.is_visible} : ann
+                    (ann) => ann.id === newann.id ? { ...ann, is_visible: newann.is_visible } : ann
                 )
             )
             console.log("Update announcements")
@@ -61,7 +61,7 @@ function Announcement(props) {
                         <Card.Header as="h3" className="announcement-header">
                             Announcements
                             <div className="create_button">
-                                <Link to={`/admin/announcement/new`} className="alter_announcement"> <BsFillPlusCircleFill/> New</Link>
+                                <Link to={`/admin/announcement/new`} className="alter_announcement"> <BsFillPlusCircleFill /> New</Link>
                             </div>
                         </Card.Header>
                         <Card.Body>
@@ -86,7 +86,7 @@ function Announcement(props) {
                                                     <td>{announcement.creation_time}</td>
                                                     <td>{announcement.author_name}</td>
                                                     <td>
-                                                        <Switch onChange={() => handleVisible(announcement.id, announcement.is_visible)} checked={announcement.is_visible} height={20} width={40}/>
+                                                        <Switch onChange={() => handleVisible(announcement.id, announcement.is_visible)} checked={announcement.is_visible} height={20} width={40} />
                                                     </td>
                                                     <td>
                                                         <div className="option-cell">
@@ -95,7 +95,7 @@ function Announcement(props) {
                                                                     <Link to={`/admin/announcement/${announcement.id}`} className="alter_announcement"> <AiOutlineEdit /></Link>
                                                                 </div>
                                                                 <div className="option-button__items">
-                                                                    <Button variant="light" onClick={() => { HandleDeleteAnnouncement(announcement.id)}}>
+                                                                    <Button variant="light" onClick={() => { HandleDeleteAnnouncement(announcement.id) }}>
                                                                         <AiOutlineDelete />
                                                                     </Button>
                                                                 </div>
@@ -114,7 +114,7 @@ function Announcement(props) {
                             </table >
                         </Card.Body>
                     </Card>
-            </div>
+                </div>
             </div>
         </div>
     )
