@@ -1,8 +1,3 @@
-"""
-102180268@sv1.dut.udn.vn
-Tranxuanphuc97
-"""
-
 from pathlib import Path
 import os
 
@@ -170,4 +165,5 @@ Q_CLUSTER = {
 }
 
 #== User's defined global variables
-PAGINATION_PAGE_SIZE = 20
+PAGINATION_PAGE_SIZE = 10
+OUTPUT_MAX_LENGTH = 255

@@ -68,7 +68,7 @@ class ProblemAPI(APIView):
             ## Tags, Difficulty, Source
             tags = data.pop("tags")
             if not tags:
-                raise KeyError("tags")
+                tags = ["Uncategorized"]
             if type(tags) != list:
                 return response_bad_request("'tags' should be a list.")
 
@@ -85,7 +85,13 @@ class ProblemAPI(APIView):
             # Author
             data["author"] = request.user
 
-            # Testdir
+            # Sample_Test:
+            if data.get("sample_test"):
+                if type(data["sample_test"]) != list:
+                    return response_bad_request("'sample_test' should be a list of dict{input:..., output:...}")
+            else:
+                data["sample_test"] = []
+            # Testzip
             if data.get("test_zip"):
                 pass
 
@@ -94,7 +100,7 @@ class ProblemAPI(APIView):
             data["statistic_info"] = SubmissionVerdict._get_default_dict()
 
             #visible
-            if data['is_visible'] == '':
+            if data.get('is_visible', '') == '':
                 data['is_visible'] = True
             elif not data['is_visible'] in [True, False]:
                 return response_bad_request({"visible":"This field must either be true or false"})                    

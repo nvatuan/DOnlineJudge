@@ -1,3 +1,4 @@
+from donlinejudge.settings import OUTPUT_MAX_LENGTH
 from django.shortcuts import render
 from django.db.models import JSONField, Q
 from rest_framework.views import APIView
@@ -12,6 +13,7 @@ from submission.serializers import SubmissionSerializer
 
 from accounts.decorators import login_required, admin_required, super_admin_required
 
+import asyncio, websockets
 from time import sleep
 from json import loads, dumps
 import sys
@@ -21,7 +23,6 @@ import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
 from utils.test_zip import TestZipHandler
 
-import asyncio, websockets
 
 class SubmissionAPI(APIView):
     serializer_class = SubmissionSerializer
@@ -171,12 +172,14 @@ class JudgeSubmissionTask:
                 "sample_test": [],
                 "hidden_test": [],
                 "compile_message": compile_result,
-                "time": 0,
-                "memory": 0,
             }
             self.sub.verdict = SubmissionVerdict.AC
 
             maxtime, maxmem = 0, 0 
+
+            def trim_output(output):
+                return output if len(output) < OUTPUT_MAX_LENGTH else output[:OUTPUT_MAX_LENGTH]+'...'
+
             ## Sample tests
             for i in range(self.sample_test_count):
                 jres = judge_results[i]
@@ -185,15 +188,15 @@ class JudgeSubmissionTask:
                 if self.sub.verdict == SubmissionVerdict.AC and test_verdict != self.sub.verdict:
                     self.sub.verdict = test_verdict
                 
-                maxtime = max(maxtime, float(jres[2]))
+                maxtime = max(maxtime, int(float(jres[2])*1000))
                 maxmem  = max(maxmem, int(jres[3]))
                 
                 self.sub.output["sample_test"].append(
                     {
                         "test_id": i,
                         "verdict": test_verdict,
-                        "stdout": jres[1][0],
-                        "stderr": jres[1][1],
+                        "stdout": trim_output(jres[1][0]),
+                        "stderr": trim_output(jres[1][1]),
                         "cpu time": jres[2],
                         "memory used": jres[3]
                     }
@@ -207,23 +210,23 @@ class JudgeSubmissionTask:
                 if self.sub.verdict == SubmissionVerdict.AC and test_verdict != self.sub.verdict:
                     self.sub.verdict = test_verdict
                 
-                maxtime = max(maxtime, float(jres[2]))
-                maxmem  = max(maxmem, int(jres[3]))
+                maxtime = max(maxtime, int(float(jres[2])*1000)) # originally in s, convert to ms
+                maxmem  = max(maxmem, int(jres[3])) # originally in KB
                 
                 self.sub.output["hidden_test"].append(
                     {
                         "test_id": i,
                         "verdict": test_verdict,
-                        #"stdout": jres[1][0],
-                        #"stderr": jres[1][1],
+                        "stdout": trim_output(jres[1][0]),
+                        "stderr": trim_output(jres[1][1]),
                         "cpu time": jres[2],
                         "memory used": jres[3]
                     }
                 )
 
             ## Update stats
-            self.sub.output["time"] = maxtime
-            self.sub.output["memory"] = maxmem
+            self.sub.time = maxtime
+            self.sub.memory = maxmem
         
         return True
 
@@ -270,6 +273,15 @@ class JudgeSubmissionTask:
             if self.jserver != None:
                 self.jserver.pending_tasks -= 1
                 self.jserver.save()
+
+            try:
+                self.sub.time = int(self.sub.output["time"])
+            except:
+                pass
+            try:
+                self.sub.memory = int(self.sub.output["memory"])
+            except:
+                pass
             self.sub.save()
 
     def hook(self, task):

@@ -58,7 +58,8 @@ class Submission(models.Model):
 
     verdict = models.CharField(choices=SubmissionVerdict.CHOICES, max_length=20, default=SubmissionVerdict.NEW)
     output = models.JSONField(default=dict)
-    ### [{input: "asdf", output: "xyz"}, ...]
+    time = models.IntegerField(null=True)
+    memory = models.IntegerField(null=True)
 
     def is_visible(self):
         return self.problem.is_visible
