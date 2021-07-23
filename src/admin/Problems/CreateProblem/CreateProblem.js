@@ -213,27 +213,21 @@ function Createproblem({ match }) {
                         <ListGroup.Item className="cp-header cp-list" >
                             <h3>Edit problem</h3>
                         </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td className="td-dis">
-                                            <i style={{ color: 'red' }}>*</i>
-                                            <span> Display ID</span> <br /> <br />
-                                            <input type="text" placeholder="Display ID" className="cp-displayid" required
-                                                value={display_id} onChange={(e) => { handleDisplay_id(e) }} />
-                                        </td>
-                                        <td className="td-til">
-                                            <i style={{ color: 'red' }}>*</i>
-                                            <span> Title</span> <br /> <br />
-                                            <input type="text" placeholder="Title" className="cp-title" required
-                                                value={title} onChange={(e) => { handleTitle(e) }} />
-                                        </td>
-                                    </tr>
-                                </tbody>
+                        <ListGroup.Item className="cp-list cp-first">
 
-                            </table>
+                            <div className="div-dis">
+                                <i style={{ color: 'red' }}>*</i>
+                                <span> Display ID</span> <br /> <br />
+                                <input type="text" placeholder="Display ID" className="cp-displayid" required
+                                    value={display_id} onChange={(e) => { handleDisplay_id(e) }} />
+                            </div>
+                            <div className="div-til">
+                                <i style={{ color: 'red' }}>*</i>
+                                <span> Title</span> <br /> <br />
+                                <input type="text" placeholder="Title" className="cp-title" required
+                                    value={title} onChange={(e) => { handleTitle(e) }} />
 
+                            </div>
                         </ListGroup.Item>
                         <ListGroup.Item className="cp-list">
                             <i style={{ color: 'red' }}>*</i>
@@ -259,73 +253,66 @@ function Createproblem({ match }) {
                             </Form.Control>
                             {/* <Editor></Editor> */}
                         </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <table>
-                                <tbody>
+                        <ListGroup.Item className="cp-list cp-first">
 
-                                    <tr>
-                                        <td className="td-time">
-                                            <i style={{ color: 'red' }}>*</i>
-                                            <span> Time Limit (ms)</span> <br /> <br />
-                                            <input type="Number" placeholder="Time Limit" className="cp-time" required
-                                                value={time_limit} onChange={(e) => { handleTime_limit(e) }} />
-                                        </td>
-                                        <td className="td-mem">
-                                            <i style={{ color: 'red' }}>*</i>
-                                            <span> Memory limit (MB)</span> <br /> <br />
-                                            <input type="Number" placeholder="Memory limit (MB)" className="cp-mem" required
-                                                value={memory_limit} onChange={(e) => { handleMemory_limit(e) }} />
-                                        </td>
-                                        <td className="td-dif">
-                                            <i style={{ color: 'red' }}>*</i>
-                                            <span> Difficult</span> <br /> <br />
-                                            <Form.Control as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
-                                                <option value="Easy">Easy</option>
-                                                <option value="Medium">Medium</option>
-                                                <option value="Hard">Hard</option>
-                                            </Form.Control>
-                                        </td>
-                                    </tr>
-                                    <br />
-                                    <tr>
-                                        <td>
-                                            <span> Visible</span> <br /> <br />
-                                            <Form.Control className="cp-visible" as="select" size="sm" custom value={is_visible} onChange={(e) => { handleVisible(e) }} >
-                                                <option value={true}>true</option>
-                                                <option value={false}>false</option>
-                                            </Form.Control>
-                                        </td>
-                                        <td>
-                                            <i style={{ color: 'red' }}>*</i>
-                                            <span> Language</span> <br /> <br />
-                                            <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                defaultChecked
-                                                value="C"
-                                            />C
-                                            <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                value="C++"
-                                                defaultChecked
-                                            />C++
-                                            <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                value="Java"
-                                                defaultChecked
-                                            />Java
-                                            <input className="cp-language"
-                                                type="checkbox"
-                                                name="Language"
-                                                value="Python"
-                                                defaultChecked
-                                            />Python
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div className="div-time">
+                                <i style={{ color: 'red' }}>*</i>
+                                <span> Time Limit (ms)</span> <br /> <br />
+                                <input type="Number" placeholder="Time Limit" className="cp-time" required
+                                    value={time_limit} onChange={(e) => { handleTime_limit(e) }} />
+                            </div>
+                            <div className="div-mem">
+                                <i style={{ color: 'red' }}>*</i>
+                                <span> Memory limit (MB)</span> <br /> <br />
+                                <input type="Number" placeholder="Memory limit (MB)" className="cp-mem" required
+                                    value={memory_limit} onChange={(e) => { handleMemory_limit(e) }} />
+                            </div>
+                            <div className="div-dif">
+                                <i style={{ color: 'red' }}>*</i>
+                                <span> Difficult</span> <br /> <br />
+                                <Form.Control as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                </Form.Control>
+                            </div>
+
+                            <div>
+                                <span> Visible</span> <br /> <br />
+                                <Form.Control className="cp-visible" as="select" size="sm" custom value={is_visible} onChange={(e) => { handleVisible(e) }} >
+                                    <option value={true}>true</option>
+                                    <option value={false}>false</option>
+                                </Form.Control>
+                            </div>
+                            <div>
+                                <i style={{ color: 'red' }}>*</i>
+                                <span> Language</span> <br /> <br />
+                                <input className="cp-language"
+                                    type="checkbox"
+                                    name="Language"
+                                    defaultChecked
+                                    value="C"
+                                />C
+                                <input className="cp-language"
+                                    type="checkbox"
+                                    name="Language"
+                                    value="C++"
+                                    defaultChecked
+                                />C++
+                                <input className="cp-language"
+                                    type="checkbox"
+                                    name="Language"
+                                    value="Java"
+                                    defaultChecked
+                                />Java
+                                <input className="cp-language"
+                                    type="checkbox"
+                                    name="Language"
+                                    value="Python"
+                                    defaultChecked
+                                />Python
+                            </div>
+
                         </ListGroup.Item>
                         <ListGroup.Item className="cp-list">
                             <i style={{ color: 'red' }}>*</i>
@@ -334,10 +321,9 @@ function Createproblem({ match }) {
                                 {
                                     sample_test.map((sample, idx) => {
                                         return (
-                                            <div key={`${sample}-${idx}`}>
-                                                <table>
-                                                <tr>
-                                                    <td>
+                                            <div key={`${sample}-${idx}`} className="cp-second">
+                                                <div className="cp-first">
+                                                    <div className="textArea-2">
                                                         <i style={{ color: 'red' }}>*</i>
                                                         <span> Input</span> <br />
                                                         <Form.Control as="textarea" rows={5} cols={150}
@@ -348,8 +334,8 @@ function Createproblem({ match }) {
                                                             onChange={e => handleInput(idx, e)}
                                                         >
                                                         </Form.Control>
-                                                    </td>
-                                                    <td>
+                                                    </div>
+                                                    <div className="textArea-2">
                                                         <i style={{ color: 'red' }}>*</i>
                                                         <span> Output</span> <br />
                                                         <Form.Control as="textarea" rows={5} cols={150}
@@ -360,15 +346,17 @@ function Createproblem({ match }) {
                                                             onChange={e => handleOutput(idx, e)}
                                                         >
                                                         </Form.Control>
-                                                    </td>
-                                                    <td>
-                                                        <Button className="removeButton" onClick={() => handleRemove(idx)}>
-                                                            X
-                                                        </Button>
-                                                    </td>
+                                                    </div>
+                                                </div>
 
-                                                </tr>
-                                                </table>
+
+                                                <div className="textArea-2">
+                                                    <Button className="removeButton" onClick={() => handleRemove(idx)}>
+                                                        X
+                                                    </Button>
+                                                </div>
+
+
                                             </div>
                                         );
                                     })}
@@ -383,36 +371,32 @@ function Createproblem({ match }) {
                             </Form.Control>
                             {/* <Editor></Editor> */}
                         </ListGroup.Item >
-                        <ListGroup.Item className="cp-list">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td className="td-type">
-                                            <span> Type</span> <br /> <br />
-                                            <input type="radio" name="type" value="ACM" /> ACM <br />
-                                            <input type="radio" name="type" value="IO" /> IO
-                                        </td>
-                                        <td className="td-test ">
-                                            <span> Test Case</span> <br /> <br />
-                                            <input type="file" />
+                        <ListGroup.Item className="cp-list cp-first">
 
-                                        </td>
-                                        <td className="td-io">
-                                            <span> IO mode</span> <br /> <br />
-                                            <input type="radio" name="io" value="standard" /> Standard IO <br />
-                                            <input type="radio" name="io" value="file" /> File IO
-                                        </td>
-                                    </tr>
-                                </tbody>
 
-                            </table>
+                            <div className="div-type">
+                                <span> Type</span> <br /> <br />
+                                <input type="radio" name="type" value="ACM" /> ACM <br />
+                                <input type="radio" name="type" value="IO" /> IO
+                            </div>
+                            <div className="div-test ">
+                                <span> Test Case</span> <br /> <br />
+                                <input type="file" />
+
+                            </div>
+                            <div className="div-io">
+                                <span> IO mode</span> <br /> <br />
+                                <input type="radio" name="io" value="standard" /> Standard IO <br />
+                                <input type="radio" name="io" value="file" /> File IO
+                            </div>
+
                         </ListGroup.Item>
                         <Button type="submit" className="cp-btn">Save</Button>
 
                     </ListGroup>
-                </Form>
+                </Form >
             </div >
-        </div>
+        </div >
     );
 }
 
