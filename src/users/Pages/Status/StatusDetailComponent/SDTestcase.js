@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react'
 import Collapsible from 'react-collapsible'
 import { Card } from 'react-bootstrap';
 
@@ -10,7 +9,7 @@ function StatusDetailSample({ samples }) {
 					<Card.Header as="h3" >Sample Tests</Card.Header>
 					<Card.Body>
 						{
-							samples.length == 0 
+							samples.length === 0 
 							? <p> This problem does not have any sample tests.</p>
 							: samples.map((sample, idx) => {
 								return (
@@ -54,13 +53,20 @@ function StatusDetailHidden({ hiddens }) {
 					<Card.Body>
 						<ul>
 							{
-								hiddens.length == 0 
+								hiddens.length === 0 
 								? <p> This problem does not have any hidden tests.</p>
 								: hiddens.map((hidden, idx) => {
 									return (
-										<li>
-											Hidden Test #{idx+1}: {hidden.verdict} (CPU:{hidden['cpu time']}ms, MEM:{hidden['memory used']}KB)
-										</li>
+										<Collapsible key={'sdhidden-c'+idx} trigger={[`Hidden Test #${idx+1}: ${hidden.verdict} (CPU:${hidden['cpu time']}ms, MEM:${hidden['memory used']}KB)`]} easing='ease'>
+											<table>
+												<tr>
+													<td>Stderr</td> <td><pre>{hidden['stderr']}</pre></td>
+												</tr>
+												<tr>
+													<td>Stdout</td> <td><pre>{hidden['stdout']}</pre></td>
+												</tr>
+											</table>
+										</Collapsible>
 									)
 								})
 							}

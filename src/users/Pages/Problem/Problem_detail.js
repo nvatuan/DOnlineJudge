@@ -59,7 +59,6 @@ function Problem_detail({ match }) {
     };
 
     useEffect(() => {
-
         const fetchProblem_detail = async () => {
             const response = await oj_problemAPI.getById(id);
             setProblem(response.data);
@@ -67,7 +66,10 @@ function Problem_detail({ match }) {
                 setSample_test([])
             }
             else {
-                setSample_test(response.data.sample_test)
+                if (response.data.sample_test instanceof Array)
+                    setSample_test(response.data.sample_test)
+                else
+                    setSample_test([])
             }
             //check login
             if (localStorage.getItem('token') !== null) setCheckLogin(true);
@@ -114,7 +116,7 @@ function Problem_detail({ match }) {
             autoClose: 1000,
         });
     }
-    const LaTeX = 'We give illustrations for the three processes $e^+e^-$, gluon-gluon and $\\gamma\\gamma \\to W t\\bar b$.'
+    console.log(problem)
     return (
         <div>
             <Navbar />
@@ -125,7 +127,7 @@ function Problem_detail({ match }) {
                         <Card.Body>
                             <h2 className="title">{problem.title}</h2>
                             <p className="time_limit"><strong>Time limit:</strong> {problem.time_limit} ms</p>
-                            <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} mb</p>
+                            <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} MB</p>
                             <br />
                             <strong>Problem Description:</strong>
                             <br />
@@ -142,11 +144,11 @@ function Problem_detail({ match }) {
                             <strong>Sample Test:</strong>
                             <br />
                             {
-                                sample_test.map((sample, idx) => {
+                                sample_test.length === 0
+                                ? <p> This problem doesn't have any Sample tests..</p>
+                                : sample_test.map((sample, idx) => {
                                     return (
-
                                         <div className="pd__sample" key={`${sample}-${idx}`}>
-
                                             <div className="input-header">
                                                 <div>Input {idx + 1}</div>
                                                 <Form.Control id={`input_${idx}`} as="textarea" cols={150} readOnly
@@ -156,8 +158,6 @@ function Problem_detail({ match }) {
                                                 </Form.Control>
                                                 <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
                                             </div>
-
-
 
                                             <div className="input-header">
                                                 <div>Output {idx + 1}</div>
@@ -171,10 +171,6 @@ function Problem_detail({ match }) {
                                         </div>
                                     );
                                 })}
-
-
-
-
                         </Card.Body>
                     </Card>
                     <Card className="problem-main__item">
@@ -266,7 +262,7 @@ function Problem_detail({ match }) {
                                 </ListGroup.Item>
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Memory Limit</p>
-                                    <p>{problem.memory_limit} mb</p>
+                                    <p>{problem.memory_limit} MB</p>
                                 </ListGroup.Item>
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Create by</p>

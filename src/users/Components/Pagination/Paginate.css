@@ -1,0 +1,52 @@
+.pagination-container {
+    padding-top: 20px;
+    width: 100%;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.pagination li a {
+    display: block;
+    border: 2px solid #ddd; /* Gray */
+
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color .3s;
+
+    margin: 0 2px;
+    align-items: center;
+    justify-content: center;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently */
+}
+
+.pagination .active a {
+    background-color: #1c2237;
+    color: white;
+}
+
+.pagination li a:hover:not(.active) {background-color: #ddd;}
+
+.pagination li a.active {
+    border-radius: 5px;
+}
+.pagination li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

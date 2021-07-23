@@ -5,6 +5,10 @@ import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
 import queryString from 'query-string';
+import ReactPaginate from 'react-paginate';
+
+import '../../Components/Pagination/Paginate.css';
+
 function Status() {
     let href = window.location.href;
     const id = queryString.parse(href, { parseNumbers: true })
@@ -13,6 +17,7 @@ function Status() {
         sort_by: '-submit_time',
         filter_by: ['author_id'],
         author_id: id.author_id,
+        page: 1,
     })
     const [sortById, setSortById] = useState(false);
     const [sortByProblem, setSortByProblem] = useState(false);
@@ -33,6 +38,10 @@ function Status() {
         "Judging": "Judging"
 
     };
+
+    // -- paginate
+    const [currentPage, setCurrentPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(1);
 
     //sort by id
     function handleSortChange(e){
@@ -81,17 +90,7 @@ function Status() {
             })
         }
     }
-    useEffect(() => {
-        const fetchStatus = async () => {
-            try {
-                const response = await oj_statusAPI.getAll(filters);
-                setStatus(response.data);
-            } catch (error) {
-               console.log('fail to fetch status: ', error); 
-            }
-        }
-        fetchStatus();
-    }, [filters])
+
     const hanldeTime = (time) => {
         return new Date(time).toDateString();  
     }
@@ -153,6 +152,30 @@ function Status() {
             sort_by: sortByWhen ? '-submit_time' : 'submit_time'
         })
     }
+
+    // ReactPaginate: handle page change
+    const handlePageClick = async (props) => {
+        setCurrentPage(props.selected);
+        setFilters({
+            ...filters,
+            page: props.selected+1,
+        })
+    };
+
+    // -- Fetch data
+    useEffect(() => {
+        const fetchStatus = async () => {
+            try {
+                const response = await oj_statusAPI.getAll(filters);
+                setStatus(response.data);
+                setMaxPage(response.maxpage);
+            } catch (error) {
+               console.log('Fail to fetch status: ', error); 
+            }
+        }
+        fetchStatus();
+    }, [filters])
+
     return (
         <div>
             <Navbar/>
@@ -195,52 +218,63 @@ function Status() {
                     </div>
                 </Card.Header>
                 <Card.Body>
-                    
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th onClick={() => handleSortById()}>ID</th>
-                                    <th onClick={() => handleSortByProblem()}>Problem</th>
-                                    <th onClick={() => handleSortByAuthor()}>Author</th>
-                                    <th onClick={() => handleSortByStatus()}>Status</th>
-                                    <th onClick={() => handleSortByLanguage()}>Language</th>
-                                    <th onClick={() => handleSortByTime()}>Time</th>
-                                    <th onClick={() => handleSortByMemory()}>Memory</th>
-                                    <th onClick={() => handleSortByWhen()}>When</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    status.map(stat => {
-                                        return (
-                                            <tr key={stat.id}>
-                                                <td>{stat.id}</td>
-                                                <td>
-                                                    <div className="table-cell">
-                                                        <Link to={`problem/${stat.problem_id}`} >{stat.problem_title}</Link>
-                                                    </div>
-                                                </td>
-                                                <td>{stat.author_name}</td>
-                                                <td >
-                                                    <div className="table-cell">
-                                                        <div className={`result-container ${result[stat.verdict]}`}>
-                                                            <div className="result-text">
-                                                                {stat.verdict}
-                                                            </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onClick={() => handleSortById()}>ID</th>
+                                <th onClick={() => handleSortByProblem()}>Problem</th>
+                                <th onClick={() => handleSortByAuthor()}>Author</th>
+                                <th onClick={() => handleSortByStatus()}>Status</th>
+                                <th onClick={() => handleSortByLanguage()}>Language</th>
+                                <th onClick={() => handleSortByTime()}>Time</th>
+                                <th onClick={() => handleSortByMemory()}>Memory</th>
+                                <th onClick={() => handleSortByWhen()}>When</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                status.map(stat => {
+                                    return (
+                                        <tr key={stat.id}>
+                                            <td>{stat.id}</td>
+                                            <td>
+                                                <div className="table-cell">
+                                                    <Link to={`problem/${stat.problem_id}`} >{stat.problem_title}</Link>
+                                                </div>
+                                            </td>
+                                            <td>{stat.author_name}</td>
+                                            <td >
+                                                <div className="table-cell">
+                                                    <div className={`result-container ${result[stat.verdict]}`}>
+                                                        <div className="result-text">
+                                                            {stat.verdict}
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <td>{stat.language}</td>
-                                                <td>{stat.output["time"]}s</td>
-                                                <td>{Math.floor(stat.output['memory']/1024)} MB</td>
-                                                <td>{hanldeTime(stat.submit_time)}</td>
-                                                <td><Link to={`status/${stat.id}`}>Detail</Link></td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
+                                                </div>
+                                            </td>
+                                            <td>{stat.language}</td>
+                                            <td>{stat.time} ms</td>
+                                            <td>{Math.floor(stat.memory/1000)} MB</td>
+                                            <td>{hanldeTime(stat.submit_time)}</td>
+                                            <td><Link to={`status/${stat.id}`}>Detail</Link></td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                    <div className='pagination-container'>
+                        <ReactPaginate 
+                            pageCount={maxPage}
+                            pageRangeDisplayed={5}
+                            marginPagesDisplayed={2}
+                            onPageChange={handlePageClick}
+                            containerClassName={'pagination'}
+                            activeClassName={'active'}
+                            breakLabel={'...'}
+                            breakClassName={'break-me'}
+                        ></ReactPaginate>
+                    </div>
                 </Card.Body>
             </Card>
             </div>

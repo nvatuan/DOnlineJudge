@@ -6,13 +6,22 @@ import oj_problemAPI from '../../../api/oj_problemAPI';
 import { Link } from 'react-router-dom';
 import Search from '../../Components/Search';
 
+import '../../Components/Pagination/Paginate.css';
+import ReactPaginate from 'react-paginate';
+
 function Problem() {
     const [problems, setProblems] = useState([])
     const [filters, setFilters] = useState({
         filter_by: [],
         sort_by: '',
-        
+        page: 1,
     });
+
+    // -- paginate
+    const [currentPage, setCurrentPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(1);
+
+    // -- sorting
     const [sortById, setSortById] = useState(false);
     const [sortByTitle, setSortByTitle] = useState(false);
     const [sortByLevel, setSortByLevel] = useState(false);
@@ -23,14 +32,6 @@ function Problem() {
         "Hard": "Hard"
     }
 
-    useEffect(() => {
-        const fectchProblems = async () => {
-            const response = await oj_problemAPI.getAll(filters);
-            console.log(response.data);
-            setProblems(response.data);
-        }
-        fectchProblems();
-    }, [filters])
     //serach process
     function handleSearchForm(newValue) {
         setFilters({
@@ -80,6 +81,29 @@ function Problem() {
         sort_by: sortByLevel ? '-difficulty' : 'difficulty',
         })
     }
+
+    // ReactPaginate: handle page change
+    const handlePageClick = async (props) => {
+        setCurrentPage(props.selected);
+        setFilters({
+            ...filters,
+            page: props.selected+1,
+        })
+    };
+    // Fetching
+    useEffect(() => {
+        const fectchProblems = async () => {
+            try {
+                const response = await oj_problemAPI.getAll(filters);
+                setProblems(response.data);
+                setMaxPage(response.maxpage);
+            } catch (error) {
+               console.log('Fail to fetch status: ', error); 
+            }
+        }
+        fectchProblems();
+    }, [filters])
+
     return (
         <div>
             <Navbar />
@@ -107,43 +131,54 @@ function Problem() {
                     </Card.Header>
                     <Card.Body >
                         < table >
-                                <thead>
-                                    <tr>
-                                        <th onClick={() => handleSortByDisplayId()}>Display ID</th>
-                                        <th onClick={() => handleSortByTitle()}>Title</th>
-                                        <th onClick={() => handleSortByLevel()}>Level</th>
-                                        <th>Total</th>
-                                        <th>AC Rate</th>
-                                    </tr>
-                                </thead>
+                            <thead>
+                                <tr>
+                                    <th onClick={() => handleSortByDisplayId()}>Display ID</th>
+                                    <th onClick={() => handleSortByTitle()}>Title</th>
+                                    <th onClick={() => handleSortByLevel()}>Level</th>
+                                    <th>Total</th>
+                                    <th>AC Rate</th>
+                                </tr>
+                            </thead>
                             <tbody className="pages-container">
-                                    {
-                                        problems.length > 0 ? (
-                                            problems.map((problem) => (
-                                                <tr key={problem.id}>
-                                                    <td>{problem.display_id}</td>
-                                                    <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
-                                                    <td>
-                                                        <div className="table-cell">
-                                                            <div className={`difficulty-container ${difficulty[problem.difficulty]}`}>
-                                                                <div className="difficulty-text">
-                                                                    {problem.difficulty}
-                                                                </div>
+                                {
+                                    problems.length > 0 ? (
+                                        problems.map((problem) => (
+                                            <tr key={problem.id}>
+                                                <td>{problem.display_id}</td>
+                                                <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
+                                                <td>
+                                                    <div className="table-cell">
+                                                        <div className={`difficulty-container ${difficulty[problem.difficulty]}`}>
+                                                            <div className="difficulty-text">
+                                                                {problem.difficulty}
                                                             </div>
                                                         </div>
-                                                    </td>
-                                                    <td>{problem.total_submission}</td>
-                                                    <td>{problem.correct_submission}</td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan={5}>Nothing</td>
+                                                    </div>
+                                                </td>
+                                                <td>{problem.total_submission}</td>
+                                                <td>{problem.correct_submission}</td>
                                             </tr>
-                                        )
-                                    }
-                                </tbody>
-                            </table >
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={5}>Nothing</td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table >
+
+                        <div className='pagination-container'> <ReactPaginate 
+                            pageCount={maxPage}
+                            pageRangeDisplayed={5}
+                            marginPagesDisplayed={2}
+                            onPageChange={handlePageClick}
+                            containerClassName={'pagination'}
+                            activeClassName={'active'}
+                            breakLabel={'...'}
+                            breakClassName={'break-me'}
+                        ></ReactPaginate> </div>
                     </Card.Body>
                 </Card>
             </div>

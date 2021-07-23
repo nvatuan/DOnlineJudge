@@ -1,10 +1,22 @@
+/* Each announcement belongs in a announcement-container */
 .announcement-container {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
     width: 95%;
+    padding: 10px 0px;
 }
+/* Not padding first and last child */
+.announcement-container:first-child {
+    padding-top: 0;
+}
+.announcement-container:last-child {
+    padding-bottom: 0;
+}
+
+/* The article in announcement*/
 article {
+    margin: 0 auto;
+
     position: relative;
     display: flex;
     background-color: #c4c4cc;
@@ -16,15 +28,16 @@ article {
     text-align: center;
     width: 100%;
     max-height: 160px;
-    transition: trasform 0.3s;
     min-height: 200px;
 }
 
 article:hover {
-    transform: translateY(5px);
+    /*transform: translateY(5px);*/
     box-shadow: 2px 2px 26px 0px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease-in-out;
     opacity: 1;
 }
+
 .annou_head {
     background-color: #2a3358;
     flex: 1;
