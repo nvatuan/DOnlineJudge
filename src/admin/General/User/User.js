@@ -77,7 +77,7 @@ function User(props) {
                                                         <div className="option-cell">
                                                             <div className="option-button">
                                                                 <div className="option-button__items">
-                                                                        <Link to={`/admin/users/${user.id}`} className="alter-user-button"><AiOutlineEdit /></Link>
+                                                                        <Link to={`/admin/user/${user.id}`} className="alter-user-button"><AiOutlineEdit /></Link>
                                                                 </div>
                                                                 <div className="option-button__items">
                                                                     <Button variant="light" onClick={() => { handleDeleteUser(user.id)}}>

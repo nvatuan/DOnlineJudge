@@ -97,7 +97,7 @@ function NotFound() {
             <div class="text">
                 <h1>404 Error</h1>
                 <h2>Couldn't launch :(</h2>
-                <h3>Page Not Found - lets take you <Link to='/'>back</Link></h3>
+                <h3>Page Not Found - lets take you <Link to='/' onClick={() => window.history.back()}>back</Link></h3>
             </div>
         </div>
     )

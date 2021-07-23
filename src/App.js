@@ -35,7 +35,7 @@ function App() {
           <Route path='/about' exact component={About}></Route>
           <Route path='/problem' exact component={Problem}></Route>
           <Route path='/problem/:id' exact component={Problem_detail}></Route>
-          <Route path='/status' exact component={Status}></Route>
+          <Route path='/status/' exact component={Status}></Route>
           <Route path='/status/:id' exact component={Status_detail}></Route>
           <Route path='/news' exact component={News} />
           <Route path='/profile' exact component={Setting} />

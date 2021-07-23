@@ -41,10 +41,15 @@ function Sidebar() {
               Announcement
               <Link to="/admin/announcement" />
             </MenuItem>
-            <MenuItem >
-              User
-              <Link to="/admin/user" />
-            </MenuItem>
+            {
+              localStorage.getItem('role') === 'Super Admin' ? 
+                <MenuItem >
+                  User
+                  <Link to="/admin/user" />
+                </MenuItem>
+                :
+                <></>
+            }
           </SubMenu>
           <SubMenu title="Problem" icon={<AiOutlineBars />}>
             <MenuItem >

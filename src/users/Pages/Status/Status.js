@@ -12,6 +12,7 @@ import '../../Components/Pagination/Paginate.css';
 function Status() {
     let href = window.location.href;
     const id = queryString.parse(href, { parseNumbers: true })
+    console.log(id);
     const [status, setStatus] = useState([]);
     const [filters, setFilters] = useState({
         sort_by: '-submit_time',
@@ -256,7 +257,7 @@ function Status() {
                                             <td>{stat.time} ms</td>
                                             <td>{Math.floor(stat.memory/1000)} MB</td>
                                             <td>{hanldeTime(stat.submit_time)}</td>
-                                            <td><Link to={`status/${stat.id}`}>Detail</Link></td>
+                                            <td><Link to={`/status/${stat.id}`}>Detail</Link></td>
                                         </tr>
                                     )
                                 })
