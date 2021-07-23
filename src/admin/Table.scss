@@ -29,29 +29,29 @@ $radius: 0.2rem;
   padding: 0;
 }
 
-.table-view{
+.table-view {
   // height: 100vh;
   display: flex;
   justify-content: center;
   // align-items: center;
   font-size: 0.9rem;
   // margin: 30px 30px;
+  padding: 10px;
   padding-left: 200px;
   padding-top: 40px;
   background-color: #eee;
   animation: animate 1s;
-} 
-@keyframes animate{
-    from {
-        opacity: 0;
-        transform: rotateX(-10deg);
-    }
-    to {
-        opacity: 1;
-        transform: rotateX(0);
-    }
 }
-
+@keyframes animate {
+  from {
+    opacity: 0;
+    transform: rotateX(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+}
 table {
   border-collapse: collapse;
   box-shadow: 0 5px 10px $clr-gray300;
@@ -73,7 +73,7 @@ table {
 
   td {
     padding: 1rem 2rem;
-    border-bottom: 1px solid hsla(0,0%,73%,.5);
+    border-bottom: 1px solid hsla(0, 0%, 73%, 0.5);
   }
 
   a {
@@ -86,21 +86,20 @@ table {
     background-color: red;
     padding: 0.2rem 1rem;
     text-align: center;
-
   }
-  .custom-switch{
+  .custom-switch {
     padding-left: 3.25rem;
   }
-  .option-cell{
+  .option-cell {
     box-sizing: border-box;
     white-space: normal;
     word-break: break-all;
     line-height: 23px;
   }
-  .option-button{
+  .option-button {
     display: flex;
     margin-left: 0.1rem;
-    .option-button__items{
+    .option-button__items {
       padding-right: 5px;
     }
   }
@@ -108,4 +107,9 @@ table {
   // tr:nth-child(even) {
   //   background-color: $clr-gray150;
   // }
+}
+@media screen and (max-width: 960px) {
+  .table-view {
+    padding-left: 86px;
+  }
 }
