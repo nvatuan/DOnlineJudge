@@ -48,6 +48,10 @@
   align-items: center;
 }
 
+ .navbar-logo > .navbar-logo__item{
+    padding: 0 10px;
+  }
+
 .navbar-icon {
   margin-right: 0.5rem;
 }
@@ -154,8 +158,13 @@
   .navbar-logo {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 30%;
     transform: translate(25%, 50%);
+  
+  }
+  .navbar-logo > .navbar-logo__item{
+    margin: auto;
+    padding: 0 10px;
   }
 
   .menu-icon {

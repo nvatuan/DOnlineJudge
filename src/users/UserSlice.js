@@ -40,7 +40,11 @@ export const logoutUser = createAsyncThunk(
     '/logout',
     async (thunkAPI) => {
         try {
-            await logoutAPI.logout();
+            const response = await logoutAPI.logout();
+            if(response){
+                localStorage.removeItem('role');
+                localStorage.removeItem('userInformation');
+            }
 
         } catch (error) {
             console.log('Fail to logout: ', error);

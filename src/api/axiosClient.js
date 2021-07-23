@@ -22,8 +22,9 @@ axiosClient.interceptors.response.use((response) => {
     }
     return response;
     }, (error) => {
-        if(error.response.status === 400){
-            var error_messsage = error.response.data.data;
+    var error_messsage = error.response.data.data;
+    if (typeof error.response.data.data === 'object'){
+            console.log(error.response.data.data);
             for (let key in error_messsage){
                 toast.error(error_messsage[key], {
                     position: toast.POSITION.BOTTOM_CENTER,

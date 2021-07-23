@@ -9,13 +9,11 @@ function AdminNavbar() {
     function handlelogout(){
         const logout = async () => {
             const response = await logoutAPI.logout();
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            history.push('/');
             if(response){
-                localStorage.removeItem('token');
-                localStorage.removeItem('role');
-                localStorage.removeItem('username');
-                localStorage.removeItem('userId');
-                localStorage.removeItem('userInformation');
-                history.push('/');
+             
             }
         }
         logout();

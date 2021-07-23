@@ -32,8 +32,6 @@ function Status_detail({ match }) {
         };
         fetchStatus_detail();
     },[])
-
-    //console.log(status_detail);
     return (
         <div>
             <Navbar/>

@@ -40,13 +40,9 @@ function Navbar() {
             position: toast.POSITION.BOTTOM_CENTER,
             autoClose: 1500
         });
-        history.push('/');
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        localStorage.removeItem('username');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userInformation');
-
+        history.push('/');
 
     }
     return (
@@ -54,8 +50,8 @@ function Navbar() {
             <div className="navbar">
                 <div className="navbar-container container">
                     <Link to='/home' className="navbar-logo">
-                        <img className="navbar-logo" src={logo} alt="logo" />
-                        <h2>DOnlineJudge</h2>
+                        <img className="navbar-logo__item" src={logo} alt="logo"/>
+                        <h2 className="navbar-logo__item">DOnlineJudge</h2>
                     </Link>
                     <div className="menu-icon" onClick={handleClick}>
                         {click ? <FaTimes /> : <FaBars />}

@@ -47,14 +47,10 @@ function EditProfile() {
                         position: toast.POSITION.BOTTOM_CENTER,
                         autoClose: 1500
                     });
-                    history.push('/');
                     localStorage.removeItem('token');
                     localStorage.removeItem('role');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('userId');
-                    localStorage.removeItem('userInformation');
+                    history.push('/');
                 }
-                console.log(response.status);
             }
             fetchUserData();
         } catch (error) {
