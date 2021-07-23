@@ -84,7 +84,7 @@ def judge(container, processor, i, ioput, config):
     except NotFound:
         return Status.ONF, (None, stderr), duration, -1
     return (
-        Status.AC if output.rstrip() == ioput[1].rstrip() else Status.WA,
+        Status.AC if output_matches_answer(stdout, ioput[1]) else Status.WA,
         (output, stderr),
         duration, -1,
     )
@@ -161,7 +161,8 @@ def judge_use_timeout(container, processor, i, ioput, config):
                     stdout = get_bin(
                         container, _get_io_file_path("out", processor, i, config)
                     )
-                    if stdout.rstrip() == ioput[1].rstrip():
+                    #if stdout.rstrip() == ioput[1].rstrip():  ## whitespace \r\n != \n
+                    if output_matches_answer(stdout, ioput[1]):
                         verdict = Status.AC
                     else:
                         verdict = Status.WA
@@ -181,3 +182,6 @@ def judge_use_timeout(container, processor, i, ioput, config):
     ### After retrying for 3 times
     return (Status.UE, (None, stderr), rs_cputime, rs_memused)
     
+def output_matches_answer(res, ans):
+    return res.split() == ans.split()
+
