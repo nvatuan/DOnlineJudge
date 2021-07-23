@@ -71,7 +71,7 @@
 }
 
 .nav-item:hover {
-  border-bottom: 1px solid #fff;
+  border-bottom: 3px solid #f00946;
 }
 
 .nav-links {
@@ -87,7 +87,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-right: 10px;
+  margin: 0 10px;
 
 }
 .fa-bars {
@@ -131,7 +131,7 @@
     left: 0;
     opacity: 1;
     transition: all 0.6s ease;
-    z-index: 1;
+    z-index: 10;
   }
 
   .nav-links {
