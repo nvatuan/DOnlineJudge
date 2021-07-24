@@ -41,7 +41,6 @@ function Status() {
     };
 
     // -- paginate
-    const [currentPage, setCurrentPage] = useState(1);
     const [maxPage, setMaxPage] = useState(1);
 
     //sort by id
@@ -156,7 +155,6 @@ function Status() {
 
     // ReactPaginate: handle page change
     const handlePageClick = async (props) => {
-        setCurrentPage(props.selected);
         setFilters({
             ...filters,
             page: props.selected+1,

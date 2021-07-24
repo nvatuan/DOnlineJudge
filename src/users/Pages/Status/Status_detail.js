@@ -31,7 +31,7 @@ function Status_detail({ match }) {
             setStatus_detail(response.data);
         };
         fetchStatus_detail();
-    },[])
+    },[id])
     return (
         <div>
             <Navbar/>

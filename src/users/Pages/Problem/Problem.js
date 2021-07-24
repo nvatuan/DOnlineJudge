@@ -25,21 +25,21 @@ function Problem() {
     const [sortById, setSortById] = useState(false);
     const [sortByTitle, setSortByTitle] = useState(false);
     const [sortByLevel, setSortByLevel] = useState(false);
-    //difficulty
+    // difficulty
     const difficulty = {
         "Easy": "Easy",
         "Medium": "Medium",
         "Hard": "Hard"
     }
 
-    //serach process
+    // search process
     function handleSearchForm(newValue) {
         setFilters({
             ...filters,
             contains: newValue,
         })
     }
-    //filters
+    // filters
     function handleFilterDiff(e) {
         const value = e.target.value;
         filters.filter_by.push('difficulty');
@@ -92,7 +92,7 @@ function Problem() {
     };
     // Fetching
     useEffect(() => {
-        const fectchProblems = async () => {
+        const fetchProblems = async () => {
             try {
                 const response = await oj_problemAPI.getAll(filters);
                 setProblems(response.data);
@@ -101,7 +101,7 @@ function Problem() {
                console.log('Fail to fetch status: ', error); 
             }
         }
-        fectchProblems();
+        fetchProblems();
     }, [filters])
 
     return (
@@ -136,8 +136,8 @@ function Problem() {
                                     <th onClick={() => handleSortByDisplayId()}>Display ID</th>
                                     <th onClick={() => handleSortByTitle()}>Title</th>
                                     <th onClick={() => handleSortByLevel()}>Level</th>
-                                    <th>Total</th>
-                                    <th>AC Rate</th>
+                                    <th>Tries</th>
+                                    <th>Correct</th>
                                 </tr>
                             </thead>
                             <tbody className="pages-container">

@@ -19,7 +19,7 @@ function Register(props) {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const { isRegisterSuccess, isRegisterError, errorMessage } = useSelector(userSelector);
+    const { isRegisterSuccess, isRegisterError } = useSelector(userSelector);
 
     //form handling
     const { register, handleSubmit } = useForm();
@@ -31,7 +31,7 @@ function Register(props) {
         return () => {
             dispatch(clearState());
         }
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         if (isRegisterError) {
@@ -51,7 +51,7 @@ function Register(props) {
             dispatch(clearState());
             
         }
-    }, [isRegisterError, isRegisterSuccess]);
+    }, [isRegisterError, isRegisterSuccess, dispatch, history]);
     const registerModal = (<div>
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -92,7 +92,7 @@ function Register(props) {
     </div>);
     return (
         <>
-            <Button variant="outline-dark" style={{ lineheight: '1.5' }} variant="light" onClick={handleShow}>Register</Button>
+            <Button variant="light" style={{ lineheight: '1.5' }}  onClick={handleShow}>Register</Button>
             {registerModal}
         </>
     );

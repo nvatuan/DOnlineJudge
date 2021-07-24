@@ -20,34 +20,47 @@ require('codemirror/mode/python/python.js');
 require('codemirror/mode/clike/clike.js');
 require('codemirror/mode/javascript/javascript.js');
 
+const LCSTORAGE_CODE_EDITOR_PROBLEM = "lcsCodeEditorProblem";
+
 function Problem_detail({ match }) {
     const id = match.params.id;
     const [problem, setProblem] = useState([]);
     const history = useHistory();
-    //check login
+    // check login
     const [checkLogin, setCheckLogin] = useState(false);
-    //check content
-    const [content, setContent] = useState('');
+
+    // check content
     const { register, handleSubmit, error } = useForm();
     const [sample_test, setSample_test] = useState([])
-    //
+
     const [language, setLanguage] = useState('Python3');
+
+    // Methods: Use LocalStorage to store Code editor content
+    function saveEditorContentToLocalStorage(value) {
+        localStorage.setItem(LCSTORAGE_CODE_EDITOR_PROBLEM + id, value);
+    }
+    function getEditorContentFromLocalStorage() {
+        return localStorage.getItem(LCSTORAGE_CODE_EDITOR_PROBLEM+id);
+    }
+    function removeEditorContentFromLocalStorage() {
+        localStorage.removeItem(LCSTORAGE_CODE_EDITOR_PROBLEM+id);
+    }
+
+    // ===
     function onChangeUploadFile(e) {
         let files = e.target.files;
         let reader = new FileReader();
         reader.readAsText(files[0]);
         reader.onload = (e) => {
-            setContent(e.target.result);
+            saveEditorContentToLocalStorage(e.target.result);
         }
+    }
 
-    }
-    function onChangeTextarea(editor, data, value) {
-        setContent(value);
-    }
     const onSubmit = async (data) => {
-        data.content = content;
+        data.content = getEditorContentFromLocalStorage();
         data.problem_id = parseInt(data.problem_id);
         try {
+            removeEditorContentFromLocalStorage();
             const response = await oj_statusAPI.postProblem(data);
             if (response) {
                 history.push('/status');
@@ -55,7 +68,6 @@ function Problem_detail({ match }) {
         } catch (error) {
             console.log("Fail to post problem: ", error);
         }
-
     };
 
     useEffect(() => {
@@ -64,23 +76,21 @@ function Problem_detail({ match }) {
             setProblem(response.data);
             if (JSON.stringify(response.data.sample_test) === JSON.stringify({})) {
                 setSample_test([])
-            }
-            else {
+            } else {
                 if (response.data.sample_test instanceof Array)
                     setSample_test(response.data.sample_test)
                 else
                     setSample_test([])
             }
-            //check login
+            // check login
             if (localStorage.getItem('token') !== null) setCheckLogin(true);
             else setCheckLogin(false);
+
         };
         fetchProblem_detail();
     }, [])
 
-    useEffect(() => {
-        return () => console.log('unmounting...');
-    }, [content])
+
     function getDescription(str) {
         str = String(str)
         let i = str.indexOf('Input')
@@ -116,61 +126,68 @@ function Problem_detail({ match }) {
             autoClose: 1000,
         });
     }
-    console.log(problem)
     return (
         <div>
             <Navbar />
             <div className="problem_detail-flex-container pages-container">
                 <div className="problem-main">
                     <Card className="problem-main__item">
-                        <Card.Header as="h3">{problem.title}</Card.Header>
+                        {/* <Card.Header as="h3">{problem.title}</Card.Header> */}
                         <Card.Body>
-                            <h2 className="title">{problem.title}</h2>
-                            <p className="time_limit"><strong>Time limit:</strong> {problem.time_limit} ms</p>
-                            <p className="memory_limit"><strong>Memory limit:</strong> {problem.memory_limit} MB</p>
-                            <br />
-                            <strong>Problem Description:</strong>
-                            <br />
+                            <div className="problem-description-header">
+                                <h2 className="title">{problem.title}</h2>
+                                <strong>Time limit:</strong> {problem.time_limit} ms 
+                                <br/>
+                                <strong>Memory limit:</strong> {problem.memory_limit} MB
+                                <hr/>
+                            </div>
+                            {/* END PROBLEM DESCRIPTION HEADER */}
+
+                            <div className="problem-description-body">
+                            <p className="pdbody-item">Problem Description:</p>
                             <Latex className="description">{getDescription(problem.statement)}</Latex>
-                            <br /> <br />
-                            <strong>Input Description:</strong>
-                            <br />
+
+                            <p className="pdbody-item">Input Description:</p>
                             <Latex className="input_description">{getInput_description(problem.statement)}</Latex>
-                            <br /> <br />
-                            <strong>Output Description:</strong>
-                            <br />
-                            <Latex className="output_description">{getOutput_description(problem.statement)}</Latex>
-                            <br /> <br />
-                            <strong>Sample Test:</strong>
-                            <br />
+
+                            <p className="pdbody-item">Output Description:</p>
+                            <Latex className="latex output_description">{getOutput_description(problem.statement)}</Latex>
+
+                            <p className="pdbody-item">Sample Test:</p>
+
                             {
                                 sample_test.length === 0
                                 ? <p> This problem doesn't have any Sample tests..</p>
                                 : sample_test.map((sample, idx) => {
                                     return (
                                         <div className="pd__sample" key={`${sample}-${idx}`}>
-                                            <div className="input-header">
-                                                <div>Input {idx + 1}</div>
-                                                <Form.Control id={`input_${idx}`} as="textarea" cols={150} readOnly
-                                                    className="textArea"
-                                                    value={sample.input || ""}
-                                                >
-                                                </Form.Control>
-                                                <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
-                                            </div>
+                                            <div className="sample-row">
+                                                <div className="sample-row-item">
+                                                    <div>Input {idx + 1}</div>
+                                                    <Form.Control id={`input_${idx}`} as="textarea" readOnly
+                                                        className="textArea"
+                                                        value={sample.input || ""}
+                                                    >
+                                                    </Form.Control>
+                                                    <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
+                                                </div>
 
-                                            <div className="input-header">
-                                                <div>Output {idx + 1}</div>
-                                                <Form.Control id={`output_${idx}`} as="textarea" cols={150} readOnly
-                                                    className="textArea"
-                                                    value={sample.output || ""}
-                                                >
-                                                </Form.Control>
-                                                <button className="copy-btn" onClick={() => copyToClipboard(`output_${idx}`)}>copy</button>
+                                                <div className="sample-row-item">
+                                                    <div>Output {idx + 1}</div>
+                                                    <Form.Control id={`output_${idx}`} as="textarea" readOnly
+                                                        className="textArea"
+                                                        value={sample.output || ""}
+                                                    >
+                                                    </Form.Control>
+                                                    <button className="copy-btn" onClick={() => copyToClipboard(`output_${idx}`)}>copy</button>
+                                                </div>
                                             </div>
                                         </div>
                                     );
                                 })}
+                            </div> 
+                            {/* END PROBLEM DESCRIPTION BODY */}
+
                         </Card.Body>
                     </Card>
                     <Card className="problem-main__item">
@@ -179,7 +196,9 @@ function Problem_detail({ match }) {
                                 <div className='submit-nav'>
                                     <div className="dropdown-languege submit-nav__item">
                                         <label htmlFor="languege">Language: </label>
-                                        <Form.Control as="select" size="sm" custom {...register("language")} onChange={(e) => setLanguage(e.target.value)}>
+                                        <Form.Control as="select" size="sm" custom {...register("language")}
+                                            onChange={(e) => setLanguage(e.target.value)}
+                                        >
                                             <option value="Python3">Python3</option>
                                             <option value="Python2">Python2</option>
                                             <option value="Java">Java</option>
@@ -206,8 +225,8 @@ function Problem_detail({ match }) {
                                 </div>
                                 <div className="editor-container">
                                     <CodeMirror
-                                        value={content}
-                                        onChange={(editor, data, value) => { onChangeTextarea(editor, data, value) }}
+                                        value={getEditorContentFromLocalStorage()}
+                                        onChange={(editor, data, value) => { saveEditorContentToLocalStorage(value) }}
                                         options={{
                                             matchBrackets: true,
                                             styleActiveLine: true,
@@ -220,6 +239,7 @@ function Problem_detail({ match }) {
                                                 'Cpp': 'text/x-c++src',
                                             }[language],
                                             lineNumbers: true,
+                                            lineWrapping: false,
                                         }}
                                     />
                                 </div>
@@ -250,12 +270,14 @@ function Problem_detail({ match }) {
                     </Card>
                     <div className="problem-information">
                         <Card className="right-column__item">
-                            <Card.Header className="problem-information_header"><GrCircleInformation /><p> Information</p></Card.Header>
+                            <Card.Header className="problem-information_header"> 
+                                <div className="title"><GrCircleInformation/><span>Information</span></div>
+                            </Card.Header>
                             <ListGroup variant="flush">
-                                <ListGroup.Item className="problem-information__item">
+                                {/* <ListGroup.Item className="problem-information__item">
                                     <p>Id</p>
                                     <p>{problem.id}</p>
-                                </ListGroup.Item>
+                                </ListGroup.Item> */}
                                 <ListGroup.Item className="problem-information__item">
                                     <p>Time Limit</p>
                                     <p>{problem.time_limit} ms</p>

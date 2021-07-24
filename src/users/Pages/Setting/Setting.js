@@ -41,7 +41,7 @@ function Setting() {
         fetchUserData();
         return () => {
         }
-    }, [userData.profile_pic])
+    }, [userData.profile_pic, selectFile])
     return (
         <div>
             <Navbar />
