@@ -4,10 +4,12 @@ import { Card, Form } from 'react-bootstrap';
 import './Problem.scss';
 import oj_problemAPI from '../../../api/oj_problemAPI';
 import { Link } from 'react-router-dom';
-import Search from '../../Components/Search';
 
 import '../../Components/Pagination/Paginate.css';
 import ReactPaginate from 'react-paginate';
+import Collapsible from 'react-collapsible';
+import { BsChevronDown } from "react-icons/bs"; //react-icon
+import {Button} from 'react-bootstrap';
 
 function Problem() {
     const [problems, setProblems] = useState([])
@@ -18,85 +20,43 @@ function Problem() {
     });
 
     // -- paginate
-    const [currentPage, setCurrentPage] = useState(1);
     const [maxPage, setMaxPage] = useState(1);
 
     // -- sorting
-    const [sortById, setSortById] = useState(false);
-    const [sortByTitle, setSortByTitle] = useState(false);
-    const [sortByLevel, setSortByLevel] = useState(false);
-    // difficulty
-    const difficulty = {
-        "Easy": "Easy",
-        "Medium": "Medium",
-        "Hard": "Hard"
-    }
-
-    // search process
-    function handleSearchForm(newValue) {
-        setFilters({
-            ...filters,
-            contains: newValue,
-        })
-    }
-    // filters
-    function handleFilterDiff(e) {
-        const value = e.target.value;
-        filters.filter_by.push('difficulty');
-        if (value === '') {
-            filters.filter_by = filters.filter_by.filter((item) => item !== 'difficulty');
-            setFilters({
-                ...filters,
-                filter_by: filters.filter_by,
-                difficulty: '',
-            })
-        }
-        else {
-            setFilters({
-                ...filters,
-                difficulty: value,
-
-            })
+    const [sortBy, setSortBy] = useState('');
+    const setSortByCriteria = (crit) => {
+        if (sortBy === '') setSortBy(crit);
+        else
+        if (sortBy.charAt[0] === '-') {
+            setSortBy(crit);
+        } else {
+            if (sortBy === crit) setSortBy('-'+crit);
+            else setSortBy(crit);
         }
     }
-    //sort 
-    const handleSortByDisplayId = () =>{
-        setSortById(!sortById)
+    // Update filters when sortBy is changed
+    useEffect(() => {
         setFilters({
             ...filters,
-            sort_by: sortById ? '-display_id' : 'display_id',
+            sort_by: sortBy
         })
-    }
-    const handleSortByTitle = () => {
-        setSortByTitle(!sortByTitle);
-        setFilters({
-            ...filters,
-            sort_by: sortByTitle ? '-title' : 'title',
-        })
-    };
-    const handleSortByLevel = () => {
-        setSortByLevel(!sortByLevel);
-        setFilters({
-            ...filters,
-        sort_by: sortByLevel ? '-difficulty' : 'difficulty',
-        })
-    }
+    }, [sortBy])
 
-    // ReactPaginate: handle page change
+    // -- ReactPaginate: handle page change
     const handlePageClick = async (props) => {
-        setCurrentPage(props.selected);
         setFilters({
             ...filters,
             page: props.selected+1,
         })
     };
-    // Fetching
+    // Fetching data when filters is changed
     useEffect(() => {
         const fetchProblems = async () => {
             try {
                 const response = await oj_problemAPI.getAll(filters);
                 setProblems(response.data);
                 setMaxPage(response.maxpage);
+                console.log(response);
             } catch (error) {
                console.log('Fail to fetch status: ', error); 
             }
@@ -104,52 +64,101 @@ function Problem() {
         fetchProblems();
     }, [filters])
 
+    // -- Filtering
+    const [searchContent, setSearchContent] = useState('')
+    const [searchAuthor, setSearchAuthor] = useState('')
+    const [searchDifficulty, setSearchDifficulty] = useState('')
+    // -- handleFilterFormSubmit : Form Submit button
+    const handleFilterFormSubmit = (e) => {
+        if (e !== undefined) e.preventDefault()
+        let newFilter = {...filters, filter_by:[]};
+        delete newFilter['contains']
+        delete newFilter['author_name']
+        delete newFilter['difficulty']
+
+        if (searchContent !== '') {
+            newFilter = {...newFilter, contains: searchContent}
+        }
+        if (searchAuthor !== '') {
+            newFilter.filter_by.push('author_name')
+            newFilter = {...newFilter, author_name: searchAuthor}
+        } 
+        if (searchDifficulty !== '') {
+            newFilter.filter_by.push('difficulty')
+            newFilter = {...newFilter, difficulty: searchDifficulty}
+        }
+        setFilters(newFilter);
+    }
+    // -- handleFilterFormSubmit : Form Submit button
+    const handleFilterFormReset = (e) => {
+        setSearchContent(''); setSearchAuthor(''); setSearchDifficulty('');
+        let newFilter = {...filters, filter_by:[]};
+        delete newFilter['contains']
+        delete newFilter['author_name']
+        delete newFilter['difficulty']
+        setFilters(newFilter);
+    }
+
     return (
         <div>
             <Navbar />
             <div className="problems-container pages-container">
+                <Collapsible trigger={["Search/Filter", <BsChevronDown/>]} easing='ease'>
+                    <Form className="filter_form">
+                        <div className="filter_form_items">
+                            <Form.Group className="search-content">
+                                <Form.Label>Search content</Form.Label>
+                                <Form.Control type="text" placeholder="Content" onChange={(e)=>{setSearchContent(e.target.value)}}/>
+                            </Form.Group>
+
+                            <Form.Group className="search-authorname">
+                                <Form.Label>Search for author</Form.Label>
+                                <Form.Control type="text" placeholder="Author name" onChange={(e)=>{setSearchAuthor(e.target.value)}}/>
+                            </Form.Group>
+
+                            <Form.Group className="filter-difficulty">
+                                <Form.Label>Difficulty</Form.Label>
+                                <Form.Control as="select" className="diff_filter_by" onChange={(e)=>{setSearchDifficulty(e.target.value)}}>
+                                    <option value="">All</option>
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                </Form.Control>
+                            </Form.Group>
+                        </div>
+                        <Button variant="primary" type="submit" onClick={handleFilterFormSubmit}>Submit</Button>
+                        <Button variant="light" type="reset" onClick={handleFilterFormReset}>Reset</Button>
+                    </Form>
+                </Collapsible>
                 <Card>
                     <Card.Header as="h3" className="problem-header">
                         Problem
-                    <div className="problem-feartures">
-                            <div className="problem-feartures__items">
-                                <Search onSubmit={handleSearchForm} />
-                            </div>
-                            <div className="problem-feartures__items">
-                                <p>Difficulty</p>
-                                <Form className="filter_by" onChange={(e) => { handleFilterDiff(e)}}>
-                                    <Form.Control as="select" className="filter_by">
-                                        <option value="">All</option>
-                                        <option value="Easy">Easy</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Hard">Hard</option>
-                                    </Form.Control>
-                                </Form>
-                            </div>
-
-                        </div>
                     </Card.Header>
                     <Card.Body >
                         < table >
                             <thead>
                                 <tr>
-                                    <th onClick={() => handleSortByDisplayId()}>Display ID</th>
-                                    <th onClick={() => handleSortByTitle()}>Title</th>
-                                    <th onClick={() => handleSortByLevel()}>Level</th>
-                                    <th>Tries</th>
-                                    <th>Correct</th>
+                                    <th onClick={() => setSortByCriteria('display_id')}>Display ID</th>
+                                    <th onClick={() => setSortByCriteria('title')}>Title</th>
+                                    <th onClick={() => setSortByCriteria('author_name')}>Author</th>
+                                    <th onClick={() => setSortByCriteria('difficulty')}>Level</th>
+                                    <th onClick={() => setSortByCriteria('total_submission')}>Tries</th>
+                                    <th onClick={() => setSortByCriteria('correct_submission')}>Correct</th>
                                 </tr>
                             </thead>
                             <tbody className="pages-container">
                                 {
-                                    problems.length > 0 ? (
+                                    problems.length === 0 
+                                    ? <p className='empty-result-msg'> Nothing to show.. </p>
+                                    : (
                                         problems.map((problem) => (
                                             <tr key={problem.id}>
                                                 <td>{problem.display_id}</td>
                                                 <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
+                                                <td>{problem.author_name}</td>
                                                 <td>
                                                     <div className="table-cell">
-                                                        <div className={`difficulty-container ${difficulty[problem.difficulty]}`}>
+                                                        <div className={`difficulty-container ${problem.difficulty}`}>
                                                             <div className="difficulty-text">
                                                                 {problem.difficulty}
                                                             </div>
@@ -160,25 +169,27 @@ function Problem() {
                                                 <td>{problem.correct_submission}</td>
                                             </tr>
                                         ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={5}>Nothing</td>
-                                        </tr>
                                     )
                                 }
                             </tbody>
                         </table >
 
-                        <div className='pagination-container'> <ReactPaginate 
-                            pageCount={maxPage}
-                            pageRangeDisplayed={5}
-                            marginPagesDisplayed={2}
-                            onPageChange={handlePageClick}
-                            containerClassName={'pagination'}
-                            activeClassName={'active'}
-                            breakLabel={'...'}
-                            breakClassName={'break-me'}
-                        ></ReactPaginate> </div>
+                        <div className='pagination-container'> 
+                            {
+                                maxPage === 0
+                                ? <></>
+                                : <ReactPaginate 
+                                    pageCount={maxPage}
+                                    pageRangeDisplayed={5}
+                                    marginPagesDisplayed={2}
+                                    onPageChange={handlePageClick}
+                                    containerClassName={'pagination'}
+                                    activeClassName={'active'}
+                                    breakLabel={'...'}
+                                    breakClassName={'break-me'}>
+                                </ReactPaginate> 
+                            }
+                        </div>
                     </Card.Body>
                 </Card>
             </div>

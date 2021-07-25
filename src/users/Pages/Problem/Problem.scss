@@ -3,16 +3,21 @@
     width: 100%;
     background-color: #eee;
 
+    .empty-result-msg {
+        margin: 15px;
+        font-style: italic;
+    }
+    
     .card-container {
         width: 100%;
     }
 }
-.problem-header{
-    display: flex;
+.problem-header {
+    display: inline-flex;
     justify-content: space-between;
-    .problem-feartures{
+    .problem-features {
         display: flex;
-        .problem-feartures__items{
+        .problem-features__items {
             display: flex;
             padding: 0 10px;
             width: 50%;
@@ -22,8 +27,26 @@
                 font-weight: 350;
             }
         }
-
+    }
 }
+
+.Collapsible {
+    width: 100%;
+    .filter_form {
+        .filter_form_items {
+            padding: 10px 10px 0 10px;
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            width: 100%;
+
+        }
+        button {
+            float: right;
+            width: 10%;
+            margin: 0 10px 10px 0;
+        }
+    }
 }
 
 .difficulty-container{

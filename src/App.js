@@ -52,9 +52,6 @@ function App() {
           <PrivateRouteSAdmin exact component={EditUser} path='/admin/user/:id' />
           <PrivateRouteSAdmin exact component={EditUser} path='/admin/user/new' />
 
-
-
-
           <Route path='/404' component={NotFound}></Route>
           <Route component={NotFound}></Route>
         </Switch>

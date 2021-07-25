@@ -22,7 +22,16 @@
             width: 100%;
             margin: auto;
         }
+        p {
+            margin-left: 15px;
+            margin-bottom: 0px;
+            font-style: italic;
+        }
     }
+}
+.news-features {
+    display: flex;
+    flex-direction: row;
 }
 
 .announcement-header{

@@ -9,6 +9,7 @@ import Search from '../../Components/Search';
 
 import ReactPaginate from 'react-paginate';
 import '../../Components/Pagination/Paginate.css'
+import TextFieldForm from '../../Components/TextFieldForm';
 
 function News() {
     // ## useState: announcement
@@ -35,12 +36,10 @@ function News() {
     }, [filters])
 
     // ## useState: paginate
-    const [currentPage, setCurrentPage] = useState(1);
     const [maxPage, setMaxPage] = useState(1);
 
     // Paginate: Page click handler
     const handlePageClick = async (props) => {
-        setCurrentPage(props.selected);
         setFilters({
             ...filters,
             page: props.selected+1,
@@ -48,10 +47,17 @@ function News() {
     };
 
     // search process
-    function handleSearchForm(newValue) {
+    function handleSearchContentForm(newValue) {
         setFilters({
             ...filters,
             contains: newValue,
+        })
+    };
+    function handleSearchAuthorForm(newValue) {
+        setFilters({
+            ...filters,
+            filter_by: ['author_name'],
+            author_name: newValue,
         })
     };
 
@@ -63,16 +69,21 @@ function News() {
                     <Card className="news-card">
                         <Card.Header as="h3" className="announcement-header">
                             Annoucement
-                            <div className="news-feartures">
-                                <div className="news-feartures__items">
-                                    <Search onSubmit={handleSearchForm} />
+                            <div className="news-features">
+                                <div className="news-features__items">
+                                    <Search onSubmit={handleSearchContentForm} />
+                                </div>
+                                <div className="news-features__items">
+                                    <TextFieldForm onSubmit={handleSearchAuthorForm} placeHolder={"Author.."}/>
                                 </div>
                             </div>
                         </Card.Header>
                         <Card.Body>
                             <div className="card-container">
                                 {
-                                    announcement.map(annou => {
+                                    announcement.length === 0 
+                                    ? <p>Nothing to show..</p>
+                                    : announcement.map(annou => {
                                         return <Announcement title={annou.title}
                                             content={annou.content}
                                             creation_time={annou.creation_time}
@@ -81,16 +92,21 @@ function News() {
                                     })
                                 }
                             </div>
-                            <div className='pagination-container'> <ReactPaginate 
-                                pageCount={maxPage}
-                                pageRangeDisplayed={5}
-                                marginPagesDisplayed={2}
-                                onPageChange={handlePageClick}
-                                containerClassName={'pagination'}
-                                activeClassName={'active'}
-                                breakLabel={'...'}
-                                breakClassName={'break-me'}
-                            ></ReactPaginate> </div>
+                            <div className='pagination-container'>
+                            {
+                                maxPage === 0
+                                ? <></>
+                                : <ReactPaginate 
+                                    pageCount={maxPage}
+                                    pageRangeDisplayed={5}
+                                    marginPagesDisplayed={2}
+                                    onPageChange={handlePageClick}
+                                    containerClassName={'pagination'}
+                                    activeClassName={'active'}
+                                    breakLabel={'...'}
+                                    breakClassName={'break-me'}
+                                ></ReactPaginate> 
+                            }</div>
                         </Card.Body>
                     </Card>
                 </div>

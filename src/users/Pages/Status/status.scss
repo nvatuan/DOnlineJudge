@@ -17,10 +17,11 @@
     margin: 0 8px;
     
 }
-
-.sort_by_day{
-    width: 70%;
+.empty-result-msg {
+    margin: 15px;
+    font-style: italic;
 }
+
 .table-cell{
     padding-left: 10px;
     overflow: hidden;
@@ -66,4 +67,7 @@
 }
 .Judging{
     background: #23272b;
+}
+th, td {
+    text-align: center;
 }
