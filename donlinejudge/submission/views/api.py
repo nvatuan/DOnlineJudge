@@ -269,6 +269,10 @@ class JudgeSubmissionTask:
             raise
         finally:
             self.prob.statistic_info[self.sub.verdict] = self.prob.statistic_info.get(self.sub.verdict, 0) + 1
+            self.prob.total_submission += 1
+            if self.sub.verdict == SubmissionVerdict.AC:
+                 self.prob.correct_submission += 1
+
             self.prob.save()
             if self.jserver != None:
                 self.jserver.pending_tasks -= 1

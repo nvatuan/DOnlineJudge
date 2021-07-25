@@ -41,7 +41,7 @@ class ProblemAPI(APIView):
                 problem_ser_data = ProblemSerializer(problem, many=True).data
                 problem_ser_data = sdr.auto_apply(problem_ser_data, request)
                 problem_ser_data = paginate(problem_ser_data, request)
-                return response_ok(ProblemSerializer(problem, many=True).data)
+                return response_ok(problem_ser_data)
         except Exception:
             return response_bad_request("Request denied.")
 

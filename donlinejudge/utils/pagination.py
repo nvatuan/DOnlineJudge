@@ -3,8 +3,6 @@ def get_page_size():
 	return PAGINATION_PAGE_SIZE
 
 def paginate(listobj, request):
-	if len(listobj) == 0:
-                return listobj
 	page_params = request.query_params.getlist("page", [])
 	if len(page_params) == 0:
 		return get_page(listobj, 1)
@@ -30,7 +28,11 @@ def get_page(listobj, page):
 
 	max_pages = (total + PAGESIZE - 1) // PAGESIZE
 	if page > max_pages:
-		raise IndexError(f"Page number {page} exceeds max pages")
+            return {
+                    'data': [],
+                    'total': 0,
+                    'maxpage': max_pages
+            }
 	
 	return {
 		'data': listobj[(page-1)*PAGESIZE:min(page*PAGESIZE, total)],

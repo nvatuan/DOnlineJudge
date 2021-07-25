@@ -5,7 +5,7 @@ from rest_framework import status
 def response_ok(message):
     resp = {}
     if isinstance(message, dict):
-        if message.get("data"):
+        if message.get("data") != None:
             resp["data"] = message.get("data", "")
             for k, v in message.items():
                 resp[k] = v
