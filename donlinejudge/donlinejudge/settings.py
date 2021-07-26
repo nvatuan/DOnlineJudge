@@ -26,7 +26,6 @@ LOCAL_APPS = [
     'submission',
     'problem',
     'judgeserver',
-    'authenticate',
 ]
 
 INSTALLED_APPS = [
@@ -140,10 +139,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 AUTH_USER_MODEL = 'accounts.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #'rest_framework.authentication.TokenAuthentication',
-        'authenticate.models.ExpiringTokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        #'rest_framework.authentication.BasicAuthentication', #
     ]
 }
 
@@ -169,4 +167,3 @@ Q_CLUSTER = {
 #== User's defined global variables
 PAGINATION_PAGE_SIZE = 10
 OUTPUT_MAX_LENGTH = 255
-TOKEN_EXPIRE_AFTER_SECONDS = 14400
