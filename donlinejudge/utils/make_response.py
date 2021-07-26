@@ -27,6 +27,12 @@ def response_created(message):
     resp["error"] = "none"
     return Response(resp, status=status.HTTP_201_CREATED)
 
+def response_accepted(message):
+    resp = {}
+    resp["data"] = message
+    resp["error"] = "none"
+    return Response(resp, status=status.HTTP_202_ACCEPTED)
+
 def response_no_content(message):
     resp = {}
     resp["data"] = message
