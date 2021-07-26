@@ -17,7 +17,7 @@ import logging
 from PIL import Image
 
 # Project's
-from donlinejudge.settings import MEDIA_ROOT
+from donlinejudge.settings import MEDIA_ROOT, TOKEN_EXPIRE_AFTER_SECONDS
 from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer, ChangePasswordSerializer
 from accounts.decorators import unauthenticated_user, login_required, super_admin_required
 from accounts.models import *
@@ -28,6 +28,7 @@ from utils.make_response import *
 import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
 from utils.validators import ImageExtensionValidator as IEV
+from utils.time import utc_now
 
 """ accounts.management API
     - RegisterAPI
@@ -78,24 +79,33 @@ class RegisterAPI(APIView):
 
 class LoginAPI(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
-    @unauthenticated_user
+    #@unauthenticated_user # not required to logout, refresh token
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if request.data.get("username").strip() == "": 
             return response_bad_request({"username":"This field is required."})
         if request.data.get("password").strip() == "":
             return response_bad_request({"password":"This field is required."})
+        
         if serializer.is_valid():
             user = serializer.validated_data
+
+            if request.user.is_authenticated:
+                if user != request.user:
+                    return response_bad_request("Cannot login as another user if you are already logged on")
+                request.user.auth_token.delete()
+                logout(request)
+            
             login(request, user)
             user_data = User.objects.get(username=request.data['username'])
             token, created = Token.objects.get_or_create(user=user_data)
             
             return response_ok({
                 "user": UserSerializer(user, context=self.get_serializer_context()).data,
-                "token": str(token)
+                "token": str(token),
+                "TTL": int(TOKEN_EXPIRE_AFTER_SECONDS - (utc_now() - token.created).total_seconds()+0.5),
             })
         else:
             return response_bad_request({"username":"Username or Password is incorrect. Try again."})
