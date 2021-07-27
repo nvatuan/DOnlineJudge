@@ -100,7 +100,14 @@ class LoginAPI(generics.GenericAPIView):
             
             login(request, user)
             user_data = User.objects.get(username=request.data['username'])
-            token, created = Token.objects.get_or_create(user=user_data)
+            try: # Delete the Token if it exists
+                token = Token.objects.get(user=user_data)
+                token.delete()
+            except Token.DoesNotExist:
+                pass
+            except:
+                raise
+            token = Token.objects.create(user=user_data) # Recreate Token for the user who is logging in
             
             return response_ok({
                 "user": UserSerializer(user, context=self.get_serializer_context()).data,

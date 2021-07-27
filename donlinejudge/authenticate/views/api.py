@@ -15,15 +15,6 @@ class TestTokenAPI(APIView):
 	def get(self, request):
 		if request.auth == None:
 			return response_bad_request("No Authorization Token is Found in Headers")
-		model = self.get_model()
-
-		try:
-			token = model.objects.get(key=key)
-		except model.DoesNotExist:
-			return response_bad_request("Invalid Token")
-
-		if not token.user.is_active:
-			return response_bad_request('User is Inactive or Deleted')
 
 		token = request.auth
 		ttl=int(TOKEN_EXPIRE_AFTER_SECONDS - (utc_now() - token.created).total_seconds()+0.5)
