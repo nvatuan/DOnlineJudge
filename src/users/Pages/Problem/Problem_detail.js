@@ -90,7 +90,6 @@ function Problem_detail({ match }) {
         fetchProblem_detail();
     }, [])
 
-
     function getDescription(str) {
         str = String(str)
         let i = str.indexOf('Input')
@@ -262,7 +261,7 @@ function Problem_detail({ match }) {
                 <div className="right-column">
                     <Card className="submit-card right-column__item">
                         <Card.Body>
-                            <Link to={`/status`} className='to_statusPage_card'>
+                            <Link to={`/status/?filter_by=problem&problem=${problem.title}`} className='to_statusPage_card'>
                                 <AiOutlineAlignLeft className="to_statusPage_card-item " />
                                 <p>Submissions</p>
                             </Link>

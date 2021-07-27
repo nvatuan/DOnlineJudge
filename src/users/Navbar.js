@@ -6,15 +6,14 @@ import { DropdownButton, Dropdown } from 'react-bootstrap';
 import Login from './Pages/Login/Login';
 import './Navbar.css';
 import { useHistory } from 'react-router-dom';
-import { logoutUser } from './UserSlice';
-import { useDispatch } from 'react-redux';
+import { logoutUser, userSelector } from './UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Register from './Pages/Register/Register';
 import logo from '../public/Logo_dhbkdn.jpg'
-import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 function Navbar() {
     const [check, setCheck] = useState(false);
-
+    const { isSuccess } = useSelector(userSelector);
     useEffect(() => {
         if (localStorage.getItem('token') !== null) setCheck(true);
         else setCheck(false);
@@ -36,14 +35,14 @@ function Navbar() {
     const history = useHistory();
     const onLogout = () => {
         dispatch(logoutUser());
-        toast.success('goodbye!', {
-            position: toast.POSITION.BOTTOM_CENTER,
-            autoClose: 1500
-        });
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        history.push('/');
+        if(isSuccess){
+            toast.success('goodbye!', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 1500
+            });
+            history.push("/");
 
+        }
     }
     return (
         <>

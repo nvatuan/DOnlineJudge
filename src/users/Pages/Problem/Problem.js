@@ -56,7 +56,6 @@ function Problem() {
                 const response = await oj_problemAPI.getAll(filters);
                 setProblems(response.data);
                 setMaxPage(response.maxpage);
-                console.log(response);
             } catch (error) {
                console.log('Fail to fetch status: ', error); 
             }

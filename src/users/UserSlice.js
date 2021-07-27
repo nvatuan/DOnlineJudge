@@ -42,6 +42,7 @@ export const logoutUser = createAsyncThunk(
         try {
             const response = await logoutAPI.logout();
             if(response){
+                localStorage.removeItem('token');
                 localStorage.removeItem('role');
                 localStorage.removeItem('userInformation');
             }
@@ -63,6 +64,7 @@ export const userSlice = createSlice({
         isRegisterError: false,
         isFeching: false,
         errorMessage: '',
+
     },
     reducers:{
         clearState: (state) => {

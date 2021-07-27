@@ -6,21 +6,27 @@ import Navbar from '../../Navbar';
 import './status.scss';
 import queryString from 'query-string';
 import ReactPaginate from 'react-paginate';
-
 import '../../Components/Pagination/Paginate.css';
-
 import Collapsible from 'react-collapsible';
 import { BsChevronDown } from "react-icons/bs"; //react-icon
 import {Button} from 'react-bootstrap';
-
 function Status() {
     let href = window.location.href;
-    const id = queryString.parse(href, { parseNumbers: true })
+    var url = new URL(href);
+    var problem_title = url.searchParams.get('problem');
+    var username = url.searchParams.get('username');
     const [status, setStatus] = useState([]);
-    const [filters, setFilters] = useState({
-        sort_by: '-submit_time',
-        filter_by: [],
-        page: 1,
+    const [filters, setFilters] = useState(() => {
+        let filter = []
+        if(username !== null) filter.push('author_name');
+        if(problem_title !== null) filter.push('problem_title');
+        return {
+            sort_by: '-submit_time',
+            filter_by: filter,
+            author_name: username,
+            problem_title: problem_title,
+            page: 1,
+        }
     })
 
     const result = {
