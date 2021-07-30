@@ -21,7 +21,13 @@ axiosClient.interceptors.response.use((response) => {
         return response.data;
     }
     return response;
+    
     }, (error) => {
+    if (error.response.status === 401){
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userInformation');
+    }
     var error_messsage = error.response.data.data;
     if (typeof error.response.data.data === 'object'){
             console.log(error.response.data.data);

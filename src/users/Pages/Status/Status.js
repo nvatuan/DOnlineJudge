@@ -21,7 +21,7 @@ function Status() {
         if(username !== null) filter.push('author_name');
         if(problem_title !== null) filter.push('problem_title');
         return {
-            sort_by: '-submit_time',
+            // sort_by: '-submit_time',
             filter_by: filter,
             author_name: username,
             problem_title: problem_title,
@@ -44,7 +44,7 @@ function Status() {
     const [maxPage, setMaxPage] = useState(1);
 
     // -- sorting
-    const [sortBy, setSortBy] = useState('');
+    const [sortBy, setSortBy] = useState('-submit_time');
     const setSortByCriteria = (crit) => {
         if (sortBy === '') setSortBy(crit);
         else
@@ -61,7 +61,6 @@ function Status() {
             sort_by: sortBy
         })
     }, [sortBy])
-
     // ReactPaginate: handle page change
     const handlePageClick = async (props) => {
         setFilters({
