@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom';
 import sidebarImage from './sidebar.png';
 import './Sidebar.scss';
 import { AiFillAppstore, AiOutlineBars, AiOutlineCode, AiFillHome } from 'react-icons/ai';
+import {BiServer} from 'react-icons/bi'
+
 import Logo from '../public/logo.jpg'
+import JudgeServer from './JudgeServer/JudgeServer';
+
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(() => {
     if (window.innerWidth <= 960) {
@@ -61,6 +65,14 @@ function Sidebar() {
               <Link to='/admin/problem/create' />
             </MenuItem>
           </SubMenu>
+
+          <SubMenu title="Judge Server" icon={<BiServer/>}>
+            <MenuItem>
+              Server List
+              <Link to="/admin/judgeserver" />
+            </MenuItem>
+          </SubMenu>
+
           <MenuItem icon={<AiFillHome />} >
             Back to home
             <Link to='/'/>

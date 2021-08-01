@@ -25,6 +25,8 @@ import Status_detail from './users/Pages/Status/Status_detail';
 import Setting from './users/Pages/Setting/Setting';
 import EditUser from './admin/General/User/EditUser'
 import NotFound from './users/Pages/NotFound/NotFound';
+import JudgeServer from './admin/JudgeServer/JudgeServer';
+import JudgeServerDetail from './admin/JudgeServer/JudgeServerDetail';
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
           <PrivateRoute exact component={CreateProblem} path='/admin/problem/:id' />
           <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/:id' />
           <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/new' />
+          <PrivateRoute exact component={JudgeServer} path='/admin/judgeserver' />
+          <PrivateRoute exact component={JudgeServerDetail} path='/admin/judgeserver/:id' />
           <PrivateRouteSAdmin exact component={User} path='/admin/user' />
           <PrivateRouteSAdmin exact component={EditUser} path='/admin/user/:id' />
           <PrivateRouteSAdmin exact component={EditUser} path='/admin/user/new' />
