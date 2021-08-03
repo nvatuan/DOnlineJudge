@@ -38,7 +38,7 @@ const admin_announcementAPI = {
             }
         }
         const url = `admin/announcement/${data.id}/`;
-        return axiosClient.put(url, data.formData ,config)
+        return axiosClient.put(url, data.formData, config)
     },
     createAnnouncemt: (data) => {
         const token = localStorage.getItem('token');

@@ -3,14 +3,36 @@ import { ListGroup, Button, Form } from 'react-bootstrap';
 import './Createproblem.scss';
 import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
-import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom';
+import {Card} from 'react-bootstrap'
+import {AiFillDelete} from 'react-icons/ai'
+import {GrAdd} from 'react-icons/gr'
+import {FiSave} from 'react-icons/fi'
 import admin_problemAPI from '../../../api/admin_problemAPI';
 
+import { WithContext as ReactTags } from 'react-tag-input';
+import { toast } from 'react-toastify';
+
+function isAlphaNumeric(str) {
+    var code, i, len;
+
+    for (i = 0, len = str.length; i < len; i++) {
+        code = str.charCodeAt(i);
+        if (!(code > 47 && code < 58) && // numeric (0-9)
+            !(code > 96 && code < 123)) { // lower alpha (a-z)
+            return false;
+        }
+    }
+    return true;
+};
 
 function Createproblem({ match }) {
-    const { handleSubmit } = useForm();
     const id = match.params.id;
+    var cardTitle = "Create new Problem";
+    if (id !== undefined) {
+        cardTitle = "Edit Problem#"+id
+    }
+
     const [display_id, setDisplay_id] = useState(() => {
         const initDisplay_id = localStorage.getItem('display_id') || '';
         return initDisplay_id;
@@ -95,29 +117,61 @@ function Createproblem({ match }) {
         setDifficulty(value);
         localStorage.setItem('difficulty', value);
     }
-    const onSubmit = async (formData) => {
-        formData.id = id;
-        formData.display_id = display_id;
-        formData.title = title;
-        formData.is_visible = true;
-        formData.time_limit = time_limit;
-        formData.memory_limit = memory_limit;
-        formData.difficulty = difficulty;
-        formData.tags = [1, 2];
-        formData.statement = description + '\nInput\n' + input_description + '\nOutput\n' + output_description;
-        formData.sample_test = sample_test;
-        if (!isNaN(id)) {
+
+    /** Hidden test zip file */
+    const [currentTestZipFile, setCurrentTestZipFile] = useState(null)
+    const [hiddenTestZip, setHiddenTestZip] = useState(null)
+    const handleFileChange = (e) => {
+        setHiddenTestZip(e.target.files[0])
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData()
+        if (id !== undefined)
+            formData.append('id', id);
+        formData.append('display_id', display_id);
+        formData.append('title', title);
+        formData.append('is_visible', true);
+        formData.append('time_limit', time_limit);
+        formData.append('memory_limit', memory_limit);
+        formData.append('difficulty', difficulty);
+        formData.append('statement', description + '\nInput\n' + input_description + '\nOutput\n' + output_description);
+
+        // Prepare tag
+        var taggings = []
+        tags.forEach((tag) => {
+            taggings.push(tag.tag_name)
+        });
+        formData.append('tags', JSON.stringify(taggings));
+
+        // Prepare sample_test
+        var sendingSampleTests = [];
+        console.log(sample_test)
+        sample_test.forEach((sample) => {
+            console.log(sample)
+            sendingSampleTests.push(
+                {"input": sample.input, "output": sample.output}
+            )
+        })
+        formData.append('sample_test', JSON.stringify(sendingSampleTests));
+
+        if (hiddenTestZip !== null) // A file is selected
+            formData.append('test_zip', hiddenTestZip);
+
+        if (!isNaN(id)) { // PUT to /problem
             try {
                 const response = await admin_problemAPI.updateById({ formData, id });
 
-                if (response) {
-                    history.push('/admin/problem/');
-                }
+                console.log('Update:', response)
+                //if (response) {
+                //    history.push('/admin/problem/');
+                //}
             } catch (error) {
                 console.log("Fail to put problem: ", error);
             }
-        }
-        else {
+        } else { // POST to /problem
             try {
                 const response = await admin_problemAPI.createProblem(formData);
                 if (response) {
@@ -165,20 +219,41 @@ function Createproblem({ match }) {
                     setMemory_limit(response.data.memory_limit)
                     setVisible(response.data.visible)
                     setDifficulty(response.data.difficulty)
-                    if (JSON.stringify(response.data.sample_test) === JSON.stringify({})) {
+                    setCurrentTestZipFile(response.data.test_zip)
+
+                    // set tags
+                    var tagIDs = response.data.tags;
+                    var currTags = []
+                    tagIDs.forEach((tag) => {
+                        currTags.push({id: tag.tag_name, tag_name: tag.tag_name})
+                    })
+                    setTags(currTags)
+
+                    // set sample_test
+                    if (Array.isArray(response.data.sample_test)) {
+                        setSample_test(response.data.sample_test)
+                    } else {
                         setSample_test([])
                     }
-                    else {
-                        setSample_test(response.data.sample_test)
-                    }
-
-
                 } catch (error) {
                     console.log("fail to alter problem: ", error);
                 }
             };
             fetchProblem();
         }
+        const fetchProblemTag = async() => {
+            try {
+                const response = await admin_problemAPI.getAllProblemTags();
+                var tg = []
+                response.data.forEach((suggestion) => {
+                    tg.push({...suggestion, id: String(suggestion.id)})
+                })
+                setTagSuggestions(tg)
+            } catch (error) {
+                console.log("fail to alter problem: ", error);
+            }
+        }
+        fetchProblemTag()
     }, [])
 
     function handleInput(i, event) {
@@ -203,198 +278,195 @@ function Createproblem({ match }) {
         values.splice(i, 1);
         setSample_test(values);
     }
+
+    const [tags, setTags] = useState([])
+    const [tagSuggestions, setTagSuggestions] = useState([])
+    const handleTagDelete = (i) => {
+        setTags(tags.filter((tag, index) => index !== i));
+    };
+    
+    const handleTagAddition = (tag) => {
+        tag = {...tag, tag_name: tag.tag_name.toLowerCase()};
+        if (isAlphaNumeric(tag.tag_name)) {
+            setTags([...tags, tag]);
+        } else {
+            toast.error("Tag should contain alphanumeric characters only", {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 3000,
+            });
+            return false;
+        }
+    };
+    
+    const handleTagDrag = (tag, currPos, newPos) => {
+        const newTags = [...tags].slice();
+    
+        newTags.splice(currPos, 1);
+        newTags.splice(newPos, 0, tag);
+    
+        setTags(newTags);
+    };
+    
+    const handleOnClearAll = () => {
+        setTags([]);
+    };
+
     return (
         <div className="Edit-container">
             <AdminNavbar />
             <Sidebar />
-            <div className="cp">
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                    <ListGroup>
-                        <ListGroup.Item className="cp-header cp-list" >
-                            <h3>Edit problem</h3>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list cp-first">
+            <div className="table-view">
+                <Card className="jserver-list">
+                    <Card.Header as="h3">{cardTitle}</Card.Header>
+                    <Card.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <ListGroup>
+                            <ListGroup.Item className="cp-list cp-first">
+                                <Form.Label className='lbl-required'>Display ID</Form.Label>
+                                <Form.Control type="text" placeholder="Problem's unique name id"
+                                    required value={display_id} onChange={(e)=>{handleDisplay_id(e)}}
+                                />
+                            </ListGroup.Item>
 
-                            <div className="div-dis">
-                                <i style={{ color: 'red' }}>*</i>
-                                <span> Display ID</span> <br /> <br />
-                                <input type="text" placeholder="Display ID" className="cp-displayid" required
-                                    value={display_id} onChange={(e) => { handleDisplay_id(e) }} />
-                            </div>
-                            <div className="div-til">
-                                <i style={{ color: 'red' }}>*</i>
-                                <span> Title</span> <br /> <br />
-                                <input type="text" placeholder="Title" className="cp-title" required
-                                    value={title} onChange={(e) => { handleTitle(e) }} />
+                            <ListGroup.Item className="cp-list">
+                                <Form.Label className='lbl-required'>Title</Form.Label>
+                                <Form.Control type="text" placeholder="Problem's Title"
+                                    required value={title} onChange={(e)=>{handleTitle(e)}}
+                                />
+                            </ListGroup.Item>
 
-                            </div>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <i style={{ color: 'red' }}>*</i>
-                            <span> Description</span> <br /> <br />
-                            <Form.Control as="textarea" rows={10} cols={150} required
-                                value={description} onChange={(e) => { handleDescription(e) }}>
-                            </Form.Control>
-                            {/* <Editor></Editor> */}
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <i style={{ color: 'red' }}>*</i>
-                            <span> Input Description</span> <br /> <br />
-                            <Form.Control as="textarea" rows={10} cols={150} required
-                                value={input_description} onChange={(e) => { handleInput_description(e) }}>
-                            </Form.Control>
-                            {/* <Editor></Editor> */}
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <i style={{ color: 'red' }}>*</i>
-                            <span> Output Description</span> <br /> <br />
-                            <Form.Control as="textarea" rows={10} cols={150} required
-                                value={output_description} onChange={(e) => { handleOutput_description(e) }}>
-                            </Form.Control>
-                            {/* <Editor></Editor> */}
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list cp-first">
-
-                            <div className="div-time">
-                                <i style={{ color: 'red' }}>*</i>
-                                <span> Time Limit (ms)</span> <br /> <br />
-                                <input type="Number" placeholder="Time Limit" className="cp-time" required
-                                    value={time_limit} onChange={(e) => { handleTime_limit(e) }} />
-                            </div>
-                            <div className="div-mem">
-                                <i style={{ color: 'red' }}>*</i>
-                                <span> Memory limit (MB)</span> <br /> <br />
-                                <input type="Number" placeholder="Memory limit (MB)" className="cp-mem" required
-                                    value={memory_limit} onChange={(e) => { handleMemory_limit(e) }} />
-                            </div>
-                            <div className="div-dif">
-                                <i style={{ color: 'red' }}>*</i>
-                                <span> Difficult</span> <br /> <br />
-                                <Form.Control as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
-                                    <option value="Easy">Easy</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Hard">Hard</option>
+                            <ListGroup.Item className="cp-list">
+                                <Form.Label className='lbl-required'>Statement</Form.Label>
+                                <Form.Control as="textarea" rows={10} cols={150} required
+                                    value={description} onChange={(e) => { handleDescription(e) }}>
                                 </Form.Control>
-                            </div>
+                                {/* <Editor></Editor> */}
+                            </ListGroup.Item>
 
-                            <div>
-                                <span> Visible</span> <br /> <br />
-                                <Form.Control className="cp-visible" as="select" size="sm" custom value={is_visible} onChange={(e) => { handleVisible(e) }} >
-                                    <option value={true}>true</option>
-                                    <option value={false}>false</option>
+                            <ListGroup.Item className="cp-list">
+                                <Form.Label className='lbl-required'>Input Description</Form.Label>
+                                <Form.Control as="textarea" rows={10} cols={150} required
+                                    value={input_description} onChange={(e) => { handleInput_description(e) }}>
                                 </Form.Control>
-                            </div>
-                            <div>
-                                <i style={{ color: 'red' }}>*</i>
-                                <span> Language</span> <br /> <br />
-                                <input className="cp-language"
-                                    type="checkbox"
-                                    name="Language"
-                                    defaultChecked
-                                    value="C"
-                                />C
-                                <input className="cp-language"
-                                    type="checkbox"
-                                    name="Language"
-                                    value="C++"
-                                    defaultChecked
-                                />C++
-                                <input className="cp-language"
-                                    type="checkbox"
-                                    name="Language"
-                                    value="Java"
-                                    defaultChecked
-                                />Java
-                                <input className="cp-language"
-                                    type="checkbox"
-                                    name="Language"
-                                    value="Python"
-                                    defaultChecked
-                                />Python
-                            </div>
+                            </ListGroup.Item>
 
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <i style={{ color: 'red' }}>*</i>
-                            <span> Sample</span> <br /> <br />
-                            <div className="Sample" >
-                                {
-                                    sample_test.map((sample, idx) => {
-                                        return (
-                                            <div key={`${sample}-${idx}`} className="cp-second">
-                                                <div className="cp-first">
-                                                    <div className="textArea-2">
-                                                        <i style={{ color: 'red' }}>*</i>
-                                                        <span> Input</span> <br />
-                                                        <Form.Control as="textarea" rows={5} cols={150}
-                                                            className="textArea"
-                                                            placeholder="Enter input..."
-                                                            value={sample.input || ""}
-                                                            required
-                                                            onChange={e => handleInput(idx, e)}
-                                                        >
-                                                        </Form.Control>
+                            <ListGroup.Item className="cp-list">
+                                <Form.Label className='lbl-required'>Output Description</Form.Label>
+                                <Form.Control as="textarea" rows={10} cols={150} required
+                                    value={output_description} onChange={(e) => { handleOutput_description(e) }}>
+                                </Form.Control>
+                            </ListGroup.Item>
+
+                            <ListGroup.Item className="cp-list cp-first">
+                                <ListGroup.Item className="cp-list">
+                                    <Form.Label className='lbl-required'>Time Limit (ms)</Form.Label>
+                                    <Form.Control type="text" placeholder="Problem's Time Limit"
+                                        required value={time_limit} onChange={(e)=>{handleTime_limit(e)}}
+                                    />
+                                </ListGroup.Item>
+
+                                <ListGroup.Item className="cp-list">
+                                    <Form.Label className='lbl-required'>Memory Limit (MB)</Form.Label>
+                                    <Form.Control type="text" placeholder="Problem's Time Limit"
+                                        required value={memory_limit} onChange={(e)=>{handleMemory_limit(e)}}
+                                    />
+                                </ListGroup.Item>
+
+                                <ListGroup.Item className="cp-list">
+                                    <Form.Label>Difficulty</Form.Label>
+                                    <Form.Control as="select" size="sm" custom value={difficulty} onChange={(e) => { handleDifficulty(e) }} >
+                                        <option value="Easy">Easy</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Hard">Hard</option>
+                                    </Form.Control>
+                                </ListGroup.Item>
+
+                                <ListGroup.Item className="cp-list">
+                                    <Form.Label>Visibility</Form.Label>
+                                    <Form.Control as="select" size="sm" custom value={is_visible} onChange={(e) => { handleVisible(e) }} >
+                                        <option value={true}>true</option>
+                                        <option value={false}>false</option>
+                                    </Form.Control>
+                                </ListGroup.Item>
+                            </ListGroup.Item> {/* Time Mem Diff Visible */}
+
+                            <ListGroup.Item className="cp-list">
+                                <Form.Label>Sample Tests</Form.Label>
+                                <div className="Sample" >
+                                    {
+                                        sample_test.map((sample, idx) => {
+                                            return (
+                                                <div key={`sample-test-${idx}`} className="cp-second">
+                                                    <div className="cp-first">
+                                                        <div className="textArea-2">
+                                                            <Form.Label className='lbl-required'>Input #{idx+1}</Form.Label>
+                                                            <Form.Control as="textarea" rows={5} cols={150}
+                                                                className="textArea"
+                                                                value={sample.input || ""}
+                                                                onChange={e => handleInput(idx, e)}
+                                                            >
+                                                            </Form.Control>
+                                                        </div>
+                                                        <div className="textArea-2">
+                                                            <Form.Label className='lbl-required'>Output #{idx+1}</Form.Label>
+                                                            <Form.Control as="textarea" rows={5} cols={150}
+                                                                className="textArea"
+                                                                value={sample.output || ""}
+                                                                onChange={e => handleOutput(idx, e)}
+                                                            >
+                                                            </Form.Control>
+                                                        </div>
                                                     </div>
                                                     <div className="textArea-2">
-                                                        <i style={{ color: 'red' }}>*</i>
-                                                        <span> Output</span> <br />
-                                                        <Form.Control as="textarea" rows={5} cols={150}
-                                                            className="textArea"
-                                                            placeholder="Enter output..."
-                                                            value={sample.output || ""}
-                                                            required
-                                                            onChange={e => handleOutput(idx, e)}
-                                                        >
-                                                        </Form.Control>
+                                                        <Button className="removeButton" onClick={() => handleRemove(idx)}>
+                                                            <AiFillDelete/>
+                                                        </Button>
                                                     </div>
                                                 </div>
+                                            );
+                                        })}
+                                    <Button className="addButton" onClick={() => handleAdd()}>
+                                        <GrAdd/>
+                                    </Button>
+                                </div>
+                            </ListGroup.Item>
+                            <ListGroup.Item className="cp-list">
+                                <Form.Group className="hidden-test">
+                                    <Form.Label>Hidden Test Zip</Form.Label>
+                                    <Form.Control type="file" onChange={handleFileChange} name="test-zip"/>
+                                    <div className='div-test-in-use-zip'>Current zip file: <span>{currentTestZipFile?currentTestZipFile:'None'}</span></div>
+                                </Form.Group>
+                            </ListGroup.Item>
+                                
+                            <ListGroup.Item className="cp-list cp-first">
+                                <Form.Group className="tagging">
+                                    <Form.Label>Tags</Form.Label>
+                                    <div className='tag-container'>
+                                        <ReactTags 
+                                            tags={tags} handleDelete={handleTagDelete} handleAddition={handleTagAddition} handleDrag={handleTagDrag}
+                                            onClearAll={handleOnClearAll} 
+                                            labelField={'tag_name'}
+                                            suggestions={tagSuggestions}
 
-
-                                                <div className="textArea-2">
-                                                    <Button className="removeButton" onClick={() => handleRemove(idx)}>
-                                                        X
-                                                    </Button>
-                                                </div>
-
-
-                                            </div>
-                                        );
-                                    })}
-                                <Button className="addButton" onClick={() => handleAdd()}>
-                                    +
-                                </Button>
-                            </div>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="cp-list">
-                            <span> Hint</span> <br /> <br />
-                            <Form.Control as="textarea" rows={10} cols={150} >
-                            </Form.Control>
-                            {/* <Editor></Editor> */}
-                        </ListGroup.Item >
-                        <ListGroup.Item className="cp-list cp-first">
-
-
-                            <div className="div-type">
-                                <span> Type</span> <br /> <br />
-                                <input type="radio" name="type" value="ACM" /> ACM <br />
-                                <input type="radio" name="type" value="IO" /> IO
-                            </div>
-                            <div className="div-test ">
-                                <span> Test Case</span> <br /> <br />
-                                <input type="file" />
-
-                            </div>
-                            <div className="div-io">
-                                <span> IO mode</span> <br /> <br />
-                                <input type="radio" name="io" value="standard" /> Standard IO <br />
-                                <input type="radio" name="io" value="file" /> File IO
-                            </div>
-
-                        </ListGroup.Item>
-                        <Button type="submit" className="cp-btn">Save</Button>
-
-                    </ListGroup>
-                </Form >
+                                            minQueryLength={3}
+                                            maxLength={32}
+                                            autofocus={false}
+                                            readOnly={false}
+                                            allowUnique={true}
+                                            allowDragDrop={true}
+                                            inline={true}
+                                            allowAdditionFromPaste={true}
+                                            clearAll={true}
+                                        />
+                                        <Button className='tag-clearall-btn' onClick={handleOnClearAll}>Clear All</Button>
+                                    </div>
+                                </Form.Group>
+                            </ListGroup.Item>
+                            <Button type="submit" className="cp-btn">Save <FiSave/></Button>
+                        </ListGroup>
+                    </Form >
+                    </Card.Body>
+                </Card>
             </div >
         </div >
     );

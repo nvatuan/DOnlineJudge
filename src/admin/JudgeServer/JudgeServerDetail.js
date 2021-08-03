@@ -3,9 +3,8 @@ import { Form, Card, Button, ListGroup } from 'react-bootstrap';
 import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 import '../Table.scss';
-import { Link } from 'react-router-dom';
-import { BsFillPlusCircleFill } from 'react-icons/bs';
-import { BiCog, BiSpreadsheet, BiServer } from 'react-icons/bi';
+import { useHistory } from 'react-router-dom';
+import { BiCog, BiSpreadsheet } from 'react-icons/bi';
 
 import adminJudgeServerAPI from '../../api/adminJudgeServerAPI';
 import './JudgeServerDetail.scss'
@@ -25,6 +24,18 @@ function JudgeServer({match}) {
 		fetch(id);
 	}, [])
 
+	const history = useHistory();
+	const onSubmitHandler = async(e) => {
+		e.preventDefault();
+		const resp = await adminJudgeServerAPI.updateById({id:id,formData:jserver})
+		if (resp.error==='none') {
+			history.push('/admin/judgeserver')
+		} else {
+			console.log("Err",resp.error)
+			console.log("ErrMsg", resp.data)
+		}
+	}
+
 	return (
         <div>
             <AdminNavbar />
@@ -39,39 +50,6 @@ function JudgeServer({match}) {
 							jserver === {}
 							? <div className="not-fetched">Please wait...</div>
 							: <div className="jserver-detail">
-								<Card id="form-card">
-									<Card.Header as="h4" className="jserver-form"><BiCog/> Config</Card.Header>
-									<Card.Body>
-										<Form id="jserver-form">
-											<Form.Group className="mb-3" controlId="jserver-form-Hostname">
-												<Form.Label>Hostname</Form.Label>
-												<Form.Control type="text" placeholder="Server's human-readable hostname" value={jserver.hostname}/>
-											</Form.Group>
-											<Form.Group className="mb-3" controlId="jserver-form-address">
-												<Form.Label>Address</Form.Label>
-												<Form.Control type="text" placeholder="Server's socket address" value={jserver.socketaddress} />
-											</Form.Group>
-
-											<Form.Group className="mb-3" controlId="jserver-form-activation">
-												<Form.Label>Activation</Form.Label>
-												<Form.Check
-													checked={!jserver.is_disabled} label="Enable" name="group1" type="radio" id={`radio-2`}
-												/>
-												<Form.Check
-													checked={jserver.is_disabled} label="Disable" name="group1" type="radio" id={`radio-2`}
-												/>
-											</Form.Group>
-
-											<Form.Group className="mb-3" controlId="jserver-form-mptask">
-												<Form.Label>Max pending tasks allowed</Form.Label>
-												<Form.Control type="number" placeholder="Server's max number of pending tasks" value={jserver.max_pending_tasks} />
-											</Form.Group>
-											<Button variant="primary" type="submit">
-												Submit
-											</Button>
-										</Form>
-									</Card.Body>
-								</Card>
 								<Card id="readonly-card">
 									<Card.Header as="h4" className="jserver-readonly"><BiSpreadsheet/> Read-only</Card.Header>
 									<Card.Body>
@@ -107,6 +85,46 @@ function JudgeServer({match}) {
 												</div>
 											</ListGroup.Item>
 										</ListGroup>
+									</Card.Body>
+								</Card>
+								<Card id="form-card">
+									<Card.Header as="h4" className="jserver-form"><BiCog/> Config</Card.Header>
+									<Card.Body>
+										<Form id="jserver-form" onSubmit={(e)=>(onSubmitHandler(e))}>
+											<Form.Group className="mb-3" controlId="jserver-form-Hostname">
+												<Form.Label>Hostname</Form.Label>
+												<Form.Control type="text" placeholder="Judge Server's name"
+													value={jserver.hostname} onChange={(e)=>(setJserver({...jserver, hostname:e.target.value}))}/>
+											</Form.Group>
+											<Form.Group className="mb-3" controlId="jserver-form-address">
+												<Form.Label>Address</Form.Label>
+												<Form.Control type="text" placeholder="Judge Server's socket address" 
+													value={jserver.socketaddress} onChange={(e)=>(setJserver({...jserver, socketaddress:e.target.value}))}/>
+											</Form.Group>
+
+											<Form.Group className="mb-3" controlId="jserver-form-activation">
+												<Form.Label>Activation</Form.Label>
+												<Form.Check
+													checked={!jserver.is_disabled} label="Enable" name="group1" type="radio" id={`radio-1`}
+													onChange={()=>(setJserver({...jserver, is_disabled:false}))}
+												/>
+												<Form.Check
+													checked={jserver.is_disabled} label="Disable" name="group2" type="radio" id={`radio-2`}
+													onChange={()=>(setJserver({...jserver, is_disabled:true}))}
+												/>
+											</Form.Group>
+
+											<Form.Group className="mb-3" controlId="jserver-form-mptask">
+												<Form.Label>Max pending tasks allowed</Form.Label>
+												<Form.Control type="number" placeholder="Server's max number of pending tasks" 
+													value={jserver.max_pending_tasks}
+													onChange={(e)=>(setJserver({...jserver, max_pending_tasks:e.target.value}))}
+												/>
+											</Form.Group>
+											<Button variant="primary" type="submit" className='form-submit-btn'>
+												Submit
+											</Button>
+										</Form>
 									</Card.Body>
 								</Card>
 							</div>

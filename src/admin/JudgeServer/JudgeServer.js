@@ -4,11 +4,16 @@ import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
 import '../Table.scss';
-
-import adminJudgeServerAPI from '../../api/adminJudgeServerAPI';
+import './JudgeServer.scss'
 
 import { Link } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+
+import adminJudgeServerAPI from '../../api/adminJudgeServerAPI';
+
 
 function JudgeServer(props) {
 	const [jservers, setJServers] = useState([])
@@ -23,18 +28,29 @@ function JudgeServer(props) {
 		}
 		fetch();
 	}, [])
-	console.log(jservers);
+
+    const dispatch = useDispatch();
+    const OnDeleteHandler = async (id) => {
+        if (window.confirm(`Are you sure you want to delete Judge Server#${id}?`)) {
+            const resp = await adminJudgeServerAPI.deleteById(id);
+			if (resp.status==204) {
+				setJServers(jservers.filter((jserver) => {return jserver.id !== id}))
+			} else {
+				console.log('Error when Deleting a Judge Server:', resp)
+			}
+        }
+    }
 
 	return (
         <div>
             <AdminNavbar />
             <Sidebar />
             <div className="table-view">
-                <Card>
+                <Card className="jserver-list">
                     <Card.Header as="h3" className="problemList-header">
 						Judge Server
-                        <div className="create_button">
-                            <Link to={`/admin/judgeserver/add`}  className="js-add-btn"> <BsFillPlusCircleFill /> Add </Link>
+                        <div className="create_button alter_announcement">
+                            <Link to={`/admin/judgeserver/new`}  className="js-add-btn"> <BsFillPlusCircleFill /> Add </Link>
                         </div>
                     </Card.Header>
                     <Card.Body>
@@ -54,7 +70,7 @@ function JudgeServer(props) {
 							<tbody>
 								{
 									jservers.map((jserver) => (
-										<tr>
+										<tr key={`jserver-list-tr-${jserver.id}`}>
 											<td>{jserver.id}</td>
 											<td>{jserver.hostname}</td>
 											<td>{jserver.socketaddress}</td>
@@ -67,7 +83,20 @@ function JudgeServer(props) {
 											</td>
 											<td>{jserver.pending_tasks}</td>
 											<td>
-												<Link to={`/admin/judgeserver/${jserver.id}`}>Detail</Link>
+												<div className="option-cell">
+													<div className="option-button">
+														<div className="option-button__items">
+															<Link to={`/admin/judgeserver/${jserver.id}`}
+																className='op-btn'>
+															<AiOutlineEdit/></Link>
+														</div>
+														<div className="option-button__items">
+															<Button variant="light" onClick={() => {OnDeleteHandler(jserver.id)}}>
+																<AiOutlineDelete />
+															</Button>
+														</div>
+													</div>
+												</div>
 											</td>
 										</tr>
 									))

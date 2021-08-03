@@ -47,7 +47,7 @@ const adminJudgeServerAPI = {
                 'Authorization': 'Token ' + token,
             }
         };
-        const url = 'admin/announcement/';
+        const url = 'admin/judgeserver/';
         return axiosClient.post(url, data, config);
     },
 }

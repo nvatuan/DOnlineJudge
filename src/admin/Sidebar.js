@@ -68,8 +68,10 @@ function Sidebar() {
 
           <SubMenu title="Judge Server" icon={<BiServer/>}>
             <MenuItem>
-              Server List
-              <Link to="/admin/judgeserver" />
+              Server List <Link to="/admin/judgeserver" />
+            </MenuItem>
+            <MenuItem>
+              Add Server <Link to="/admin/judgeserver/new" />
             </MenuItem>
           </SubMenu>
 

@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { userSelector, clearState, loginUser } from '../../UserSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 function Login(props) {
     //toast 
     toast.configure();

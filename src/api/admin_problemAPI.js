@@ -60,6 +60,17 @@ const admin_problemAPI = {
         const url = `admin/problem/${id}/`;
         const visible = {is_visible: !isVisible};
         return axiosClient.put(url,visible,config);
+    },
+
+    getAllProblemTags: () => {
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
+        const url = 'problem_tag/';
+        return axiosClient.get(url,config);
     }
 }
 

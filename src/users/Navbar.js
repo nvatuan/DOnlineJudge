@@ -41,7 +41,6 @@ function Navbar() {
                 autoClose: 1500
             });
             history.push("/");
-
         }
     }
     return (
