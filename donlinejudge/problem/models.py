@@ -2,8 +2,9 @@ from django.db import models
 from accounts.models import User
 from utils.validators import lowerAlphanumeric
 from utils.file_upload import FileUploadUtils
+from donlinejudge.settings import MEDIA_ROOT
 
-import os
+import os, sys
 
 class ProblemDifficulty(object):
     HARD = "Hard"
@@ -39,7 +40,7 @@ class Problem(models.Model):
     tags = models.ManyToManyField(ProblemTag)
     source = models.TextField(null=True)
 
-    sample_test = models.JSONField(default=dict, null=True)
+    sample_test = models.JSONField(default=dict, null=True, blank=True)
     ### [{input: "hello", output: "world"}, {input: "i am", output: "django"}]
 
     #== The Problem tests location
@@ -59,6 +60,25 @@ class Problem(models.Model):
     ### {_.ACCEPTED: 5, _.WRONG_ANSWER: 4, ...}
 
     #-- Method fields
+    def set_tags_to(self, newTags):
+        # Remove old tag that isn't in new tags
+        for oldTag in self.tags.all():
+            if not oldTag.tag_name in newTags:
+                self.tags.remove(oldTag)
+                if len(ProblemTag.objects.get(id=oldTag.id).problem_set.all())==0:
+                    oldTag.delete()
+
+        # Add new tags
+        for item in newTags:
+            item = item.lower()
+            try:
+                tag = ProblemTag.objects.get(tag_name=item)
+            except ProblemTag.DoesNotExist:
+                tag = ProblemTag.objects.create(tag_name=item)
+        for item in newTags:
+            tag = ProblemTag.objects.get(tag_name=item)
+            self.tags.add(tag)
+
     def remove_test_zip(self):
         if self.test_zip:
             try:
@@ -68,12 +88,37 @@ class Problem(models.Model):
                 pass
             self.test_zip = None
             self.save()
+
+    def std_test_zip_name(self):
+        return 'tests/'+str(self.id)+'.zip'
+    def std_test_zip_path(self):
+        return os.path.join(
+            os.path.abspath(MEDIA_ROOT),
+            self.std_test_zip_name(),
+        )
+
+    def rename_testzip_to_pk(self):
+        if self.test_zip:
+            if self.test_zip.name != self.std_test_zip_name():
+                try:
+                    if os.path.exists(self.test_zip.path):
+                        if os.path.exists(self.std_test_zip_path()):
+                            os.remove(self.std_test_zip_path())
+                        os.rename(self.test_zip.path, self.std_test_zip_path())
+                        self.test_zip.name = self.std_test_zip_name()
+                        self.save()
+                    else:
+                        self.test_zip = None
+                        self.save()
+                except:
+                    e = sys.exc_info()[0]
+                    print(e)
+                    raise
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        #self.rename_testzip_to_pk() # dont need
 
-
-    
     #--- Author
     def author_id(self):
         if self.author:

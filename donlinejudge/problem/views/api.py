@@ -5,12 +5,14 @@ from django.utils.crypto import get_random_string
 
 from problem.models import Problem, ProblemTag
 from problem.models import ProblemDifficulty
+from problem.forms import ProblemForm, ProblemPutForm
 
 from submission.models import SubmissionVerdict
-from problem.serializers import ProblemSerializer
+from problem.serializers import ProblemSerializer, ProblemTagSerializer
 
 from rest_framework.views import APIView
 
+from accounts.models import User
 from accounts.decorators import super_admin_required
 from accounts.decorators import admin_required, super_admin_required
 from utils.make_response import *
@@ -20,6 +22,8 @@ from utils.validators import lowerAlphanumeric
 import utils.serialized_data_rearrange as sdr
 from utils.pagination import paginate
 from utils.test_zip import TestZipHandler
+
+import json
 
 class ProblemAPI(APIView):
     serializer_class = ProblemSerializer
@@ -47,76 +51,55 @@ class ProblemAPI(APIView):
 
     @admin_required
     def post(self, request, format=None):
-        resperror = ""
-        respdata = ""
+        datapost = request.data
+        fdata = ProblemForm(request.POST, request.FILES)
 
-        data = request.data.copy()
+        if not fdata.is_valid():
+            return response_bad_request(fdata.errors.as_data())
 
-        try:
-            ## Display ID
-            disp_id = data["display_id"]
-            if not disp_id:
-                raise KeyError("display_id")
-            disp_id = disp_id.lower()
+        instance = fdata.save(commit=False)
+
+        if request.FILES.get('test_zip', '') != '':
+            uploadedzipfile = request.FILES['test_zip']
+            tmpzipfile = f"/tmp/{get_random_string(32)}.zip"
+            with open(tmpzipfile, "wb") as f:
+                for chunk in uploadedzipfile:
+                    f.write(chunk)
             try:
-                lowerAlphanumeric(disp_id) 
-            except ValidationError:
-                return response_bad_request("'display_id' should contains lowercase, alphanumerics only")
-            if Problem.objects.filter(display_id=disp_id).exists():
-                return response_bad_request("Problem with display_id=%s already exists" % disp_id)
+                TestZipHandler(tmpzipfile) # automatic validate
+            except ValueError as ve:
+                return response_bad_request('Invalid Zip: '+ve.args[0])
+            instance.remove_test_zip() # Does not raise, remove zip if it exists
+            instance.test_zip = request.FILES['test_zip']
 
-            ## Tags, Difficulty, Source
-            tags = data.pop("tags")
-            if not tags:
-                tags = ["Uncategorized"]
+        # TAGS
+        tags = ["uncategorized"]
+        if datapost.get('tags'):
+            tags = datapost.get("tags")
+            if type(tags) == str:
+                tags = json.loads(tags)
             if type(tags) != list:
                 return response_bad_request("'tags' should be a list.")
+            if not tags:
+                tags = ["uncategorized"]
 
-            for item in tags:
-                try:
-                    tag = ProblemTag.objects.get(tag_name=item)
-                except ProblemTag.DoesNotExist:
-                    tag = ProblemTag.objects.create(tag_name=item)
-
-            data["difficulty"] = data.get("difficulty", "Easy")
-            if data["difficulty"] not in ProblemDifficulty.DIFF:
-                return response_bad_request(f"Difficulty {data['difficulty']} is not valid")
-
-            # Author
-            data["author"] = request.user
-
-            # Sample_Test:
-            if data.get("sample_test"):
-                if type(data["sample_test"]) != list:
-                    return response_bad_request("'sample_test' should be a list of dict{input:..., output:...}")
-            else:
-                data["sample_test"] = []
-            # Testzip
-            if data.get("test_zip"):
-                pass
-
-            # Constaints
-            # Statistics
-            data["statistic_info"] = SubmissionVerdict._get_default_dict()
-
-            #visible
-            if data.get('is_visible', '') == '':
-                data['is_visible'] = True
-            elif not data['is_visible'] in [True, False]:
-                return response_bad_request({"visible":"This field must either be true or false"})                    
-
-            # == Create object
-            problem = Problem.objects.create(**data)
-            for item in tags:
+        for item in tags:
+            item = item.lower()
+            try:
                 tag = ProblemTag.objects.get(tag_name=item)
-                problem.tags.add(tag)
+            except ProblemTag.DoesNotExist:
+                tag = ProblemTag.objects.create(tag_name=item)
 
-            return response_ok(ProblemSerializer(problem).data)
-        except KeyError as ke:
-            return response_bad_request(str(ke) + " is required.")
-        # except:
-        #     return response_bad_request("Unexpected error has occurred")
+        # Statistics
+        instance.statistic_info = SubmissionVerdict._get_default_dict()
 
+        instance.save()
+        for item in tags:
+            tag = ProblemTag.objects.get(tag_name=item)
+            instance.tags.add(tag)
+        instance.author = request.user
+        instance.save()
+        return response_ok(ProblemSerializer(instance).data)
 
 class ProblemDetailAPI(APIView):
     serializer_class = ProblemSerializer
@@ -141,6 +124,7 @@ class ProblemDetailAPI(APIView):
     """
     @admin_required
     def put(self, request, id):
+        print(request.data)
         try:
             problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
@@ -150,78 +134,43 @@ class ProblemDetailAPI(APIView):
             if (problem.author is None) or (not request.user == problem.author):
                 return response_unauthorized("You don't have permission to edit the problem")
 
-        data = request.data
-
-        # == Content to be displayed
-        if data.get("title") != None:
-            problem.title = data.get("title")
-        if data.get("statement") != None:
-            problem.statement = data.get("statement")
-
-        ## Tags, Difficulty, Source
-        if data.get("tags") != None:
-            tags = data["tags"]
-            if type(tags) != list:
-                return response_bad_request("'tags' should be a list.")
-            else:
-                for item in tags:
-                    try:
-                        tag = ProblemTag.objects.get(tag_name=item)
-                    except ProblemTag.DoesNotExist:
-                        tag = ProblemTag.objects.create(tag_name=item)
-
-            problem.tags.clear()
-            for item in tags:
-                problem.tags.add(ProblemTag.objects.get(tag_name=item))
-
-        if data.get("difficulty") != None:
-            dif = data.get("difficulty")
-            if dif not in ProblemDifficulty.DIFF:
-                dif = ProblemDifficulty.easy
-            problem.difficulty = dif
-
-        # Sample tests
-        if data.get("sample_test", '') != '':
-            problem.sample_test = data['sample_test']
-
-        # Testdir
-        if data.get('test_zip', '') != '':
-            problem.test_zip = data['test_zip']
-
+        ## Remove display_id if from querydict it is the same
+        datapost = request.data
+        rqpost = request.POST.copy()
+        if rqpost.get('display_id'):
+            problem.display_id = rqpost.get('display_id')
+        rqpost.pop('display_id')
+        
+        fdata = ProblemPutForm(rqpost, request.FILES)
+        if not fdata.is_valid():
+            return response_bad_request(fdata.errors.as_data())
+        if request.FILES.get('test_zip', '') != '':
             uploadedzipfile = request.FILES['test_zip']
             tmpzipfile = f"/tmp/{get_random_string(32)}.zip"
             with open(tmpzipfile, "wb") as f:
                 for chunk in uploadedzipfile:
                     f.write(chunk)
-            TestZipHandler(tmpzipfile) # automatic validate
-
-        # Constaints
-        if data.get("time_limit", '') != '':
             try:
-                tlimit = int(data.get("time_limit", '1000'))
-            except:
-                return response_bad_request("Cannot parse time_limit to an integer")
+                TestZipHandler(tmpzipfile) # automatic validate
+            except ValueError as ve:
+                return response_bad_request('Invalid Zip: '+ve.args[0])
+            problem.remove_test_zip() # Does not raise, remove zip if it exists
+            problem.test_zip = request.FILES['test_zip']
 
-            if tlimit < 0:
-                tlimit = 1000
-            problem.time_limit = tlimit
+        # TAGS
+        tags = ["uncategorized"]
+        if datapost.get('tags'):
+            tags = datapost.get("tags")
+            if type(tags) == str:
+                tags = json.loads(tags)
+            if type(tags) != list:
+                return response_bad_request("'tags' should be a list.")
+            if not tags:
+                tags = ["uncategorized"]
+        problem.set_tags_to(tags)
 
-        #visible
-        if data.get("is_visible", '') != '':
-            if data.get("is_visible") in [True, False]:
-                problem.is_visible = data.get("is_visible")
-            else:
-                raise ValueError("Attribute 'is_visible' should be boolean ("+data.get("is_visible")+")")
-
-        if data.get("memory_limit", '') != '':
-            try:
-                mlimit = int(data.get("memory_limit", '256'))
-            except:
-                return response_bad_request("Cannot parse memory_limit to an integer")
-            if mlimit < 0:
-                mlimit = 256
-            problem.memory_limit = mlimit
-
+        for k, v in fdata.cleaned_data.items():
+            setattr(problem, k, v)
         problem.save()
         return response_ok(ProblemSerializer(problem).data)
 
@@ -240,7 +189,7 @@ class ProblemDetailAPI(APIView):
         if not request.user.can_mgmt_all_problem and not request.user == problem.author:
             return response_unauthorized("You don't have permission to the problem")
 
-        # TODO delete testset directory
+        problem.remove_test_zip()
         problem.delete()
         return response_no_content("Delete successful")
 
