@@ -4,7 +4,6 @@ import { Link} from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
 import './status.scss';
-import queryString from 'query-string';
 import ReactPaginate from 'react-paginate';
 import '../../Components/Pagination/Paginate.css';
 import Collapsible from 'react-collapsible';
@@ -19,9 +18,9 @@ function Status() {
     const [filters, setFilters] = useState(() => {
         let filter = []
         if(username !== null) filter.push('author_name');
-        if(problem_title !== null) filter.push('problem_title');
+        if(problem_title != '') filter.push('problem_title');
         return {
-            // sort_by: '-submit_time',
+            sort_by: '-submit_time',
             filter_by: filter,
             author_name: username,
             problem_title: problem_title,

@@ -63,7 +63,7 @@ function Problem_detail({ match }) {
             removeEditorContentFromLocalStorage();
             const response = await oj_statusAPI.postProblem(data);
             if (response) {
-                history.push('/status');
+                history.push('/status/');
             }
         } catch (error) {
             console.log("Fail to post problem: ", error);
