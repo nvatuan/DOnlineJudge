@@ -18,7 +18,9 @@ function Status() {
     const [filters, setFilters] = useState(() => {
         let filter = []
         if(username !== null) filter.push('author_name');
-        if(problem_title != '') filter.push('problem_title');
+        if(problem_title !== null && problem_title !== ''){
+            filter.push('problem_title');
+        }
         return {
             sort_by: '-submit_time',
             filter_by: filter,
