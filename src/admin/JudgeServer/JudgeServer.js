@@ -49,8 +49,8 @@ function JudgeServer(props) {
                 <Card className="jserver-list">
                     <Card.Header as="h3" className="problemList-header">
 						Judge Server
-                        <div className="create_button alter_announcement">
-                            <Link to={`/admin/judgeserver/new`}  className="js-add-btn"> <BsFillPlusCircleFill /> Add </Link>
+                        <div className="create_button">
+                            <Link to={`/admin/judgeserver/new`}  className="alter_announcement"> <BsFillPlusCircleFill /> Add </Link>
                         </div>
                     </Card.Header>
                     <Card.Body>
@@ -64,7 +64,7 @@ function JudgeServer(props) {
 									<th>Socket Address</th>
 									<th>Status</th>
 									<th>Pending Tasks</th>
-									<th></th>
+									<th>Options</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -83,18 +83,16 @@ function JudgeServer(props) {
 											</td>
 											<td>{jserver.pending_tasks}</td>
 											<td>
-												<div className="option-cell">
-													<div className="option-button">
-														<div className="option-button__items">
-															<Link to={`/admin/judgeserver/${jserver.id}`}
-																className='op-btn'>
-															<AiOutlineEdit/></Link>
-														</div>
-														<div className="option-button__items">
-															<Button variant="light" onClick={() => {OnDeleteHandler(jserver.id)}}>
-																<AiOutlineDelete />
-															</Button>
-														</div>
+												<div className="js-option-cell">
+													<div className="option-button__items">
+														<Link to={`/admin/judgeserver/${jserver.id}`}
+															className='op-btn'>
+														<AiOutlineEdit/></Link>
+													</div>
+													<div className="option-button__items">
+														<Button variant="light" onClick={() => {OnDeleteHandler(jserver.id)}}>
+															<AiOutlineDelete />
+														</Button>
 													</div>
 												</div>
 											</td>

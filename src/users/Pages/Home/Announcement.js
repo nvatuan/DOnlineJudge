@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap'
 import React from 'react'
 import './Announcement.scss'
+import {AiFillEyeInvisible} from 'react-icons/ai'
+
 function Announcement(props) {
     const { title, author, creation_time, content, id } = props;
     const hanldeTime = (time) => {
@@ -42,6 +44,9 @@ function Announcement(props) {
                     <h5>From: {author}</h5>
                     <div className="creation_time">
                         <p>{hanldeTime(creation_time)}</p>
+                    </div>
+                    <div className='visible_indicator'>
+                        {props.is_visible ? '' : <AiFillEyeInvisible/>}
                     </div>
                 </div>
                 <div className="annou_detail">

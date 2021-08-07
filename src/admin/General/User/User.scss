@@ -2,6 +2,25 @@
     display: flex;
     justify-content: space-between;
 }
+
+.admin-card {
+    width: 80vw;
+    .card-body {
+        height: 65vh;
+        overflow: scroll;
+    }
+}
+
+.admin-user {
+    table {
+        svg {
+            width: 100%;
+            min-width: 20px;
+            min-height: auto;
+        }
+    }
+}
+
 .alter-user-button:hover {
     color: #212529;
     background-color: #e2e6ea;

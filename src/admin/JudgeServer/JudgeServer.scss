@@ -1,5 +1,37 @@
 .jserver-list {
 	width: 80vw;
+    .card-body {
+        height: 65vh;
+        overflow: scroll;
+        svg {
+            width: 100%;
+            min-width: 20px;
+            min-height: auto;
+        }
+
+        .js-option-cell {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+
+    .jserver-status-normal {
+        border-radius: 15px;
+        background: #83be30;
+        padding: 2px 0; 
+
+        font-weight: bold;
+        color: white;
+    }
+    .jserver-status-abnormal {
+        border-radius: 15px;
+        background: #be3030;
+        padding: 2px 0; 
+
+        font-weight: bold;
+        color: white;
+    }
 }
 .form-submit-btn {
     float: right;

@@ -1,7 +1,25 @@
 .announcement-header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
+
+.admin-card {
+    .card-body {
+        height: 65vh;
+        overflow: scroll;
+    }
+}
+
+.admin-announcement {
+    table {
+        svg {
+            width: 100%;
+            min-width: 20px;
+            min-height: auto;
+        }
+    }
+}
+
 .alter_announcement:hover {
     color: #212529;
     background-color: #e2e6ea;

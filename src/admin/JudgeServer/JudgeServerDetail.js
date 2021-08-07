@@ -6,6 +6,9 @@ import '../Table.scss';
 import { useHistory } from 'react-router-dom';
 import { BiCog, BiSpreadsheet } from 'react-icons/bi';
 
+import { Link} from 'react-router-dom';
+import { BiLeftArrowAlt } from 'react-icons/bi';
+
 import adminJudgeServerAPI from '../../api/adminJudgeServerAPI';
 import './JudgeServerDetail.scss'
 
@@ -43,7 +46,10 @@ function JudgeServer({match}) {
             <div className="table-view">
                 <Card>
                     <Card.Header as="h3" className="judge-server-card">
-						Judge Server # {id}
+						Judge Server #{id}
+                        <div className="">
+                            <Link to={`/admin/judgeserver`}  className="card-header-btn"> <BiLeftArrowAlt/> Back </Link>
+                        </div>
                     </Card.Header>
                     <Card.Body>
 						{
@@ -122,7 +128,7 @@ function JudgeServer({match}) {
 												/>
 											</Form.Group>
 											<Button variant="primary" type="submit" className='form-submit-btn'>
-												Submit
+												Change
 											</Button>
 										</Form>
 									</Card.Body>

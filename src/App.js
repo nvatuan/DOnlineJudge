@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css';
-import { HashRouter, BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import About from './users/Pages/About/About';
@@ -9,6 +9,9 @@ import Problem from './users/Pages/Problem/Problem';
 import Status from './users/Pages/Status/Status';
 import ProblemList from './admin/Problems/ProblemList/ProblemList';
 import User from './admin/General/User/User';
+import CreateUser from './admin/General/User/CreateUser';
+import UserCreateionLog from './admin/General/User/UserCreationLog';
+
 import Announcement from './admin/General/Announcement/Announcement';
 import Dashboard from './admin/Dashboard/Dashboard';
 import CreateProblem from './admin/Problems/CreateProblem/CreateProblem'
@@ -28,6 +31,8 @@ import NotFound from './users/Pages/NotFound/NotFound';
 import JudgeServer from './admin/JudgeServer/JudgeServer';
 import JudgeServerDetail from './admin/JudgeServer/JudgeServerDetail';
 import NewJudgeServerForm from './admin/JudgeServer/NewJudgeServerForm';
+import AdminSubmissionList from './admin/Submission/SubmissionList'
+import AdminSubmissionDetail from './admin/Submission/SubmissionDetail'
 
 function App() {
   return (
@@ -46,17 +51,24 @@ function App() {
           <PrivateRoute exact component={Dashboard} path='/admin' />
           <PrivateRoute exact component={Dashboard} path='/admin/dashboard' />
           <PrivateRoute exact component={ProblemList} path='/admin/problem' />
+
           <PrivateRoute exact component={Announcement} path='/admin/announcement' />
+          <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/new' />
+          <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/:id' />
+
           <PrivateRoute exact component={CreateProblem} path='/admin/problem/create' />
           <PrivateRoute exact component={CreateProblem} path='/admin/problem/:id' />
-          <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/:id' />
-          <PrivateRoute exact component={EditAnnouncement} path='/admin/announcement/new' />
+
+          <PrivateRoute exact component={AdminSubmissionList} path='/admin/submission' />
+          <PrivateRoute exact component={AdminSubmissionDetail} path='/admin/submission/:id' />
           <PrivateRoute exact component={JudgeServer} path='/admin/judgeserver'/>
           <PrivateRoute exact component={NewJudgeServerForm} path='/admin/judgeserver/new'/>
           <PrivateRoute exact component={JudgeServerDetail} path='/admin/judgeserver/:id' />
+
           <PrivateRouteSAdmin exact component={User} path='/admin/user' />
+          <PrivateRouteSAdmin exact component={UserCreateionLog} path='/admin/user/create/log/:id' />
+          <PrivateRouteSAdmin exact component={CreateUser} path='/admin/user/create' />
           <PrivateRouteSAdmin exact component={EditUser} path='/admin/user/:id' />
-          <PrivateRouteSAdmin exact component={EditUser} path='/admin/user/new' />
 
           <Route path='/404' component={NotFound}></Route>
           <Route component={NotFound}></Route>

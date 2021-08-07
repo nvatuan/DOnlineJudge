@@ -7,6 +7,15 @@
 .status_details-container__item{
     margin-top: 20px;
 }
+
+.test-result td {
+    text-align: left;
+}
+.test-result .row-name {
+    width: 10%;
+    border-right: 1px solid rgba(186, 186, 186, 0.5);
+}
+
 .verdict{
     height: 30px;
     line-height: 30px;

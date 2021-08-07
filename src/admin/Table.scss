@@ -99,6 +99,8 @@ table {
   .option-button {
     display: flex;
     margin-left: 0.1rem;
+    flex-direction: row;
+    justify-content: center;
     .option-button__items {
       padding-right: 5px;
     }

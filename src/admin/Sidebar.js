@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import sidebarImage from './sidebar.png';
 import './Sidebar.scss';
-import { AiFillAppstore, AiOutlineBars, AiOutlineCode, AiFillHome } from 'react-icons/ai';
+import { AiFillAppstore, AiOutlineBars, AiOutlineCode, AiFillHome, AiOutlineUser} from 'react-icons/ai';
 import {BiServer} from 'react-icons/bi'
+import {CgNotes} from 'react-icons/cg'
 
 import Logo from '../public/logo.jpg'
 import JudgeServer from './JudgeServer/JudgeServer';
@@ -40,45 +41,36 @@ function Sidebar() {
             Dashboard
             <Link to='/admin/dashboard' />
           </MenuItem>
-          <SubMenu title="General" icon={<AiFillAppstore />}>
-            <MenuItem>
-              Announcement
-              <Link to="/admin/announcement" />
-            </MenuItem>
-            {
-              localStorage.getItem('role') === 'Super Admin' ? 
-                <MenuItem >
-                  User
-                  <Link to="/admin/user" />
-                </MenuItem>
-                :
-                <></>
-            }
-          </SubMenu>
-          <SubMenu title="Problem" icon={<AiOutlineBars />}>
-            <MenuItem >
-              Problem List
-              <Link to="/admin/problem" />
-            </MenuItem>
-            <MenuItem>
-              Create Problem
-              <Link to='/admin/problem/create' />
-            </MenuItem>
-          </SubMenu>
+          
+          {
+            localStorage.getItem('role') === 'Super Admin' ? 
+              <MenuItem icon={<AiOutlineUser/>}>
+                Users
+                <Link to="/admin/user" />
+              </MenuItem>
+              :
+              <></>
+          }
 
-          <SubMenu title="Judge Server" icon={<BiServer/>}>
-            <MenuItem>
-              Server List <Link to="/admin/judgeserver" />
-            </MenuItem>
-            <MenuItem>
-              Add Server <Link to="/admin/judgeserver/new" />
-            </MenuItem>
-          </SubMenu>
-
-          <MenuItem icon={<AiFillHome />} >
-            Back to home
-            <Link to='/'/>
+          <MenuItem icon={<AiFillAppstore />}>
+            Posts
+            <Link to="/admin/announcement" />
           </MenuItem>
+
+          <MenuItem icon={<AiOutlineBars />}>
+            Problems 
+            <Link to="/admin/problem" />
+          </MenuItem>
+
+          <MenuItem icon={<CgNotes/>}>
+            Submissions 
+            <Link to="/admin/Submission" />
+          </MenuItem>
+
+          <MenuItem icon={<BiServer/>}>
+            Judge Servers <Link to="/admin/judgeserver" />
+          </MenuItem>
+
         </Menu>
       </ProSidebar>
 

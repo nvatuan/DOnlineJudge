@@ -17,7 +17,7 @@ function News() {
     // ## useState: announcement filters 
     const [filters, setFilters] = useState({
         filter_by: [],
-        sort_by: '',
+        sort_by: '-id',
         page: 1,
     });
 
@@ -48,17 +48,21 @@ function News() {
 
     // search process
     function handleSearchContentForm(newValue) {
-        setFilters({
-            ...filters,
-            contains: newValue,
-        })
+        var newFilter = {...filters}
+        delete newFilter['contains']
+        if (newValue!=='') {
+            newFilter.contains=newValue
+        }
+        setFilters(newFilter)
     };
     function handleSearchAuthorForm(newValue) {
-        setFilters({
-            ...filters,
-            filter_by: ['author_name'],
-            author_name: newValue,
-        })
+        var newFilter = {...filters}
+        delete newFilter['author_name']
+        if (newValue!=='') {
+            newFilter.filter_by=['author_name']
+            newFilter.author_name=newValue
+        }
+        setFilters(newFilter)
     };
 
     return (
@@ -68,7 +72,7 @@ function News() {
                 <div className="news-container">
                     <Card className="news-card">
                         <Card.Header as="h3" className="announcement-header">
-                            Annoucement
+                            Announcement
                             <div className="news-features">
                                 <div className="news-features__items">
                                     <Search onSubmit={handleSearchContentForm} />

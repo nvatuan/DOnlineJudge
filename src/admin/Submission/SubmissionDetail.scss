@@ -1,0 +1,102 @@
+.admin-status-details-container{
+    position: relative;
+    width: 75vw;
+}
+
+.admin-status-details-container__item{
+    margin-top: 20px;
+}
+
+.admin-status-control-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card-header-btn {
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+.card-header-btn:hover {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    text-decoration: none;
+}
+
+.test-result td {
+    text-align: left;
+}
+.test-result .row-name {
+    width: 10%;
+    border-right: 1px solid rgba(186, 186, 186, 0.5);
+}
+
+.verdict{
+    height: 30px;
+    line-height: 30px;
+    margin: 2px 4px 2px 0;
+    padding: 0 8px;
+    border: 1px solid #e9eaec;
+    border-radius: 8px;
+    background: #924381;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 380;
+    vertical-align: middle;
+    opacity: 1;
+}
+.Accepted{
+    background: #19be6b;
+}
+.Time_limit,.Wrong_answer,.Runtime_error, .Rejected {
+    background: #ed3f14;
+}
+.Compile_error{
+    background: #f90;
+}
+.New{
+    background: #0069d9;
+}
+.System_error {
+    background: #138496;
+}
+.Judging, .Rejudging{
+    background: #23272b;
+}
+.verdict-text{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    margin: 2px 4px 2px 0;
+    padding: 0 8px;
+    border: 1px solid #e9eaec;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 380;
+    vertical-align: middle;
+    opacity: 1;
+    overflow: hidden;
+    cursor: pointer;
+}

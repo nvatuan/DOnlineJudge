@@ -7,10 +7,14 @@ import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import { useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
+import { Link } from 'react-router-dom';
+import { BiLeftArrowAlt } from 'react-icons/bi';
 
 //
 function EditAnnouncement({ match }) {
     const id = match.params.id;
+    var cardTitle = (id===undefined?'New Announcement':'Edit Announcement #'+id)
+
     const [title, setTitle] = useState(() => {
         const initTitle = localStorage.getItem('ann_title') || '';
         return initTitle;
@@ -74,7 +78,7 @@ function EditAnnouncement({ match }) {
             };
             fetchAnnouncement();
         }
-    }, [])
+    }, [id])
     const updateVisibility = () => {
         setVisible(!visible);
     }
@@ -84,7 +88,12 @@ function EditAnnouncement({ match }) {
             <Sidebar />
             <div className="edit_form">
                 <Card>
-                    <Card.Header as="h3">Edit</Card.Header>
+                    <Card.Header as="h3">
+                        {cardTitle}
+                        <div className="">
+                            <Link to={`/admin/announcement`}  className="card-header-btn"> <BiLeftArrowAlt/> Back </Link>
+                        </div>
+                    </Card.Header>
                     <Card.Body>
                         <Form onSubmit={handleSubmit(onSubmit)} className="announForm">
                             <ListGroup.Item className="announForm-items">

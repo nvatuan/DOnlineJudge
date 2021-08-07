@@ -5,8 +5,10 @@ import AdminNavbar from '../../AdminNavbar';
 import Sidebar from '../../Sidebar';
 import { useHistory } from 'react-router-dom';
 import {Card} from 'react-bootstrap'
+import { Link } from 'react-router-dom';
+import { BiLeftArrowAlt } from 'react-icons/bi';
 import {AiFillDelete} from 'react-icons/ai'
-import {GrAdd} from 'react-icons/gr'
+import {BsPlusCircle} from 'react-icons/bs'
 import {FiSave} from 'react-icons/fi'
 import admin_problemAPI from '../../../api/admin_problemAPI';
 
@@ -28,8 +30,10 @@ function isAlphaNumeric(str) {
 
 function Createproblem({ match }) {
     const id = match.params.id;
-    var cardTitle = "Create new Problem";
+    var cardTitle = "Create New Problem";
+    var formType = "CREATE";
     if (id !== undefined) {
+        formType = "EDIT";
         cardTitle = "Edit Problem#"+id
     }
 
@@ -124,65 +128,6 @@ function Createproblem({ match }) {
     const handleFileChange = (e) => {
         setHiddenTestZip(e.target.files[0])
     }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData()
-        if (id !== undefined)
-            formData.append('id', id);
-        formData.append('display_id', display_id);
-        formData.append('title', title);
-        formData.append('is_visible', true);
-        formData.append('time_limit', time_limit);
-        formData.append('memory_limit', memory_limit);
-        formData.append('difficulty', difficulty);
-        formData.append('statement', description + '\nInput\n' + input_description + '\nOutput\n' + output_description);
-
-        // Prepare tag
-        var taggings = []
-        tags.forEach((tag) => {
-            taggings.push(tag.tag_name)
-        });
-        formData.append('tags', JSON.stringify(taggings));
-
-        // Prepare sample_test
-        var sendingSampleTests = [];
-        console.log(sample_test)
-        sample_test.forEach((sample) => {
-            console.log(sample)
-            sendingSampleTests.push(
-                {"input": sample.input, "output": sample.output}
-            )
-        })
-        formData.append('sample_test', JSON.stringify(sendingSampleTests));
-
-        if (hiddenTestZip !== null) // A file is selected
-            formData.append('test_zip', hiddenTestZip);
-
-        if (!isNaN(id)) { // PUT to /problem
-            try {
-                const response = await admin_problemAPI.updateById({ formData, id });
-
-                console.log('Update:', response)
-                //if (response) {
-                //    history.push('/admin/problem/');
-                //}
-            } catch (error) {
-                console.log("Fail to put problem: ", error);
-            }
-        } else { // POST to /problem
-            try {
-                const response = await admin_problemAPI.createProblem(formData);
-                if (response) {
-                    history.push('/admin/problem/');
-                }
-            } catch (error) {
-                console.log("Fail to post problem: ", error);
-            }
-        }
-
-    };
     function getDescription(str) {
         const i = str.indexOf('\nInput\n')
         if (i >= 0) {
@@ -206,7 +151,7 @@ function Createproblem({ match }) {
         else return ''
     }
     useEffect(() => {
-        if (!isNaN(id)) {
+        if (formType === 'EDIT') {
             const fetchProblem = async () => {
                 try {
                     const response = await admin_problemAPI.getById(id);
@@ -311,13 +256,83 @@ function Createproblem({ match }) {
         setTags([]);
     };
 
+    const [deleteFileCheckbox, setDeleteFileCheckBox] = useState(false)
+    const handleDeleteFileCheckbox = () => {
+        setDeleteFileCheckBox(!deleteFileCheckbox)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData()
+        if (id !== undefined)
+            formData.append('id', id);
+        formData.append('display_id', display_id);
+        formData.append('title', title);
+        formData.append('is_visible', true);
+        formData.append('time_limit', time_limit);
+        formData.append('memory_limit', memory_limit);
+        formData.append('difficulty', difficulty);
+        formData.append('statement', description + '\nInput\n' + input_description + '\nOutput\n' + output_description);
+
+        // Prepare tag
+        var taggings = []
+        tags.forEach((tag) => {
+            taggings.push(tag.tag_name)
+        });
+        formData.append('tags', JSON.stringify(taggings));
+
+        // Prepare sample_test
+        var sendingSampleTests = [];
+        console.log(sample_test)
+        sample_test.forEach((sample) => {
+            console.log(sample)
+            sendingSampleTests.push(
+                {"input": sample.input, "output": sample.output}
+            )
+        })
+        formData.append('sample_test', JSON.stringify(sendingSampleTests));
+
+        // FormData
+        if (formType==='EDIT')
+            formData.append('delete-test-zip', deleteFileCheckbox)
+        
+        if (hiddenTestZip !== null) // A file is selected
+            formData.append('test_zip', hiddenTestZip);
+
+        if (formType==='EDIT') { // PUT to /problem
+            try {
+                const response = await admin_problemAPI.updateById({ formData, id });
+
+                console.log('Update:', response)
+                window.location.reload()
+            } catch (error) {
+                console.log("Fail to put problem: ", error);
+            }
+        } else { // POST to /problem
+            try {
+                const response = await admin_problemAPI.createProblem(formData);
+                if (response) {
+                    history.push('/admin/problem/');
+                }
+            } catch (error) {
+                console.log("Fail to post problem: ", error);
+            }
+        }
+
+    };
+
     return (
         <div className="Edit-container">
             <AdminNavbar />
             <Sidebar />
             <div className="table-view">
-                <Card className="jserver-list">
-                    <Card.Header as="h3">{cardTitle}</Card.Header>
+                <Card>
+                    <Card.Header as="h3">{cardTitle}
+                        <div className="">
+                            <Link to={`/admin/problem`}  className="card-header-btn"> <BiLeftArrowAlt/> Back </Link>
+                        </div>
+                    </Card.Header>
                     <Card.Body>
                     <Form onSubmit={handleSubmit}>
                         <ListGroup>
@@ -357,17 +372,17 @@ function Createproblem({ match }) {
                                 </Form.Control>
                             </ListGroup.Item>
 
-                            <ListGroup.Item className="cp-list cp-first">
+                            <ListGroup.Item className="cp-list cp-first constraint-list">
                                 <ListGroup.Item className="cp-list">
                                     <Form.Label className='lbl-required'>Time Limit (ms)</Form.Label>
-                                    <Form.Control type="text" placeholder="Problem's Time Limit"
+                                    <Form.Control type="number" placeholder="Problem's Time Limit"
                                         required value={time_limit} onChange={(e)=>{handleTime_limit(e)}}
                                     />
                                 </ListGroup.Item>
 
                                 <ListGroup.Item className="cp-list">
                                     <Form.Label className='lbl-required'>Memory Limit (MB)</Form.Label>
-                                    <Form.Control type="text" placeholder="Problem's Time Limit"
+                                    <Form.Control type="number" placeholder="Problem's Time Limit"
                                         required value={memory_limit} onChange={(e)=>{handleMemory_limit(e)}}
                                     />
                                 </ListGroup.Item>
@@ -426,7 +441,7 @@ function Createproblem({ match }) {
                                             );
                                         })}
                                     <Button className="addButton" onClick={() => handleAdd()}>
-                                        <GrAdd/>
+                                        Add <BsPlusCircle/>
                                     </Button>
                                 </div>
                             </ListGroup.Item>
@@ -435,6 +450,10 @@ function Createproblem({ match }) {
                                     <Form.Label>Hidden Test Zip</Form.Label>
                                     <Form.Control type="file" onChange={handleFileChange} name="test-zip"/>
                                     <div className='div-test-in-use-zip'>Current zip file: <span>{currentTestZipFile?currentTestZipFile:'None'}</span></div>
+
+                                    <Form.Check type='checkbox' className={formType==='EDIT'?"chkbox-nothidden":"chkbox-hidden"} id="test-zip-chkbox"
+                                        onChange={handleDeleteFileCheckbox}
+                                        checked={deleteFileCheckbox} label="Delete current zip file?"/>
                                 </Form.Group>
                             </ListGroup.Item>
                                 
@@ -447,7 +466,6 @@ function Createproblem({ match }) {
                                             onClearAll={handleOnClearAll} 
                                             labelField={'tag_name'}
                                             suggestions={tagSuggestions}
-
                                             minQueryLength={3}
                                             maxLength={32}
                                             autofocus={false}
@@ -462,6 +480,7 @@ function Createproblem({ match }) {
                                     </div>
                                 </Form.Group>
                             </ListGroup.Item>
+                            <hr/>
                             <Button type="submit" className="cp-btn">Save <FiSave/></Button>
                         </ListGroup>
                     </Form >

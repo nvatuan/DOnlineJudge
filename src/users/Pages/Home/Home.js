@@ -29,7 +29,9 @@ function Home() {
             <div className="pages-container">
                 <div className="home-container">
                     <div className="left-part home-container__items">
-                        <h1>Welcome</h1>
+                        <h1>Welcome to DOnlineJudge</h1>
+                        <hr/>
+                        <h5>An Automatic Code Grading System</h5>
                     </div>
                     <div className="right-part home-container__items">
                         <h1>News</h1>
@@ -40,7 +42,9 @@ function Home() {
                                         content={annou.content}
                                         creation_time={annou.creation_time}
                                         author={annou.author_name} key={annou.id}
-                                        id={annou.id} />
+                                        id={annou.id} 
+                                        is_visible={annou.is_visible}
+                                    />
                                 })
                             }
                         </div>

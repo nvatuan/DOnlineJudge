@@ -12,7 +12,8 @@ function Dashboard() {
     const { id, username, admin_type, profile_pic, last_login, authored_problem, solved_problem } = useSelector(profileSelector);
     useEffect(() => {
         dispatch(userProfile());
-    }, [])
+    }, [dispatch])
+
     const hanldeTime = (time) => {
         return new Date(time).toString().replace("Indochina", "Hanoi");
     }
@@ -21,7 +22,12 @@ function Dashboard() {
             <AdminNavbar />
             <Sidebar />
             <div className="admin-dashboard pages-container">
-                <h2 className="dashboard__title"> <AiOutlineDashboard className="dashboard__title-icon"></AiOutlineDashboard> Dashboard</h2>
+
+                <h2 className="dashboard__title"> 
+                    <AiOutlineDashboard className="dashboard__title-icon"></AiOutlineDashboard> Dashboard
+                </h2>
+                <hr/>
+
                 <div className="dashboard__list">
                     <div className="dashboard__item dashboard__item--admin-name">
                         <div className="item__icon item__icon--first">
@@ -59,11 +65,11 @@ function Dashboard() {
                     <div className="admin_information">
                         <h4>Introduction</h4>
                         <hr />
-                        <p>Thuốc đắng giả tật, nhạc giật lên luôn</p>
+                        {/* <p>Thuốc đắng giả tật, nhạc giật lên luôn</p> */}
+                        <p><em>This user doesn't have any information</em></p>
                     </div>
                 </div >
                 <div className="admin__section">
-
                     <div className="admin__my-problems">
                         <h4>Authored Problems</h4>
                         < table >
@@ -71,7 +77,7 @@ function Dashboard() {
                                 <tr>
                                     <th>ID</th>
                                     <th>Display ID</th>
-                                    <th>Tille</th>
+                                    <th>Title</th>
                                     <th>difficulty</th>
 
                                 </tr>
@@ -105,7 +111,7 @@ function Dashboard() {
                                 <tr>
                                     <th>ID</th>
                                     <th>Display ID</th>
-                                    <th>Tille</th>
+                                    <th>Title</th>
                                     <th>difficulty</th>
 
                                 </tr>

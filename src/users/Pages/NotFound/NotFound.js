@@ -95,9 +95,8 @@ function NotFound() {
                 </svg>
             </div>
             <div class="text">
-                <h1>404 Error</h1>
-                <h2>Couldn't launch :(</h2>
-                <h3>Page Not Found - lets take you <Link to='/' onClick={() => window.history.back()}>back</Link></h3>
+                <h1>Error 404</h1>
+                <h2>Page Not Found - Let's Take You <Link to='/' onClick={() => window.history.back()}>Back</Link></h2>
             </div>
         </div>
     )

@@ -48,7 +48,7 @@ function Login(props) {
                 autoClose: 1500 
             });
             dispatch(clearState());
-            history.push('/problem/');
+            history.push('/home/');
         }
     }, [isLoginSuccess, isLoginError]);
 

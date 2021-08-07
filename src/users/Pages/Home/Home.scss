@@ -6,6 +6,7 @@
   -webkit-font-smoothing: subpixel-antialiased;
 }
 .home-container {
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   align-content: center;
@@ -20,8 +21,15 @@
     margin-left: 100px;
     h1 {
       color: #fff;
-      font-size: 80px;
+      font-size: 70px;
       font-weight: 500;
+    }
+    h2, h3, h4, h5 {
+      color: #fff;
+    }
+    hr {
+      border-top: 1px solid #fff;
+      width: 80%;;
     }
     z-index: 5;
   }
@@ -67,4 +75,5 @@
   min-width: 100%;
   min-height: 100%;
   opacity: 0.8;
+  object-fit: fill;
 }

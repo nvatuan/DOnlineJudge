@@ -56,11 +56,11 @@ function NewJudgeServerForm() {
 								<Form.Label>Server Active Status</Form.Label>
 								<Form.Check
 									label="Enable" name="group1" type="radio" id={`radio-1`} onChange={()=>{setActive(true)}}
-									required
+									required checked={active}
 								/>
 								<Form.Check
 									label="Disable" name="group1" type="radio" id={`radio-2`} onChange={()=>{setActive(false)}}
-									required
+									required checked={!active}
 								/>
 							</Form.Group>
 

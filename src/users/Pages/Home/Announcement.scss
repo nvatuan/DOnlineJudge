@@ -49,8 +49,19 @@ article:hover {
     border-bottom-right-radius: 120px;
     margin-left: 10px;
     margin-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+
     h5 {
         font-size: 15px;
+    }
+    p {
+        margin: 0 !important;
+    }
+    .visible_indicator {
+        margin: auto;
+        font-size: x-large;
     }
 }
 

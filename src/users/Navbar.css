@@ -8,8 +8,8 @@
   position: fixed;
   top: 0;
   z-index: 1000;
-
 }
+
 .navbar-logo {
   margin-right: 4px;
   transform: translateY(-4px);
@@ -62,7 +62,7 @@
   justify-content: center;
   list-style: none;
   text-align: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .nav-item {

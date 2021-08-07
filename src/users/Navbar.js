@@ -55,9 +55,9 @@ function Navbar() {
                         {click ? <FaTimes /> : <FaBars />}
                     </div>
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <Link to='/home' className='nav-links'> Home</Link>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <Link to='/news' className='nav-links'> News</Link>
                         </li>

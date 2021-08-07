@@ -1,20 +1,49 @@
 .navbar {
+  margin: 0;
+  padding: 0;
+
   background: #1c2237;
   height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 1.2rem;
   position: sticky;
   top: 0;
   z-index: 100;
 
-  .btn-item {
-    display: inline-block;
-    position: absolute;
-    color: #606266;
-    font-size: 14px;
-    right: 12px;
-    top: 20px;
+  display: flex;
+  align-content: center;
+
+  .nav-container {
+    margin-top: auto;
+    margin-bottom: auto;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-content: center;
+    width: 100%;
+    margin-right: 10px;
+
+    .btn-item {
+      padding-right: 10px;
+      color: #606266;
+      text-align: center;
+
+      .icon-w-text {
+        .icon {
+          font-size: medium;
+        }
+        .text {
+          strong {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    .btn:disabled {
+      opacity: 1;
+      background-color: #1c2237;
+      color: white;
+      font-family: monospace;
+    }
   }
 }

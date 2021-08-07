@@ -1,15 +1,17 @@
 import axiosClient from './axiosClient'
+import queryString from 'query-string';
 
 const admin_usersAPI = {
-    getAll: () =>{
+    getAll: (data) =>{
         const token = localStorage.getItem('token');
         let config = {
             headers: {
                 'Authorization': 'Token ' + token,
             }
-        };
-        const url = 'admin/users';
-        return axiosClient.get(url,config);
+        }
+        const paramString = queryString.stringify(data);
+        const url = `admin/users/?${paramString}`;
+        return axiosClient.get(url, config);
     },
     getById: (id)=>{
         const token = localStorage.getItem('token');

@@ -9,6 +9,9 @@ const logoutAPI = {
                 'Authorization': 'Token ' + token,
             }
         }
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userInformation');
         return axiosClient.get(url,config);
     }
 }

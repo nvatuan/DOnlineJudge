@@ -1,14 +1,18 @@
 import axiosClient from "./axiosClient";
+import queryString from 'query-string';
+
 const admin_problemAPI = {
-    getAll: () => {
+    getAll: (data) => {
         const token = localStorage.getItem('token');
         let config = {
             headers: {
                 'Authorization': 'Token ' + token,
             }
         }
-        const url = 'admin/problem/';
-        return axiosClient.get(url,config);
+        const paramString = queryString.stringify(data);
+        const url = `problem/?${paramString}`;
+        if (token === null) return axiosClient.get(url);
+        return axiosClient.get(url, config);
     },
     getById: (id) => {
         const url = `admin/problem/${id}`;
@@ -50,7 +54,7 @@ const admin_problemAPI = {
         const url = 'admin/problem/';
         return axiosClient.post(url, data, config);
     },
-    updateVisible: (id, isVisible) =>{
+    updateVisible: (id) =>{
         const token = localStorage.getItem('token');
         let config = {
             headers: {
@@ -58,8 +62,8 @@ const admin_problemAPI = {
             }
         };
         const url = `admin/problem/${id}/`;
-        const visible = {is_visible: !isVisible};
-        return axiosClient.put(url,visible,config);
+        const payload = {'toggle_visibility':'true'}
+        return axiosClient.put(url, payload,config);
     },
 
     getAllProblemTags: () => {
