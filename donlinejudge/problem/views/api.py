@@ -55,7 +55,12 @@ class ProblemAPI(APIView):
         fdata = ProblemForm(request.POST, request.FILES)
 
         if not fdata.is_valid():
-            return response_bad_request(fdata.errors.as_data())
+            errmsg = ""
+            try:
+                errmsg = '. '.join(fdata.errors.get('__all__', []))
+            except:
+                pass
+            return response_bad_request(errmsg)
 
         instance = fdata.save(commit=False)
 
@@ -98,6 +103,7 @@ class ProblemAPI(APIView):
             tag = ProblemTag.objects.get(tag_name=item)
             instance.tags.add(tag)
         instance.author = request.user
+        instance.rename_testzip_to_pk()
         instance.save()
         return response_ok(ProblemSerializer(instance).data)
 
@@ -139,7 +145,6 @@ class ProblemDetailAPI(APIView):
         datapost = request.data
 
         ## If the request only update the visibility
-        print(datapost)
         if datapost.get('toggle_visibility'):
             problem.is_visible ^= True
             problem.save();

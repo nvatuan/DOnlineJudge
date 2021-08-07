@@ -99,7 +99,12 @@ class LoginAPI(generics.GenericAPIView):
                 request.user.auth_token.delete()
                 logout(request)
             
-            login(request, user)
+            try:
+                login(request, user)
+            except FileNotFoundError:
+                user.reset_profile_pic()
+                login(request, user)
+
             user_data = User.objects.get(username=request.data['username'])
             try: # Delete the Token if it exists
                 token = Token.objects.get(user=user_data)

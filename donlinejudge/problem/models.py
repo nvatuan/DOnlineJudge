@@ -147,7 +147,7 @@ class Problem(models.Model):
 
     class Meta:
         db_table = "problem"
-        ordering = ["created"]
+        ordering = ["-id"]
     
     def __str__(self):
         return f"Disp_id[{self.display_id}] Title[{self.title}]"

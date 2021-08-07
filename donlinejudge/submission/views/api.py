@@ -17,6 +17,8 @@ import asyncio, websockets
 from time import sleep
 from json import loads, dumps
 import sys
+import logging
+logger = logging.getLogger("donlinejudge")
 
 from utils.make_response import *
 import utils.serialized_data_rearrange as sdr
@@ -86,14 +88,21 @@ class SubmissionAPI(APIView):
             submission = Submission.objects.create(**data)
             problem = Problem.objects.get(id=prob_id)
             jstask = JudgeSubmissionTask(submission, problem)
-
             async_task(jstask.main, hook=jstask.hook, ack_failure=True)
 
             return response_created(SubmissionSerializer(submission).data)
         except KeyError as ke:
             return response_bad_request(str(ke) + " is required.")
-        # except: # TODO Uncomment these
-        #     return response_bad_request("Something went wrong.")
+        except FileNotFound as fnferr:
+            problem.remove_test_zip()
+            logger.error('Error POST @ /status: Test-Zip for problem not found. Resetting back to None...\n' + repr(fnferr))
+        except Exception as e: 
+            logger.error('Error POST @ /status: ' + repr(e))
+        finally:
+            submission.verdict = SubmissionVerdict.SE
+            submission.save();
+            return response_internal_error("There is something wrong at the Server. Please notify the admin about this")
+
 
 class SubmissionDetailAPI(APIView):
     """
@@ -177,7 +186,6 @@ class JudgeSubmissionTask:
 
         tests = []
         ## Appending sample tests
-        print('Samp', self.prob.sample_test)
         for kv in self.prob.sample_test:       
             tests.append((kv["input"], kv["output"]))
         self.sample_test_count = len(tests)
@@ -208,6 +216,8 @@ class JudgeSubmissionTask:
             maxtime, maxmem = 0, 0 
 
             def trim_output(output):
+                if output == None:
+                    return ""
                 return output if len(output) < OUTPUT_MAX_LENGTH else output[:OUTPUT_MAX_LENGTH]+'...'
 
             ## Sample tests

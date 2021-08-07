@@ -58,7 +58,7 @@ class Submission(models.Model):
     content = models.TextField(null=True)
     language = models.CharField(choices=SubmissionLanguage.CHOICES, max_length=50, default=SubmissionLanguage.LANG[0])
 
-    verdict = models.CharField(choices=SubmissionVerdict.CHOICES, max_length=20, default=SubmissionVerdict.NEW)
+    verdict = models.CharField(choices=SubmissionVerdict.CHOICES, max_length=128, default=SubmissionVerdict.NEW)
     output = models.JSONField(default=dict)
     time = models.IntegerField(null=True)
     memory = models.IntegerField(null=True)
