@@ -14,6 +14,9 @@ import Collapsible from 'react-collapsible';
 import adminStatusAPI from '../../api/adminStatusAPI';
 import './SubmissionList.scss'
 
+import {V2C, VS} from '../../constant/SubmissionVerdict'
+import '../../css/SubmissionVerdict.css'
+
 function AdminSubmissionList(props) {
     let href = window.location.href;
     var url = new URL(href);
@@ -32,19 +35,6 @@ function AdminSubmissionList(props) {
             page: 1,
         }
     })
-
-    const result = {
-        "Accepted": "Accepted",
-        "Wrong Answer": "Wrong_answer",
-        "Runtime Error": "Runtime_error",
-        "New": "New",
-        "Compilation Error": "Compile_error",
-        "System Error": "System_error",
-        "Judged": "Judged",
-        "Judging": "Judging",
-        "Rejected": "Rejected",
-        "Rejudging": "Rejudging",
-    };
 
     // -- paginate
     const [maxPage, setMaxPage] = useState(1);
@@ -175,8 +165,9 @@ function AdminSubmissionList(props) {
                                             <option value="Wrong Answer">Wrong answer</option>
                                             <option value="Runtime Error">Runtime error</option>
                                             <option value="New">New</option>
-                                            <option value="Compile Error">Compile error</option>
+                                            <option value="Compilation Error">Compile Error</option>
                                             <option value="System Error">System error</option>
+                                            <option value="Skipped">Skipped</option>
                                             <option value="Judged">Judged</option>
                                             <option value="Judging">Judging</option>
                                             <option value="Rejected">Rejected</option>
@@ -234,9 +225,9 @@ function AdminSubmissionList(props) {
                                                     <td>{stat.author_name}</td>
                                                     <td>
                                                         <div className="table-cell">
-                                                            <div className={`result-container ${result[stat.verdict]}`}>
+                                                            <div className={`result-container ${V2C(stat.verdict)}`}>
                                                                 <div className="result-text">
-                                                                    {stat.verdict}
+                                                                    {VS(stat.verdict)}
                                                                 </div>
                                                             </div>
                                                         </div>

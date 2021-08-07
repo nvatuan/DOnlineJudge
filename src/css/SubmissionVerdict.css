@@ -1,0 +1,127 @@
+.accepted {
+    background: #19be6b;
+}
+.accepted:hover div {
+	display: none;
+}
+.accepted:hover:before{
+	content: 'Accepted';
+}
+
+.time-limit-exceeded{
+    background: #ed3f14;
+}
+.time-limit-exceeded:hover div {
+	display: none;
+}
+.time-limit-exceeded:hover:before {
+	content: 'Time Limit Exceeded';
+}
+
+.memory-limit-exceeded{
+    background: #ed3f14;
+}
+.memory-limit-exceeded:hover div {
+	display: none;
+}
+.memory-limit-exceeded:hover:before {
+	content: 'Memory Limit Exceeded';
+}
+
+.wrong-answer {
+    background: #ed3f14;
+}
+.wrong-answer:hover div {
+	display: none;
+}
+.wrong-answer:hover:before {
+	content: "Wrong Answer";
+}
+
+.rejected{
+    background: #ed3f14cb;
+}
+.rejected:hover div {
+	display: none;
+}
+.rejected:hover:before {
+	content: 'Rejected';
+}
+
+.runtime-error {
+    background: #ed8814;
+}
+.runtime-error:hover div {
+	display: none;
+}
+.runtime-error:hover:before {
+	content: "Runtime Error";
+}
+
+.compile-error {
+    background: #1e6d79;
+}
+.compile-error:hover div {
+	display: none;
+}
+.compile-error:hover:before {
+	content: "Compile Error";
+}
+
+.system-error {
+    background: #000;
+}
+.system-error:hover div {
+	display: none;
+}
+.system-error:hover:before {
+	content: "System Error";
+}
+
+.judged, .skipped {
+    background: #0069d9;
+}
+.judged:hover div {
+	display: none;
+}
+.judged:hover:before {
+	content: "Judged";
+}
+
+.skipped:hover div {
+	display: none;
+}
+.skipped:hover:before {
+	content: "Skipped";
+}
+
+.new, .waiting, .judging, .rejudging{
+    background: #616161;
+}
+.new:hover div {
+	display: none;
+}
+.new:hover:before {
+	content:"New";
+}
+
+.waiting:hover div {
+	display: none;
+}
+.waiting:hover:before {
+	content: "Waiting";
+}
+
+.judging:hover div {
+	display: none;
+}
+.judging:hover:before {
+	content: "Judging";
+}
+
+.rejudging:hover div {
+	display: none;
+}
+.rejudging:hover:before {
+	content: "Rejudging";
+}

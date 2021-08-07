@@ -50,40 +50,25 @@
     box-sizing: border-box;
 }
 .result-container{
-    display: inline-block;
-    height: 30px;
-    line-height: 30px;
-    margin: 2px 4px 2px 0;
-    padding: 0 8px;
-    border: 1px solid #e9eaec;
-    border-radius: 8px;
-    background: #924381;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 380;
-    vertical-align: middle;
-    opacity: 1;
-    overflow: hidden;
-    cursor: pointer;
+    // display: inline-block;
+    // height: 30px;
+    // line-height: 30px;
+    // margin: 2px 4px 2px 0;
+    // padding: 0 8px;
+    // border: 1px solid #e9eaec;
+    // border-radius: 8px;
+    // color: #fff;
+    // font-size: 13px;
+    // font-weight: 380;
+    // vertical-align: middle;
+    // opacity: 1;
+    // overflow: hidden;
+    // cursor: pointer;
+    .other {
+        background: #924381;
+    }
 }
+
 .result-text{
     text-align: center;
-}
-.Accepted{
-    background: #19be6b;
-}
-.Time_limit,.Wrong_answer,.Runtime_error{
-    background: #ed3f14;
-}
-.System_error,.Compile_error{
-    background: #f90;
-}
-.New{
-    background: #0069d9;
-}
-.Judged{
-    background: #138496;
-}
-.Judging, .Rejudging{
-    background: #23272b;
 }
