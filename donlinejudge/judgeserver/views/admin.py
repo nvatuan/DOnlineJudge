@@ -24,7 +24,7 @@ class JudgeServerAPI(APIView):
         """
         error = ""
         try:
-            FIELDS = ['hostname', 'socketaddress']
+            FIELDS = ['hostname', 'socketaddress', 'is_disabled']
             for field in FIELDS:
                 if request.data.get(field) == None:
                     error += (f"'{field}' is missing. ")
@@ -37,9 +37,12 @@ class JudgeServerAPI(APIView):
 
             data['hostname'] = data.get('hostname', '')
 
+            print(data)
             jserver = JudgeServer(
                 hostname=data['hostname'],
-                socketaddress=data['socketaddress']
+                socketaddress=data['socketaddress'],
+                is_disabled=data.get('is_disabled', False),
+                max_pending_tasks=data.get('max_pending_tasks', 8),
             )
             jserver.generate_new_token()
             jserver.save()
@@ -61,7 +64,7 @@ class JudgeServerDetailAPI(APIView):
                 return response_not_found("Judgeserver with id=%s does not exist." % str(id))
             jserver = JudgeServer.objects.get(id=id)
 
-            FIELDS = ['hostname', 'socketaddress', 'is_disabled']
+            FIELDS = ['hostname', 'socketaddress', 'is_disabled', 'max_pending_tasks']
             changed = False
             for field in FIELDS:
                 if request.data.get(field) != None:

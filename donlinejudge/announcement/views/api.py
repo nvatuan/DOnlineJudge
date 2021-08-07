@@ -28,9 +28,10 @@ class AnnouncementAPI(APIView):
             else:
                 announcement = Announcement.objects.filter(
                     is_visible=True).order_by("-creation_time")
-                announcement = AnnouncementSerializer(announcement, many=True).data 
-                announcement = paginate(announcement, request)
-                return response_ok(announcement)
+                ann_serialized_data = AnnouncementSerializer(announcement, many=True).data
+                ann_serialized_data = sdr.auto_apply(ann_serialized_data, request)
+                ann_serialized_data = paginate(ann_serialized_data, request)
+                return response_ok(ann_serialized_data)
         except Exception as E:
             #print(E)
             return response_bad_request("Request denied.")

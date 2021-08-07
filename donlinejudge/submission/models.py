@@ -11,23 +11,25 @@ class SubmissionVerdict:
     RE = "Runtime Error"
     CE = "Compile Error"
     SE = "System Error"
+    REJECT = "Rejected"
 
     NEW = "New"
     WAIT = "Waiting"
     JUDGE = "Judging"
+    REJUDGE = "Rejudging"
     SKIPPED = "Skipped" 
 
-    VERDICTS = [AC, WA, TLE, MLE, RE, CE, SE]
+    VERDICTS = [AC, WA, TLE, MLE, RE, CE, SE, REJECT]
 
     ACCEPTED_VERDICTS = [AC]
-    NOT_ACCEPTED_VERDICTS = [WA, TLE, MLE, RE]
+    NOT_ACCEPTED_VERDICTS = [WA, TLE, MLE, RE, REJECT]
 
-    NOT_YET_VERDICTS = [NEW, WAIT, JUDGE, SKIPPED]
+    NOT_YET_VERDICTS = [NEW, WAIT, JUDGE, REJUDGE, SKIPPED]
 
     CHOICES = [
         ("AC", AC), ("WA", WA), ("TLE", TLE),
-        ("MLE", MLE), ("RE", RE), ("CE", CE),
-        ("SE", SE), ("WAIT", WAIT), ("JUDGE", JUDGE), ("NEW", NEW)
+        ("MLE", MLE), ("RE", RE), ("CE", CE), ("REJECT", REJECT),
+        ("SE", SE), ("WAIT", WAIT), ("JUDGE", JUDGE), ("REJUDGE", REJUDGE), ("NEW", NEW)
     ]
 
     def _get_default_dict():
@@ -78,6 +80,21 @@ class Submission(models.Model):
 
     def author_name(self):
         return User.objects.get(id=self.author.id).username
+
+    ## Methods
+    def set_fields_rejudge(self):
+        self.verdict = SubmissionVerdict.REJUDGE
+        self.time=None
+        self.time=None
+        self.output={}
+
+    def set_fields_reject(self):
+        remain_ac_sub_set = Submission.objects.filter(author=self.author).filter(verdict=SubmissionVerdict.AC)
+        if len(remain_ac_sub_set) == 1:
+            self.author.solved_problem.remove(self)
+            self.author.save()
+        self.verdict = SubmissionVerdict.REJECT
+        self.save()
 
     class Meta:
         db_table = "submission"

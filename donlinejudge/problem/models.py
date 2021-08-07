@@ -114,6 +114,21 @@ class Problem(models.Model):
                     e = sys.exc_info()[0]
                     print(e)
                     raise
+
+    def update_stat_remove_submission(self, sub):
+        try:
+            if sub.problem.id != self.id: return
+            self.statistic_info[sub.verdict] = max(self.statistic_info.get(sub.verdict, 0) - 1, 0)
+            self.total_submission = max(self.total_submission-1, 0)
+
+            #if sub.verdict == SubmissionVerdict.AC: # circular import problem
+            if sub.verdict == "Accepted": # TODO Fix import issue and Use the above line
+                 self.correct_submission = max(
+                    self.correct_submission-1, 0
+                 )
+        except:
+            # TODO handle exception for Problem.submission_got_rejected
+            raise
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

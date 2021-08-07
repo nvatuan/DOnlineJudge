@@ -22,7 +22,7 @@ class JudgeServer(models.Model):
 
     class Meta:
         db_table = "judge_server"
-        ordering = ["-is_disabled", "-added_time"]
+        ordering = ["-id", "-is_disabled"]
 
     def __str__(self):
         return f"Hostname=[{self.hostname}], Socket address=[{self.socketaddress}], Token=[{self.token}]"

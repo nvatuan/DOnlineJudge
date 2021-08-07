@@ -12,14 +12,12 @@ class ProblemForm(ModelForm):
                 'title', 'statement',
                 'difficulty', 
                 'sample_test',
-                'test_zip',
+                #'test_zip',
                 'time_limit', 'memory_limit'
                 ]
 
     def clean(self):
         cdata = super().clean()
-        print("Forms data", self.data)
-        print("Forms cleandata", cdata)
 
         try:
             # Clean display_id
@@ -85,7 +83,7 @@ class ProblemPutForm(ModelForm):
                 'title', 'statement',
                 'difficulty', 
                 'sample_test',
-                'test_zip',
+                #'test_zip',
                 'time_limit', 'memory_limit'
         ]
     def clean(self):

@@ -42,6 +42,10 @@ class UserLoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Incorrect Credentials")
 
+class UserCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
 
 class ProfilePageSerializer(serializers.ModelSerializer):
     profile_pic = serializers.ImageField(default='avatar/__default__.png')

@@ -124,7 +124,8 @@ class ProblemDetailAPI(APIView):
     """
     @admin_required
     def put(self, request, id):
-        print(request.data)
+        doDeleteTest = (request.data.get('delete-test-zip', '').lower() == 'true')
+
         try:
             problem = Problem.objects.get(id=id)
         except Problem.DoesNotExist:
@@ -136,14 +137,25 @@ class ProblemDetailAPI(APIView):
 
         ## Remove display_id if from querydict it is the same
         datapost = request.data
+
+        ## If the request only update the visibility
+        print(datapost)
+        if datapost.get('toggle_visibility'):
+            problem.is_visible ^= True
+            problem.save();
+            return response_ok(ProblemSerializer(problem).data)
+
         rqpost = request.POST.copy()
         if rqpost.get('display_id'):
             problem.display_id = rqpost.get('display_id')
-        rqpost.pop('display_id')
+            rqpost.pop('display_id')
         
         fdata = ProblemPutForm(rqpost, request.FILES)
         if not fdata.is_valid():
             return response_bad_request(fdata.errors.as_data())
+
+        if doDeleteTest:
+            problem.remove_test_zip()
         if request.FILES.get('test_zip', '') != '':
             uploadedzipfile = request.FILES['test_zip']
             tmpzipfile = f"/tmp/{get_random_string(32)}.zip"
@@ -172,6 +184,7 @@ class ProblemDetailAPI(APIView):
         for k, v in fdata.cleaned_data.items():
             setattr(problem, k, v)
         problem.save()
+
         return response_ok(ProblemSerializer(problem).data)
 
     """
@@ -184,10 +197,11 @@ class ProblemDetailAPI(APIView):
         except Problem.DoesNotExist:
             return response_not_found("Problem with id=%s does not exist." % str(id))
 
-        data = request.data
+        if (not request.user.can_mgmt_all_problem()) and (not request.user.is_super_admin()):
+            if (problem.author is None) or (not request.user == problem.author):
+                return response_unauthorized("You don't have permission to Delete the problem")
 
-        if not request.user.can_mgmt_all_problem and not request.user == problem.author:
-            return response_unauthorized("You don't have permission to the problem")
+        data = request.data
 
         problem.remove_test_zip()
         problem.delete()

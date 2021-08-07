@@ -127,16 +127,49 @@ class SubmissionDetailAPI(APIView):
         submission.delete()
         return response_no_content("Delete succesful")
 
+    """
+		Reject or Rejudge a submission 
+    """
+    @super_admin_required
+    def put(self, request, id):
+        ## TODO permission all, own
+        try:
+            submission = Submission.objects.get(id=id)
+            problem = submission.problem
+        except Submission.DoesNotExist:
+            return response_not_found("Submission with id=%s does not exist." % (str(id)))
+
+        put_type = request.data.get('put_type') 
+        if put_type == 'rejudge':
+            jstask = JudgeSubmissionTask(submission, problem, True)
+            async_task(jstask.main, hook=jstask.hook, ack_failure=True)
+            return response_ok(SubmissionSerializer(submission).data)
+        elif put_type == 'reject':
+            problem.update_stat_remove_submission(submission)
+            problem.save();
+            submission.set_fields_reject()
+            submission.save();
+            return response_ok(SubmissionSerializer(submission).data)
+        else:
+            return response_bad_request('Missing type of operation \'put-type\' in request body')
+
 class JudgeSubmissionTask:
     """
         Represents a Task to send to DjangoQ worker - A task is to compile, run and extract results
     """
     __name__ = 'JudgeSubmissionTask'
-    def __init__(self, sub : Submission, prob: Problem):
+    def __init__(self, sub : Submission, prob: Problem, isRejudge: bool=False):
         self.sub = sub
         self.prob = prob
         self.jserver = None
         self.sample_test_count = 0
+
+        self.is_rejudge = isRejudge
+        if self.is_rejudge: # update statistic info of the problem
+            self.prob.update_stat_remove_submission(self.sub)
+            self.prob.save()
+            self.sub.set_fields_rejudge()
+            self.sub.save()
 
         # Prepping kwargs
         src = self.sub.content
@@ -144,6 +177,7 @@ class JudgeSubmissionTask:
 
         tests = []
         ## Appending sample tests
+        print('Samp', self.prob.sample_test)
         for kv in self.prob.sample_test:       
             tests.append((kv["input"], kv["output"]))
         self.sample_test_count = len(tests)
@@ -153,10 +187,6 @@ class JudgeSubmissionTask:
             tzh = TestZipHandler(self.prob.test_zip.path)
             hidden_tests = tzh.get_testdata()
             for fin, fout in hidden_tests:
-                #if not fin.endswith(b'\n'):
-                #    fin += b'\n'
-                #if not fout.endswith(b'\n'):
-                #    fout += b'\n'
                 tests.append((fin, fout))
 
         self.kwargs = {'source':src,'processor':lang,'tests':tests,'config':{}}

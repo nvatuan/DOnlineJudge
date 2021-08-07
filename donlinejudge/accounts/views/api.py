@@ -1,6 +1,7 @@
 # From django
 from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import make_password
+from django.utils.crypto import get_random_string as randstr
 from django.db import transaction, IntegrityError
 
 from rest_framework.views import APIView
@@ -18,7 +19,7 @@ from PIL import Image
 
 # Project's
 from donlinejudge.settings import MEDIA_ROOT, TOKEN_EXPIRE_AFTER_SECONDS
-from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer, ChangePasswordSerializer
+from accounts.serializers import RegisterSerializer, UserLoginSerializer, UserSerializer, ProfilePageSerializer, ProfilePageNoPasswordSerializer, ChangePasswordSerializer, UserCreationSerializer
 from accounts.decorators import unauthenticated_user, login_required, super_admin_required
 from accounts.models import *
 from submission.models import Submission
@@ -236,10 +237,66 @@ class UserAPI(APIView):
 
         return response_ok(user_sdata)
 
-    #@super_admin_required
-    #def post(self, request):
-    #    return response_bad_request("This API is not implemented")
+    @super_admin_required
+    def post(self, request):
+        gen_type = request.data.get('user_gen_type')
+        dat = request.data
+        # If any is duplicated, abort
+        if gen_type == 'list':
+            # 1. Supply list of username, email, first_name, last_name
+            # Automatically create accounts for these users
+            ulist = dat.get('username_list',[])
 
+            elist = dat.get('email_list',[])
+            flist = dat.get('fname_list',[])
+            llist = dat.get('lname_list',[])
+            created_users = []
+            for i, un in enumerate(ulist):
+                if len(User.objects.filter(username=un)) > 0:
+                    return response_bad_request(
+                        "Username {0} has been taken".format(un)
+                    )
+                em = (elist[i] if len(elist) > i else '')
+                fn = (flist[i] if len(flist) > i else '')
+                ln = (llist[i] if len(llist) > i else '')
+                created_users.append(
+                    User(username=un, email=em,
+                         first_name=fn, last_name=ln,
+                         password = randstr(length=10)
+                    )
+                )
+            User.objects.bulk_create(created_users)
+            return response_created(
+                UserCreationSerializer(created_users, many=True).data
+            ) 
+        elif gen_type == 'macro':
+            # 2. Let the website generate a group of users
+            # with prefix and postfix in their username
+            prefix=dat.get('username_prefix', '');
+            postfix=dat.get('username_postfix', '');
+            try:
+                howmany = int(dat.get('create_count', '0'));
+                if howmany < 1:
+                    return response_bad_request("'create_count' should be positive")
+            except ValueError:
+                return response_bad_request("'create_count' should be a whole number")
+            
+            created_users = []
+            for i in range(howmany):
+                un = prefix+str(i)+postfix
+                if len(User.objects.filter(username=un)) > 0:
+                    return response_bad_request(
+                        "Username {0} has been taken".format(un)
+                    )
+                created_users.append(
+                    User(username=un,password = randstr(length=10))
+                )
+            User.objects.bulk_create(created_users)
+            return response_created(
+                UserCreationSerializer(created_users, many=True).data
+            ) 
+        else:
+            return response_bad_request("Missing 'user_gen_type' in body or type is unsupported")
 
 class UserDetailAPI(APIView):
     @super_admin_required
