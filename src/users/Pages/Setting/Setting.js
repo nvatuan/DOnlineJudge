@@ -71,7 +71,7 @@ function Setting() {
                         <a href="#" onClick={() => { openProfilePage() }}><i className="far fa-id-badge"></i><span>Profile</span></a>
                         <a href="#" onClick={() => { openAccountPage() }}><i className="fas fa-user-cog"></i><span>Account</span></a>
                         <div className="sidebar-item">
-                            <Link className="profile_submission" to={`status/?probem=&username=${userData.username}`}>
+                            <Link className="profile_submission" to={`status/?problem=&username=${userData.username}`}>
                                 <i className="fas fa-history"></i>
                                 Submission
                             </Link>
