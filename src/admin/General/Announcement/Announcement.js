@@ -53,7 +53,7 @@ function Announcement(props) {
             ...filters,
             sort_by: sortBy
         })
-    }, [filters, sortBy])
+    }, [sortBy])
 
     // -- ReactPaginate: handle page change
     const handlePageClick = async (props) => {

@@ -284,7 +284,6 @@ function Createproblem({ match }) {
 
         // Prepare sample_test
         var sendingSampleTests = [];
-        console.log(sample_test)
         sample_test.forEach((sample) => {
             console.log(sample)
             sendingSampleTests.push(

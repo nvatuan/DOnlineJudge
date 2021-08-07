@@ -1,6 +1,9 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
+
+
 
 const axiosClient = axios.create({
 baseURL: process.env.REACT_APP_API_URL,
@@ -24,13 +27,16 @@ axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     if (error.response.status === 401){
-        // localStorage.removeItem('token');
-        // localStorage.removeItem('role');
-        // localStorage.removeItem('userInformation');
+        if (error.response.data.detail == "Token has expired"){
+            const history = useHistory();
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            localStorage.removeItem('userInformation');
+            history.push("/");
+        }
     }
     var error_messsage = error.response.data.data;
     if (typeof error.response.data.data === 'object'){
-        console.log(error.response.data.data);
         for (let key in error_messsage){
             toast.error(error_messsage[key], {
                 position: toast.POSITION.BOTTOM_CENTER,
