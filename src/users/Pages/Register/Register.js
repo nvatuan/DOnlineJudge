@@ -24,7 +24,14 @@ function Register(props) {
     //form handling
     const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
+        if (data.password == data.password_again)
         dispatch(registerUser(data));
+        else{
+            toast.error('Your password and confirmation password does not match', {
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 1500
+            });
+        }
     }
 
     useEffect(() => {
@@ -74,7 +81,7 @@ function Register(props) {
                         <Form.Control type="password" placeholder="Password" {...register("password")} />
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword1">
-                        <Form.Control type="password" placeholder="Password Again" />
+                        <Form.Control type="password" placeholder="Password Again" {...register("password_again")} />
                     </Form.Group>
                     <Button variant="primary" type="submit">
                         Register
