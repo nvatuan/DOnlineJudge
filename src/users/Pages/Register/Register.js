@@ -16,7 +16,6 @@ function Register(props) {
 
 
     //redux 
-
     const dispatch = useDispatch();
     const history = useHistory();
     const { isRegisterSuccess, isRegisterError } = useSelector(userSelector);
@@ -25,11 +24,11 @@ function Register(props) {
     const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
         if (data.password == data.password_again)
-        dispatch(registerUser(data));
+            dispatch(registerUser(data));
         else{
             toast.error('Your password and confirmation password does not match', {
-            position: toast.POSITION.BOTTOM_CENTER,
-            autoClose: 1500
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 2000
             });
         }
     }
@@ -81,7 +80,7 @@ function Register(props) {
                         <Form.Control type="password" placeholder="Password" {...register("password")} />
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword1">
-                        <Form.Control type="password" placeholder="Password Again" {...register("password_again")} />
+                        <Form.Control type="password" placeholder="Confirm your Password" {...register("password_again")} />
                     </Form.Group>
                     <Button variant="primary" type="submit">
                         Register

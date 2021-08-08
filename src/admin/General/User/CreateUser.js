@@ -105,7 +105,7 @@ function MacroTypeCreationForm({formSubmitHandler}) {
 			if (i < 1) return;
 			setUserCnt(i);
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 		}
 	}
 
@@ -180,7 +180,7 @@ function CreateUser({ match }) {
 		try {
 			const resp = await admin_usersAPI.createUser(data)
 			if (resp) {
-				console.log("OK", resp)
+				// console.log("OK", resp)
 				if (localStorage.getItem(LS_ACC_CREATION_DATA) === null) {
 					localStorage.setItem(LS_ACC_CREATION_DATA, JSON.stringify([]))
 				}
@@ -208,7 +208,7 @@ function CreateUser({ match }) {
 				setUselessValue(uselessValue+1)
 			}
 		} catch (error) {
-			console.log("ERR", error)
+			// console.log("ERR", error)
 		}
 	}
 	const eraseLocalStorageLogs = () => {
@@ -268,7 +268,7 @@ function CreateUser({ match }) {
 								<div className='logs'>
 									{
 										getCreationLogFromLocalStorage().map((item) => (
-											<p><Link to={`/admin/user/create/log/${item.id}`}  target="_blank">{item.id}# {new Date(item.when).toLocaleString()} <BiLinkExternal/></Link></p>
+											<p key={'log-'+item.id}><Link to={`/admin/user/create/log/${item.id}`}  target="_blank">{item.id}# {new Date(item.when).toLocaleString()} <BiLinkExternal/></Link></p>
 										))
 									}
 									<input type='hidden' className='useless-input' value={uselessValue}></input>

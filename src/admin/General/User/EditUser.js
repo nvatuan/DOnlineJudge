@@ -108,8 +108,8 @@ function EditUser({match}) {
                                     <label htmlFor="Is staff">This user is a Staff: </label>
                                     <Form.Control as="select" size="sm" custom {...register("is_staff")}>
                                         <option value="" selected disabled hidden>{`${userData.is_staff}`}</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
                                     </Form.Control>
                                 </div>
                                 <div className="user-select">

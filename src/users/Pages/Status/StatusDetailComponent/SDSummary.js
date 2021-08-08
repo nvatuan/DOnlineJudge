@@ -41,7 +41,7 @@ function StatusDetailSummary({ submission }) {
 									<td>Status</td>
 									<td>
 										<div className={`verdict-text ${V2C(submission.verdict)}`}>
-											<div>{VS(submission.verdict)}</div>
+											<div>{submission.verdict}</div>
 										</div>
 									</td>
 								</tr>

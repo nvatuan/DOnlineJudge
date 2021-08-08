@@ -15,12 +15,14 @@ function StatusDetailSample({ samples }) {
 								return (
 									<Collapsible key={'sdsample-c'+idx} trigger={[`Sample Test #${idx+1}: ${sample.verdict} (CPU:${sample['cpu time']}ms, MEM:${sample['memory used']}KB)`]} easing='ease'>
 										<table className='test-result'>
+											<tbody>
 											<tr>
-												<td className='row-name'>Stderr</td> <td className='row-value'><pre>{sample['stderr']}</pre></td>
+												<td className='row-name'>Stderr</td><td className='row-value'><pre>{sample['stderr']}</pre></td>
 											</tr>
 											<tr>
-												<td className='row-name'>Stdout</td> <td className='row-value'><pre>{sample['stdout']}</pre></td>
+												<td className='row-name'>Stdout</td><td className='row-value'><pre>{sample['stdout']}</pre></td>
 											</tr>
+											</tbody>
 										</table>
 									</Collapsible>
 								)
@@ -59,12 +61,14 @@ function StatusDetailHidden({ hiddens }) {
 									return (
 										<Collapsible key={'sdhidden-c'+idx} trigger={[`Hidden Test #${idx+1}: ${hidden.verdict} (CPU:${hidden['cpu time']}ms, MEM:${hidden['memory used']}KB)`]} easing='ease'>
 											<table className='test-result'>
+												<tbody>
 												<tr>
-													<td className='row-name'>Stderr</td> <td className='row-value'><pre>{hidden['stderr']}</pre></td>
+													<td className='row-name'>Stderr</td><td className='row-value'><pre>{hidden['stderr']}</pre></td>
 												</tr>
 												<tr>
-													<td className='row-name'>Stdout</td> <td className='row-value'><pre>{hidden['stdout']}</pre></td>
+													<td className='row-name'>Stdout</td><td className='row-value'><pre>{hidden['stdout']}</pre></td>
 												</tr>
+												</tbody>
 											</table>
 										</Collapsible>
 									)

@@ -144,7 +144,7 @@ function AdminSubmissionList(props) {
             <div className="table-view">
                 <Card className='admin-card'>
                     <div className="admin-status-container pages-container">
-                        <Collapsible trigger={["Search/Filter", <BsChevronDown/>]} easing='ease'>
+                        <Collapsible trigger={["Search/Filter", <BsChevronDown key='chevron-admin-status'/>]} easing='ease'>
                             <Form className="filter_form">
                                 <div className="filter_form_items">
                                     <Form.Group className="search-content">
@@ -212,7 +212,7 @@ function AdminSubmissionList(props) {
                                 <tbody>
                                     {
                                         status.length === 0
-                                        ? <p className="empty-result-msg">Nothing to show..</p>
+                                        ? <tr><td colSpan={5}><p className="empty-result-msg">Nothing to show..</p></td></tr>
                                         : status.map(stat => {
                                             return (
                                                 <tr key={"table-row"+stat.id}>

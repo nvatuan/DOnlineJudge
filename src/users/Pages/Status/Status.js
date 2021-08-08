@@ -122,7 +122,7 @@ function Status() {
         <div>
             <Navbar/>
             <div className="status-container pages-container">
-                <Collapsible trigger={["Search/Filter", <BsChevronDown/>]} easing='ease'>
+                <Collapsible trigger={["Search/Filter", <BsChevronDown key={'chevron-down-status'}/>]} easing='ease'>
                     <Form className="filter_form">
                         <div className="filter_form_items">
                             <Form.Group className="search-content">
@@ -189,7 +189,7 @@ function Status() {
                         <tbody>
                             {
                                 status.length === 0
-                                ? <p className="empty-result-msg">Nothing to show..</p>
+                                ? <tr><td><p className="empty-result-msg">Nothing to show..</p></td></tr>
                                 : status.map(stat => {
                                     return (
                                         <tr key={stat.id}>

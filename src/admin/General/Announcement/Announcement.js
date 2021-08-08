@@ -70,7 +70,7 @@ function Announcement(props) {
                 setAnnouncements(resp.data)
                 setMaxPage(resp.maxpage)
             } catch (error) {
-                console.log(error);
+                // console.log(error);
             }
         }
         fetchProblemByFilters();
@@ -86,9 +86,9 @@ function Announcement(props) {
                     (ann) => ann.id === newann.id ? { ...ann, is_visible: newann.is_visible } : ann
                 )
             )
-            console.log("Update announcements")
+            // console.log("Update announcements")
         } catch (error) {
-            console.log("Fail to set visibility:", error);
+            // console.log("Fail to set visibility:", error);
         }
     }
 
@@ -124,7 +124,7 @@ function Announcement(props) {
             <div className="announcements-container">
                 <div className="table-view admin-announcement">
                     <Card className='admin-card'>
-                        <Collapsible trigger={["Search/Filter", <BsChevronDown/>]} easing='ease'>
+                        <Collapsible trigger={["Search/Filter", <BsChevronDown key='chevron-admin-post'/>]} easing='ease'>
                             <Form className="filter_form">
                                 <div className="filter_form_items">
                                     <Form.Group className="search-content">

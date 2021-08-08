@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Register from './Pages/Register/Register';
 import logo from '../public/Logo_dhbkdn.jpg'
+
 function Navbar() {
     const [check, setCheck] = useState(false);
     const { isSuccess } = useSelector(userSelector);
@@ -36,11 +37,11 @@ function Navbar() {
     const onLogout = () => {
         dispatch(logoutUser());
         if(isSuccess){
-            toast.success('goodbye!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                autoClose: 1500
-            });
             history.push("/");
+            toast.success('See you later!', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 3000
+            });
         }
     }
     return (
@@ -74,9 +75,9 @@ function Navbar() {
                             {!check ? (
                                 <Login />
                             ) : <DropdownButton  variant="secondary" title={localStorage.getItem('username')}>
-                                <Dropdown.Item><Link to='/profile' className="dropdown-items">Settings</Link></Dropdown.Item>
+                                <Dropdown.Item href='/profile' className="dropdown-items">Settings</Dropdown.Item>
                                 {localStorage.getItem('role') === "Super Admin" || localStorage.getItem('role') === "Admin" ?
-                                        <Dropdown.Item><Link to='/admin' className="dropdown-items ">Admin page</Link></Dropdown.Item> : <></>}
+                                    <Dropdown.Item href='/admin' className="dropdown-items ">Admin page</Dropdown.Item> : <></>}
                                 <Dropdown.Divider />
                                 <Dropdown.Item className="dropdown-items" onClick={onLogout} >Logout</Dropdown.Item>
                             </DropdownButton>}

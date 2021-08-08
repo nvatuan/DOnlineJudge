@@ -34,8 +34,19 @@ import NewJudgeServerForm from './admin/JudgeServer/NewJudgeServerForm';
 import AdminSubmissionList from './admin/Submission/SubmissionList'
 import AdminSubmissionDetail from './admin/Submission/SubmissionDetail'
 
+import {toast} from 'react-toastify'
+
 function App() {
+  if (localStorage.getItem('force-logout')) {
+    toast.error("Your Token has expired. Please login again.", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: 4000,
+    });
+    localStorage.removeItem('force-logout')
+  }
+
   return (
+    <>
       <Router>
         <Switch>
           <Route path='/' exact component={Home}></Route>
@@ -74,6 +85,7 @@ function App() {
           <Route component={NotFound}></Route>
         </Switch>
       </Router>    
+    </>
   );
 }
 

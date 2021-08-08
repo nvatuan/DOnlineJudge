@@ -64,7 +64,6 @@ function User(props) {
     useEffect(() => {
         const fetchAll = async() => {
             try {
-                console.log(filters)
                 const resp = await admin_usersAPI.getAll(filters)
                 setUsers(resp.data)
                 setMaxPage(resp.maxpage)
@@ -107,7 +106,7 @@ function User(props) {
             <Sidebar />
             <div className="admin-user table-view">
                 <Card className='admin-card'>
-                    <Collapsible trigger={["Search/Filter", <BsChevronDown/>]} easing='ease'>
+                    <Collapsible trigger={["Search/Filter", <BsChevronDown key='chevron-admin-user'/>]} easing='ease'>
                         <Form className="filter_form">
                             <div className="filter_form_items">
                                 <Form.Group className="search-content">

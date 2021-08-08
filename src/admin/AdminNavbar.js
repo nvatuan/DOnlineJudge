@@ -6,8 +6,6 @@ import { useHistory } from 'react-router';
 import logoutAPI from '../api/logoutAPI';
 import './AdminNavbar.scss';
 
-import {ToastContainer} from 'react-toastify';
-
 function AdminNavbar() {
     const history = useHistory();
     function handlelogout(){
@@ -53,7 +51,6 @@ function AdminNavbar() {
                         </Button>
                     </div>
                 </div>
-                <ToastContainer/>
             </div>
         </>
     )

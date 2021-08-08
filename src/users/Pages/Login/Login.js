@@ -43,9 +43,9 @@ function Login(props) {
             dispatch(clearState());
         }
         if (isLoginSuccess){
-            toast.success('Welcome', {
+            toast.success('Welcome back!', {
                 position: toast.POSITION.BOTTOM_CENTER,
-                autoClose: 1500 
+                autoClose: 3000 
             });
             dispatch(clearState());
             history.push('/home/');

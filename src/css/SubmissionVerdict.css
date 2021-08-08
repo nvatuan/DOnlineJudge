@@ -125,3 +125,7 @@
 .rejudging:hover:before {
 	content: "Rejudging";
 }
+
+.other {
+	background: inherit;
+}

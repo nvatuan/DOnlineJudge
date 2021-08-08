@@ -102,7 +102,7 @@ function Problem() {
         <div>
             <Navbar />
             <div className="problems-container pages-container">
-                <Collapsible trigger={["Search/Filter", <BsChevronDown/>]} easing='ease'>
+                <Collapsible trigger={["Search/Filter", <BsChevronDown key={'chevron-down'}/>]} easing='ease'>
                     <Form className="filter_form">
                         <div className="filter_form_items">
                             <Form.Group className="search-content">
@@ -148,7 +148,7 @@ function Problem() {
                             <tbody className="pages-container">
                                 {
                                     problems.length === 0 
-                                    ? <p className='empty-result-msg'> Nothing to show.. </p>
+                                    ? <tr><td className='empty-result-msg'> Nothing to show.. </td></tr>
                                     : (
                                         problems.map((problem) => (
                                             <tr key={problem.id}>
