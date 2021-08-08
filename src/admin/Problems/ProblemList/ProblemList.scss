@@ -1,0 +1,36 @@
+.admin-problem-container {
+    width: 100%;
+    background-color: #eee;
+
+    .filter_form {
+        button {
+            white-space: nowrap;
+        }
+    }
+
+    .card {
+        width: 100%;
+
+        .card-body {
+            height: 65vh;
+            overflow: scroll;
+            table {
+                th, td {
+                    text-align: center;
+                }
+                th:last-child, table td:last-child {
+                    min-width: 100px;
+                }
+                svg {
+                    width: 100%;
+                    min-width: 20px;
+                    min-height: auto;
+                }
+            }
+        }
+    }
+}
+.problemList-header{
+    display: flex;
+    justify-content: space-between;
+}

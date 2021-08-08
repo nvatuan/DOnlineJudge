@@ -10,4 +10,3 @@ The development version is daily refreshed and updated. The remote server:
 - [API server](http://nvatazure.southeastasia.cloudapp.azure.com:7000/) (The default home page show a list of API that is permitted)
 - [Frontend](http://nvatazure.southeastasia.cloudapp.azure.com:8080/) (It is now online)
 - Judge-server (Local only)
-

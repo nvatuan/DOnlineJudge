@@ -1,0 +1,113 @@
+/* Each announcement belongs in a announcement-container */
+.announcement-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    padding: 10px 0px;
+}
+/* Not padding first and last child */
+.announcement-container:first-child {
+    padding-top: 0;
+}
+.announcement-container:last-child {
+    padding-bottom: 0;
+}
+
+/* The article in announcement*/
+article {
+    margin: 0 auto;
+
+    position: relative;
+    display: flex;
+    background-color: #c4c4cc;
+    opacity: 0.8;
+    box-sizing: border-box;
+    border: none;
+    box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    text-align: center;
+    width: 100%;
+    max-height: 160px;
+    min-height: 200px;
+}
+
+article:hover {
+    /*transform: translateY(5px);*/
+    box-shadow: 2px 2px 26px 0px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.annou_head {
+    background-color: #2a3358;
+    flex: 1;
+    color: rgba(255, 255, 255, 0.945);
+    padding: 20px 10px;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 120px;
+    margin-left: 10px;
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    h5 {
+        font-size: 15px;
+    }
+    p {
+        margin: 0 !important;
+    }
+    .visible_indicator {
+        margin: auto;
+        font-size: x-large;
+    }
+}
+
+.annou_detail {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex: 5;
+    padding: 20px 20px;
+}
+.annou_detail h4 {
+    word-wrap: break-word;
+}
+.creation_time {
+    bottom: 7%;
+    font-size: 15px;
+    font-weight: 500;
+}
+.more-button {
+    bottom: 10%;
+    right: 10%;
+}
+
+.more-button Button {
+    position: absolute;
+    bottom: 5%;
+    right: 1%;
+    background-color: #242d4d;
+    border-radius: 20px;
+    border: none;
+    color: #fff;
+    padding: 10px;
+    width: 10%;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.more-button Button:hover {
+    background-color: rgb(47, 47, 77) !important ;
+}
+.more-button Button:focus {
+    background-color: #1c2237;
+}
+.modal__footer {
+    display: block;
+    flex-direction: column;
+    text-align: right;
+}
