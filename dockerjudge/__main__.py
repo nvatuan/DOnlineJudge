@@ -81,7 +81,9 @@ class HeartbeatSender():
                         r = requests.post(self.url, headers=self.headers, data=dumps(self.data))
                         #logging.info(f"Heartbeat sent, response = {r}")
                     sleep(period)
-                    retry=0
+                    if retry>0:
+                        logging.info("Reconnect successfully with backend. Now sending heartbeat...")
+                        retry=0
             except ConnectionError: 
                 logging.error("Cannot connect to the given URL. Aborting..")
                 break
@@ -90,16 +92,19 @@ class HeartbeatSender():
                 break
             except Exception as e:
                 retry += 1
-                sleep(retry*2)
+                logging.error(f"Sleeping for {retry*5} seconds before retry")
+                sleep(retry*5)
                 if retry > 10:
                     logging.error("Failed after 10 retries. Aborting..")
                     break
                 logging.error("Something went wrong at 'heartbeat_sender':", e)
                 logging.error(f"Retrying (attempt {retry})..")
+
+
     
 from threading import Thread
-URL = "http://127.0.0.1:9999/judgeserver_heartbeat/" ## CHANGE ME
-TOK = "ADTLVBoEHRTz1C0HrObs6nwTiz8mzfGv" ## CHANGE ME
+URL = "http://127.0.0.1:5000/judgeserver_heartbeat/" ## CHANGE ME
+TOK = "aEJwBPTzQZmKSWXHRGFy0Xu4buPHffzA" ## CHANGE ME
 
 def main(*args):
     logging.info("Server is starting ...")
