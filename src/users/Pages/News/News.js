@@ -78,7 +78,7 @@ function News() {
                                     <Search onSubmit={handleSearchContentForm} />
                                 </div>
                                 <div className="news-features__items">
-                                    <TextFieldForm onSubmit={handleSearchAuthorForm} placeHolder={"Author.."}/>
+                                    <TextFieldForm onSubmit={handleSearchAuthorForm} placeHolder={"Author"}/>
                                 </div>
                             </div>
                         </Card.Header>
@@ -86,7 +86,7 @@ function News() {
                             <div className="card-container">
                                 {
                                     announcement.length === 0 
-                                    ? <p>Nothing to show..</p>
+                                    ? <p>Nothing</p>
                                     : announcement.map(annou => {
                                         return <Announcement title={annou.title}
                                             content={annou.content}

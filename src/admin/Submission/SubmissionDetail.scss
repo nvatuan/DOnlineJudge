@@ -66,24 +66,6 @@
     vertical-align: middle;
     opacity: 1;
 }
-.Accepted{
-    background: #19be6b;
-}
-.Time_limit,.Wrong_answer,.Runtime_error, .Rejected {
-    background: #ed3f14;
-}
-.Compile_error{
-    background: #f90;
-}
-.New{
-    background: #0069d9;
-}
-.System_error {
-    background: #138496;
-}
-.Judging, .Rejudging{
-    background: #23272b;
-}
 .verdict-text{
     display: inline-block;
     height: 30px;

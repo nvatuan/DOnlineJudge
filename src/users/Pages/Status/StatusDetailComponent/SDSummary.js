@@ -1,20 +1,9 @@
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { V2C, VS } from '../../../../constant/SubmissionVerdict';
 
 
 function StatusDetailSummary({ submission }) {
-    const reformatVerdict = (verdict) => {
-		return {
-			"Accepted": "Accepted",
-			"Wrong Answer": "Wrong_answer",
-			"Runtime Error": "Runtime_error",
-			"New": "New",
-			"Compilation Error": "Compile_error",
-			"System Error": "System_error",
-			"Judged": "Judged",
-			"Judging": "Judging"
-		}[verdict];
-    };
 
 	const timeFormatter = (timestring) => {
 		if (typeof timestring === undefined) return "";
@@ -51,7 +40,9 @@ function StatusDetailSummary({ submission }) {
 								<tr>
 									<td>Status</td>
 									<td>
-										<div className={`verdict-text ${reformatVerdict(submission.verdict)}`}>{submission.verdict}</div>
+										<div className={`verdict-text ${V2C(submission.verdict)}`}>
+											<div>{VS(submission.verdict)}</div>
+										</div>
 									</td>
 								</tr>
 								<tr>

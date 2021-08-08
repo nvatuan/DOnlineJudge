@@ -3,12 +3,15 @@ import { Card, Form } from 'react-bootstrap';
 import { Link} from 'react-router-dom';
 import oj_statusAPI from '../../../api/oj_statusAPI';
 import Navbar from '../../Navbar';
-import './status.scss';
 import ReactPaginate from 'react-paginate';
-import '../../Components/Pagination/Paginate.css';
 import Collapsible from 'react-collapsible';
 import { BsChevronDown } from "react-icons/bs"; //react-icon
 import {Button} from 'react-bootstrap';
+import { V2C, VS } from '../../../constant/SubmissionVerdict';
+import './status.scss';
+import '../../Components/Pagination/Paginate.css';
+import "../../../css/SubmissionVerdict.css"
+
 function Status() {
     let href = window.location.href;
     var url = new URL(href);
@@ -29,17 +32,6 @@ function Status() {
             page: 1,
         }
     })
-
-    const result = {
-        "Accepted": "Accepted",
-        "Wrong Answer": "Wrong_answer",
-        "Runtime Error": "Runtime_error",
-        "New": "New",
-        "Compilation Error": "Compile_error",
-        "System Error": "System_error",
-        "Judged": "Judged",
-        "Judging": "Judging"
-    };
 
     // -- paginate
     const [maxPage, setMaxPage] = useState(1);
@@ -151,10 +143,12 @@ function Status() {
                                     <option value="Wrong Answer">Wrong answer</option>
                                     <option value="Runtime Error">Runtime error</option>
                                     <option value="New">New</option>
-                                    <option value="Compile Error">Compile error</option>
+                                    <option value="Compilation Error">Compile Error</option>
                                     <option value="System Error">System error</option>
+                                    <option value="Skipped">Skipped</option>
                                     <option value="Judged">Judged</option>
                                     <option value="Judging">Judging</option>
+                                    <option value="Rejected">Rejected</option>
                                 </Form.Control>
                             </Form.Group>
 
@@ -202,15 +196,15 @@ function Status() {
                                             <td>{stat.id}</td>
                                             <td>
                                                 <div className="table-cell">
-                                                    <Link to={`problem/${stat.problem_id}`} >{stat.problem_title}</Link>
+                                                    <Link to={`/problem/${stat.problem_id}`} >{stat.problem_title}</Link>
                                                 </div>
                                             </td>
                                             <td>{stat.author_name}</td>
                                             <td>
                                                 <div className="table-cell">
-                                                    <div className={`result-container ${result[stat.verdict]}`}>
+                                                    <div className={`result-container ${V2C(stat.verdict)}`}>
                                                         <div className="result-text">
-                                                            {stat.verdict}
+                                                            {VS(stat.verdict)}
                                                         </div>
                                                     </div>
                                                 </div>
