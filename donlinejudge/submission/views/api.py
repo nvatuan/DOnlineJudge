@@ -59,6 +59,7 @@ class SubmissionAPI(APIView):
     """
     @login_required
     def post(self, request, format=None):
+        submission, problem = None, None
         data = request.data
         ## TODO limit the amount of submission an user can make
 
@@ -94,15 +95,17 @@ class SubmissionAPI(APIView):
         except KeyError as ke:
             return response_bad_request(str(ke) + " is required.")
         except FileNotFound as fnferr:
-            problem.remove_test_zip()
+            if problem != None:
+                problem.remove_test_zip()
             logger.error('Error POST @ /status: Test-Zip for problem not found. Resetting back to None...\n' + repr(fnferr))
+            return response_internal_error("There is something wrong at the Server. Please notify the admin about this")
         except Exception as e: 
             logger.error('Error POST @ /status: ' + repr(e))
-        finally:
-            submission.verdict = SubmissionVerdict.SE
-            submission.save();
             return response_internal_error("There is something wrong at the Server. Please notify the admin about this")
-
+        finally:
+            if submission != None:
+                submission.verdict = SubmissionVerdict.SE
+                submission.save();
 
 class SubmissionDetailAPI(APIView):
     """
