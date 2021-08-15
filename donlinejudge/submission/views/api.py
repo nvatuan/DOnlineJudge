@@ -59,6 +59,8 @@ class SubmissionAPI(APIView):
     """
     @login_required
     def post(self, request, format=None):
+        submission, problem = None, None
+
         data = request.data
         ## TODO limit the amount of submission an user can make
 
@@ -94,15 +96,17 @@ class SubmissionAPI(APIView):
         except KeyError as ke:
             return response_bad_request(str(ke) + " is required.")
         except FileNotFound as fnferr:
-            problem.remove_test_zip()
+            if problem != None:
+                problem.remove_test_zip()
             logger.error('Error POST @ /status: Test-Zip for problem not found. Resetting back to None...\n' + repr(fnferr))
+            return response_internal_error("There is something wrong at the Server. Please notify the admin about this")
         except Exception as e: 
             logger.error('Error POST @ /status: ' + repr(e))
-        finally:
-            submission.verdict = SubmissionVerdict.SE
-            submission.save();
             return response_internal_error("There is something wrong at the Server. Please notify the admin about this")
-
+        finally:
+            if submission != None:
+                submission.verdict = SubmissionVerdict.SE
+                submission.save();
 
 class SubmissionDetailAPI(APIView):
     """
@@ -112,9 +116,9 @@ class SubmissionDetailAPI(APIView):
         try:
             submission = Submission.objects.get(id=id)
             if not submission.is_visible():
-                if request.user.is_authenticated and ((not request.user.is_admin_role()) or (request.user != submission.author)):
+                if not request.user.is_authenticated:
                     return response_unauthorized("This submission cannot be viewed")
-                else:
+                if ((not request.user.is_admin_role()) and (request.user != submission.author)):
                     return response_unauthorized("This submission cannot be viewed")
         except Submission.DoesNotExist:
             return response_not_found("Submission does not exist.")
@@ -130,8 +134,13 @@ class SubmissionDetailAPI(APIView):
         ## TODO permission all, own
         try:
             submission = Submission.objects.get(id=id)
+            problem = submission.problem
         except Submission.DoesNotExist:
             return response_not_found("Submission with id=%s does not exist." % (str(id)))
+        problem.update_stat_remove_submission(submission)
+        submission.set_fields_delete()
+        problem.save();
+        submission.save();
         
         submission.delete()
         return response_no_content("Delete succesful")
@@ -155,8 +164,8 @@ class SubmissionDetailAPI(APIView):
             return response_ok(SubmissionSerializer(submission).data)
         elif put_type == 'reject':
             problem.update_stat_remove_submission(submission)
-            problem.save();
             submission.set_fields_reject()
+            problem.save();
             submission.save();
             return response_ok(SubmissionSerializer(submission).data)
         else:
