@@ -1,7 +1,7 @@
 {
   "name": "DOnlineJudge",
   "homepage": "http://45.117.171.223:8080/",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "proxy": "http://45.117.171.223:5000/",
   "dependencies": {

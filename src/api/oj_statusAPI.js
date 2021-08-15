@@ -10,6 +10,7 @@ const oj_statusAPI = {
                 'Authorization': 'Token ' + token,
             }
         }
+        if (token === null) return axiosClient.get(url);
         return axiosClient.get(url, config);
     },
     postProblem: (data) =>{
@@ -30,6 +31,7 @@ const oj_statusAPI = {
                 'Authorization': 'Token ' + token,
             }
         }
+        if (token === null) return axiosClient.get(url);
         return axiosClient.get(url, config);
     },
     getByAuthor: (authorId) => {
