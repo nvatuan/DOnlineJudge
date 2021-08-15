@@ -1,0 +1,162 @@
+.problem_detail-flex-container {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-flow: row nowrap;
+    background-color: #eee;
+}
+
+.problem-main {
+    width: 80%;
+}
+
+.problem-main__item {
+    margin: 15px 0;
+
+    .problem-description-header {
+        text-align: center;
+    }
+
+    .problem-description-body {
+        padding: 0 15px;
+        .pdbody-item {
+            margin-left: -15px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    }
+}
+
+.dropdown-languege {
+    display: flex;
+}
+.problem-id {
+    display: flex;
+}
+.submit-nav {
+    display: flex;
+    justify-content: space-between;
+    label {
+        padding-right: 10px;
+    }
+    .submit-nav__item {
+        padding: 0 10px;
+    }
+}
+#submit-button {
+    background-color: #1c2237;
+}
+#submit-button:hover {
+    background-color: rgba(35, 38, 54, 0.815);
+    box-shadow: none;
+}
+.right-column {
+    flex: none;
+    margin-top: 15px;
+}
+.CodeMirror-wrap pre {
+    word-break: break-word;
+}
+
+.submit-card {
+    text-align: center;
+    align-items: center;
+    width: 100%;
+}
+
+.right-column p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.to_statusPage_card {
+    display: flex;
+    justify-content: flex-start;
+    font-weight: 600;
+    .to_statusPage_card-item {
+        width: 20px;
+        margin-top: 5px;
+    }
+    height: 20px;
+}
+.to_statusPage_card:hover {
+    text-decoration: none;
+}
+.right-column__item {
+    margin-bottom: 60px;
+    width: 15rem;
+}
+
+.problem-information__item {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    height: 3rem;
+}
+.problem-information_header {
+    width: 100%;
+    .title {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        justify-content: space-evenly;
+    }
+}
+
+.description,
+.input_description,
+.output_description {
+    word-wrap: break-word;
+}
+.problem-main__footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+textarea {
+    background-color: #fff;
+    resize: none;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: #fff;
+}
+.sample-row {
+    display: flex;
+    flex-direction: row;
+    -ms-flex-direction: row;
+
+
+    .sample-row-item {
+        position: relative;
+        justify-content: space-between;
+        padding: 0px 3px;
+        margin-bottom: 3px;
+        width: 50%;
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: block;
+            padding: 0 10px;
+            font-size: 15px;
+            color: #767676;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0 10px 0 10px;
+        }
+        .copy-btn:hover {
+            color: #fff;
+            background-color: #563d7c;
+            border-color: #563d7c;
+        }
+    }
+}
+
+.problem-information {
+    transform: translateY(-56px);
+}
