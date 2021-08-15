@@ -70,30 +70,43 @@ function AdminSubmissionDetail({ match }) {
             <AdminNavbar />
             <Sidebar />
             <div className="table-view">
-                <Card>
-                    <Card.Header as='h2'>
-                        Submission #{subDetail.id}
-                        <div className="">
-                            <Link to={`/admin/submission`}  className="card-header-btn"> <BiLeftArrowAlt/> Back </Link>
-                        </div>
-                    </Card.Header>
-                    <Card.Body>
-                        <div className="admin-status-details-container pages-container">
-                            <div className="admin-status-control-panel">
-                                <Button className='rejudge-btn' onClick={() => sendPut('rejudge')}
-                                    disabled={id===-1||subDetail.verdict==='Rejudging'}><MdLoop/> Rejudge</Button>
-                                <Button className='reject-btn' onClick={() => sendPut('reject')}
-                                    disabled={id===-1||subDetail.verdict==='Rejected'}><ImCross/> Reject</Button>
-                                <Button className='delete-btn' onClick={() => sendDelete()}
-                                    disabled={id===-1}><AiFillDelete/> Delete</Button>
-                            </div>
-                            <StatusDetailSummary key={'sdsummary'+subDetail.id} submission={subDetail}/>
-                            <StatusDetailSource key={'sdsource'+subDetail.id} content={subDetail.content} language={subDetail.language}/>
-                            <StatusDetailSample key={'sdsample'+subDetail.id} samples={subDetail.output.sample_test}/>
-                            <StatusDetailHidden key={'sdhidden'+subDetail.id} hiddens={subDetail.output.hidden_test}/>
-                        </div>
-                    </Card.Body>
-                </Card>
+                {
+                    subDetail.id===-1
+                    ?
+                        <Card>
+                            <Card.Header as='h2'>
+                                Submission Not Found.
+                                <div className="">
+                                    <Link to={`/admin/submission`} className="card-header-btn"> <BiLeftArrowAlt/> Back </Link>
+                                </div>
+                            </Card.Header>
+                        </Card>
+                    :
+                        <Card>
+                            <Card.Header as='h2'>
+                                Submission #{subDetail.id}
+                                <div className="">
+                                    <Link to={`/admin/submission`} className="card-header-btn"> <BiLeftArrowAlt/> Back </Link>
+                                </div>
+                            </Card.Header>
+                            <Card.Body>
+                                <div className="admin-status-details-container pages-container">
+                                    <div className="admin-status-control-panel">
+                                        <Button className='rejudge-btn' onClick={() => sendPut('rejudge')}
+                                            disabled={id===-1||subDetail.verdict==='Rejudging'}><MdLoop/> Rejudge</Button>
+                                        <Button className='reject-btn' onClick={() => sendPut('reject')}
+                                            disabled={id===-1||subDetail.verdict==='Rejected'}><ImCross/> Reject</Button>
+                                        <Button className='delete-btn' onClick={() => sendDelete()}
+                                            disabled={id===-1}><AiFillDelete/> Delete</Button>
+                                    </div>
+                                    <StatusDetailSummary key={'sdsummary'+subDetail.id} submission={subDetail}/>
+                                    <StatusDetailSource key={'sdsource'+subDetail.id} content={subDetail.content} language={subDetail.language}/>
+                                    <StatusDetailSample key={'sdsample'+subDetail.id} samples={subDetail.output.sample_test}/>
+                                    <StatusDetailHidden key={'sdhidden'+subDetail.id} hiddens={subDetail.output.hidden_test}/>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                }
             </div>
 	</div>
 	)

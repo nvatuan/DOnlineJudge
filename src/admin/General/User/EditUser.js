@@ -89,6 +89,7 @@ function EditUser({match}) {
                                 <i style={{ color: 'red' }}>*</i>
                                 <span>Password</span> <br /> <br />
                                 <FormControl
+                                    type="password"
                                     aria-label="Default"
                                     aria-describedby="inputGroup-sizing-default"
                                     {...register("password")}

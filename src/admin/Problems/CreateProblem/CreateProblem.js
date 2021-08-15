@@ -269,7 +269,7 @@ function Createproblem({ match }) {
             formData.append('id', id);
         formData.append('display_id', display_id);
         formData.append('title', title);
-        formData.append('is_visible', true);
+        formData.append('is_visible', is_visible);
         formData.append('time_limit', time_limit);
         formData.append('memory_limit', memory_limit);
         formData.append('difficulty', difficulty);

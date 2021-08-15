@@ -36,7 +36,7 @@ function News() {
     }, [filters])
 
     // ## useState: paginate
-    const [maxPage, setMaxPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(0);
 
     // Paginate: Page click handler
     const handlePageClick = async (props) => {
@@ -92,7 +92,9 @@ function News() {
                                             content={annou.content}
                                             creation_time={annou.creation_time}
                                             author={annou.author_name} key={annou.id}
-                                            id={annou.id} />
+                                            id={annou.id}
+                                            is_visible={annou.is_visible}
+                                        />
                                     })
                                 }
                             </div>

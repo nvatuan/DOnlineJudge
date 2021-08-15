@@ -7,9 +7,10 @@ function StatusDetailSummary({ submission }) {
 
 	const timeFormatter = (timestring) => {
 		if (typeof timestring === undefined) return "";
-		var d = new Date(timestring);
-		var dformat = [d.getMonth()+1, d.getDate(), d.getFullYear()].join('/')+' '+[d.getHours(),d.getMinutes(),d.getSeconds()].join(':');
-		return dformat;
+		// var d = new Date(timestring);
+		// var dformat = [d.getMonth()+1, d.getDate(), d.getFullYear()].join('/')+' '+[d.getHours(),d.getMinutes(),d.getSeconds()].join(':');
+		// return dformat;
+		return (new Date(timestring)).toLocaleString();
 	};
 
 
@@ -48,13 +49,13 @@ function StatusDetailSummary({ submission }) {
 								<tr>
 									<td>Execution Time</td>
 									<td>
-										{submission.output.time} ms
+										{submission.time} ms
 									</td>
 								</tr>
 								<tr>
 									<td>Memory Usage</td>
 									<td>
-										{submission.output.memory} KB
+										{submission.memory} KB
 									</td>
 								</tr>
 							</tbody>

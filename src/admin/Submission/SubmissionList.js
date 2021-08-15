@@ -5,7 +5,7 @@ import AdminNavbar from '../AdminNavbar';
 import Sidebar from '../Sidebar';
 
 import { BsChevronDown } from "react-icons/bs"; //react-icon
-import { AiOutlineEdit, AiOutlineDelete, AiOutlineControl } from 'react-icons/ai';
+import { AiOutlineEyeInvisible, AiOutlineEdit, AiOutlineDelete, AiOutlineControl } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 
 import ReactPaginate from 'react-paginate';
@@ -28,7 +28,7 @@ function AdminSubmissionList(props) {
         if (username !== null) filter.push('author_name');
         if (problem_title !== null) filter.push('problem_title');
         return {
-            // sort_by: '-submit_time',
+            sort_by: '-id',
             filter_by: filter,
             author_name: username,
             problem_title: problem_title,
@@ -37,7 +37,7 @@ function AdminSubmissionList(props) {
     })
 
     // -- paginate
-    const [maxPage, setMaxPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(0);
 
     // -- sorting
     const [sortBy, setSortBy] = useState('-id');
@@ -216,7 +216,7 @@ function AdminSubmissionList(props) {
                                         : status.map(stat => {
                                             return (
                                                 <tr key={"table-row"+stat.id}>
-                                                    <td>{stat.id}</td>
+                                                    <td>{stat.id} {!stat.is_visible?<AiOutlineEyeInvisible/>:<></>}</td>
                                                     <td>
                                                         <div className="table-cell">
                                                             <Link to={`problem/${stat.problem_id}`} >{stat.problem_title}</Link>

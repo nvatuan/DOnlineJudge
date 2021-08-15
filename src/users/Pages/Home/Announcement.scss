@@ -12,6 +12,10 @@
 .announcement-container:last-child {
     padding-bottom: 0;
 }
+.announcement-ta {
+    width: 100%;
+    white-space: pre-wrap;
+}
 
 /* The article in announcement*/
 article {

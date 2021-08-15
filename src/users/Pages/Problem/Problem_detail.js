@@ -24,7 +24,9 @@ const LCSTORAGE_CODE_EDITOR_PROBLEM = "lcsCodeEditorProblem";
 
 function Problem_detail({ match }) {
     const id = match.params.id;
-    const [problem, setProblem] = useState([]);
+    const [problem, setProblem] = useState({
+        notfound: true,
+    });
     const history = useHistory();
     // check login
     const [checkLogin, setCheckLogin] = useState(false);
@@ -60,7 +62,7 @@ function Problem_detail({ match }) {
         data.content = getEditorContentFromLocalStorage();
         data.problem_id = parseInt(data.problem_id);
         try {
-            removeEditorContentFromLocalStorage();
+            //removeEditorContentFromLocalStorage();
             const response = await oj_statusAPI.postProblem(data);
             if (response) {
                 history.push('/status/');
@@ -132,62 +134,66 @@ function Problem_detail({ match }) {
                 <div className="problem-main">
                     <Card className="problem-main__item">
                         {/* <Card.Header as="h3">{problem.title}</Card.Header> */}
-                        <Card.Body>
-                            <div className="problem-description-header">
-                                <h2 className="title">{problem.title}</h2>
-                                <strong>Time limit:</strong> {problem.time_limit} ms 
-                                <br/>
-                                <strong>Memory limit:</strong> {problem.memory_limit} MB
-                                <hr/>
-                            </div>
-                            {/* END PROBLEM DESCRIPTION HEADER */}
+                        {
+                        problem.notfound
+                        ?   <Card.Body>This problem doesn't exist</Card.Body>
+                        :   <Card.Body>
+                                <div className="problem-description-header">
+                                    <h2 className="title">{problem.title}</h2>
+                                    <strong>Time limit:</strong> {problem.time_limit} ms 
+                                    <br/>
+                                    <strong>Memory limit:</strong> {problem.memory_limit} MB
+                                    <hr/>
+                                </div>
+                                {/* END PROBLEM DESCRIPTION HEADER */}
 
-                            <div className="problem-description-body">
-                            <p className="pdbody-item">Problem Description:</p>
-                            <Latex className="description">{getDescription(problem.statement)}</Latex>
+                                <div className="problem-description-body">
+                                <p className="pdbody-item">Problem Description:</p>
+                                <Latex className="description">{getDescription(problem.statement)}</Latex>
 
-                            <p className="pdbody-item">Input Description:</p>
-                            <Latex className="input_description">{getInput_description(problem.statement)}</Latex>
+                                <p className="pdbody-item">Input Description:</p>
+                                <Latex className="input_description">{getInput_description(problem.statement)}</Latex>
 
-                            <p className="pdbody-item">Output Description:</p>
-                            <Latex className="latex output_description">{getOutput_description(problem.statement)}</Latex>
+                                <p className="pdbody-item">Output Description:</p>
+                                <Latex className="latex output_description">{getOutput_description(problem.statement)}</Latex>
 
-                            <p className="pdbody-item">Sample Test:</p>
+                                <p className="pdbody-item">Sample Test:</p>
 
-                            {
-                                sample_test.length === 0
-                                ? <p> This problem doesn't have any Sample tests..</p>
-                                : sample_test.map((sample, idx) => {
-                                    return (
-                                        <div className="pd__sample" key={`${sample}-${idx}`}>
-                                            <div className="sample-row">
-                                                <div className="sample-row-item">
-                                                    <div>Input {idx + 1}</div>
-                                                    <Form.Control id={`input_${idx}`} as="textarea" readOnly
-                                                        className="textArea"
-                                                        value={sample.input || ""}
-                                                    >
-                                                    </Form.Control>
-                                                    <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
-                                                </div>
+                                {
+                                    sample_test.length === 0
+                                    ? <p> This problem doesn't have any Sample tests..</p>
+                                    : sample_test.map((sample, idx) => {
+                                        return (
+                                            <div className="pd__sample" key={`${sample}-${idx}`}>
+                                                <div className="sample-row">
+                                                    <div className="sample-row-item">
+                                                        <div>Input {idx + 1}</div>
+                                                        <Form.Control id={`input_${idx}`} as="textarea" readOnly
+                                                            className="textArea"
+                                                            value={sample.input || ""}
+                                                        >
+                                                        </Form.Control>
+                                                        <button className="copy-btn" onClick={() => copyToClipboard(`input_${idx}`)}>copy</button>
+                                                    </div>
 
-                                                <div className="sample-row-item">
-                                                    <div>Output {idx + 1}</div>
-                                                    <Form.Control id={`output_${idx}`} as="textarea" readOnly
-                                                        className="textArea"
-                                                        value={sample.output || ""}
-                                                    >
-                                                    </Form.Control>
-                                                    <button className="copy-btn" onClick={() => copyToClipboard(`output_${idx}`)}>copy</button>
+                                                    <div className="sample-row-item">
+                                                        <div>Output {idx + 1}</div>
+                                                        <Form.Control id={`output_${idx}`} as="textarea" readOnly
+                                                            className="textArea"
+                                                            value={sample.output || ""}
+                                                        >
+                                                        </Form.Control>
+                                                        <button className="copy-btn" onClick={() => copyToClipboard(`output_${idx}`)}>copy</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
-                            </div> 
-                            {/* END PROBLEM DESCRIPTION BODY */}
+                                        );
+                                    })}
+                                </div> 
+                                {/* END PROBLEM DESCRIPTION BODY */}
 
-                        </Card.Body>
+                            </Card.Body>
+                        }
                     </Card>
                     <Card className="problem-main__item">
                         <Card.Body>
@@ -245,7 +251,7 @@ function Problem_detail({ match }) {
 
                                 <br />
                                 <div className="problem-main__footer">
-                                    {checkLogin === true ? (
+                                    {checkLogin === true && !problem.notfound ? (
                                         <Button variant="primary" type="submit" id="submit-button" >Submit</Button>
                                     ) :
                                         (

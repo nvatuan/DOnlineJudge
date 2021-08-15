@@ -116,7 +116,13 @@ function About() {
                                     Nếu server chấm không có tác vụ, nó sẽ thỉnh thoảng ping đến back-end để xác nhận còn sống (heartbeat).
                                 </p>
                             </Collapsible>
+                            
                         </Card.Body>
+                        <Card.Footer>
+                            <p><em>
+                                Mọi thông tin hay yêu cầu khác, xin hãy liên lạc đến admin@doj.com
+                            </em></p>
+                        </Card.Footer>
                     </Card>
                 </div>
             </div>

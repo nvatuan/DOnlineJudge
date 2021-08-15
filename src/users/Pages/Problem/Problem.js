@@ -9,7 +9,12 @@ import '../../Components/Pagination/Paginate.css';
 import ReactPaginate from 'react-paginate';
 import Collapsible from 'react-collapsible';
 import { BsChevronDown } from "react-icons/bs"; //react-icon
+import {AiOutlineEyeInvisible} from "react-icons/ai";
 import {Button} from 'react-bootstrap';
+
+function formatDate(date) {
+    return (new Date(date)).toLocaleDateString();
+}
 
 function Problem() {
     const [problems, setProblems] = useState([])
@@ -20,7 +25,7 @@ function Problem() {
     });
 
     // -- paginate
-    const [maxPage, setMaxPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(0);
 
     // -- sorting
     const [sortBy, setSortBy] = useState('');
@@ -141,6 +146,7 @@ function Problem() {
                                     <th onClick={() => setSortByCriteria('title')}>Title</th>
                                     <th onClick={() => setSortByCriteria('author_name')}>Author</th>
                                     <th onClick={() => setSortByCriteria('difficulty')}>Level</th>
+                                    <th onClick={() => setSortByCriteria('created')}>Created</th>
                                     <th onClick={() => setSortByCriteria('total_submission')}>Tries</th>
                                     <th onClick={() => setSortByCriteria('correct_submission')}>Correct</th>
                                 </tr>
@@ -151,8 +157,8 @@ function Problem() {
                                     ? <tr><td className='empty-result-msg'> Nothing to show.. </td></tr>
                                     : (
                                         problems.map((problem) => (
-                                            <tr key={problem.id}>
-                                                <td>{problem.display_id}</td>
+                                            <tr key={problem.id} className={!problem.is_visible?"p-hidden":"p-public"}>
+                                                <td>{problem.display_id} {!problem.is_visible?<AiOutlineEyeInvisible/>:<></>}</td>
                                                 <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
                                                 <td>{problem.author_name}</td>
                                                 <td>
@@ -164,6 +170,7 @@ function Problem() {
                                                         </div>
                                                     </div>
                                                 </td>
+                                                <td>{formatDate(problem.created)}</td>
                                                 <td>{problem.total_submission}</td>
                                                 <td>{problem.correct_submission}</td>
                                             </tr>

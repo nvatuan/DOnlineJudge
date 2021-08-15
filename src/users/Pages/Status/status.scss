@@ -48,9 +48,19 @@
         background: #924381;
     }
 }
-.result-text{
-    text-align: center;
-}
-th, td {
-    text-align: center;
+.status-table-card {
+    .status-table {
+        .result-text{
+            text-align: center;
+        }
+        .s-hidden {
+            background: #dde;
+        }
+        .s-public {
+            background: #fff;
+        }
+        th, td {
+            text-align: center;
+        }
+    }
 }

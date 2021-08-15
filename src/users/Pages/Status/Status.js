@@ -8,6 +8,7 @@ import Collapsible from 'react-collapsible';
 import { BsChevronDown } from "react-icons/bs"; //react-icon
 import {Button} from 'react-bootstrap';
 import { V2C, VS } from '../../../constant/SubmissionVerdict';
+import {AiOutlineEyeInvisible} from 'react-icons/ai';
 import './status.scss';
 import '../../Components/Pagination/Paginate.css';
 import "../../../css/SubmissionVerdict.css"
@@ -34,7 +35,7 @@ function Status() {
     })
 
     // -- paginate
-    const [maxPage, setMaxPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(0);
 
     // -- sorting
     const [sortBy, setSortBy] = useState('-submit_time');
@@ -140,14 +141,13 @@ function Status() {
                                 <Form.Control as="select" className="verdict_filter_by" onChange={(e)=>setSearchVerdict(e.target.value)}>
                                     <option value="">All</option> 
                                     <option value="Accepted">Accepted</option>
-                                    <option value="Wrong Answer">Wrong answer</option>
-                                    <option value="Runtime Error">Runtime error</option>
-                                    <option value="New">New</option>
+                                    <option value="Wrong Answer">Wrong Answer</option>
+                                    <option value="Runtime Error">Runtime Error</option>
+                                    <option value="Time Limit Exceeded">Time Limit Exceeded</option>
+                                    <option value="Memory Limit Exceeded">Memory Limit Exceeded</option>
                                     <option value="Compilation Error">Compile Error</option>
                                     <option value="System Error">System error</option>
                                     <option value="Skipped">Skipped</option>
-                                    <option value="Judged">Judged</option>
-                                    <option value="Judging">Judging</option>
                                     <option value="Rejected">Rejected</option>
                                 </Form.Control>
                             </Form.Group>
@@ -172,8 +172,8 @@ function Status() {
                 <Card.Header as="h3" className="status-header">
                     Status
                 </Card.Header>
-                <Card.Body>
-                    <table>
+                <Card.Body className="status-table-card">
+                    <table className="status-table">
                         <thead>
                             <tr>
                                 <th onClick={() => setSortByCriteria('id')}>ID</th>
@@ -192,8 +192,8 @@ function Status() {
                                 ? <tr><td><p className="empty-result-msg">Nothing to show..</p></td></tr>
                                 : status.map(stat => {
                                     return (
-                                        <tr key={stat.id}>
-                                            <td>{stat.id}</td>
+                                        <tr key={stat.id} className={!stat.is_visible?"s-hidden":"s-public"}>
+                                            <td>{stat.id} {!stat.is_visible?<AiOutlineEyeInvisible/>:<></>}</td>
                                             <td>
                                                 <div className="table-cell">
                                                     <Link to={`/problem/${stat.problem_id}`} >{stat.problem_title}</Link>

@@ -69,8 +69,14 @@ table {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    th{
+    th {
         cursor: pointer;
+    }
+    .p-hidden {
+        background: #dde;
+    }
+    .p-public {
+        background: #fff;
     }
 }
 .Easy{

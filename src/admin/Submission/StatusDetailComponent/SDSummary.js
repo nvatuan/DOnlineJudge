@@ -48,13 +48,13 @@ function StatusDetailSummary({ submission }) {
 								<tr>
 									<td>Execution Time</td>
 									<td>
-										{submission.output.time} ms
+										{submission.time} ms
 									</td>
 								</tr>
 								<tr>
 									<td>Memory Usage</td>
 									<td>
-										{submission.output.memory} KB
+										{submission.memory} KB
 									</td>
 								</tr>
 							</tbody>

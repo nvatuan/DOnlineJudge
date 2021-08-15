@@ -36,13 +36,18 @@ function Navbar() {
     const history = useHistory();
     const onLogout = () => {
         dispatch(logoutUser());
-        if(isSuccess){
-            history.push("/");
-            toast.success('See you later!', {
-                position: toast.POSITION.BOTTOM_CENTER,
-                autoClose: 3000
-            });
-        }
+        // if(isSuccess){
+        //     history.push("/");
+        //     toast.success('See you later!', {
+        //         position: toast.POSITION.BOTTOM_CENTER,
+        //         autoClose: 3000
+        //     });
+        // }
+        history.push("/");
+        toast.success('See you later!', {
+            position: toast.POSITION.BOTTOM_CENTER,
+            autoClose: 3000
+        });
     }
     return (
         <>
@@ -77,7 +82,7 @@ function Navbar() {
                             ) : <DropdownButton  variant="secondary" title={localStorage.getItem('username')}>
                                 <Dropdown.Item href='/profile' className="dropdown-items">Settings</Dropdown.Item>
                                 {localStorage.getItem('role') === "Super Admin" || localStorage.getItem('role') === "Admin" ?
-                                    <Dropdown.Item href='/admin' className="dropdown-items ">Admin page</Dropdown.Item> : <></>}
+                                    <Dropdown.Item href='/admin' className="dropdown-items ">Admin Page</Dropdown.Item> : <></>}
                                 <Dropdown.Divider />
                                 <Dropdown.Item className="dropdown-items" onClick={onLogout} >Logout</Dropdown.Item>
                             </DropdownButton>}

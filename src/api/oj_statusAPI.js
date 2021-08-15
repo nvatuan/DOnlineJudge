@@ -3,8 +3,14 @@ import queryString from 'query-string';
 const oj_statusAPI = {
     getAll: (data) => {
         const paramString = queryString.stringify(data);
-        const url = `status/?${paramString}`;
-        return axiosClient.get(url);
+        const url = `admin/status/?${paramString}`;
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
+        return axiosClient.get(url, config);
     },
     postProblem: (data) =>{
         const token = localStorage.getItem('token');
@@ -18,7 +24,13 @@ const oj_statusAPI = {
     },
     getById: (id) => {
         const url = `status/${id}`;
-        return axiosClient.get(url);
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Token ' + token,
+            }
+        }
+        return axiosClient.get(url, config);
     },
     getByAuthor: (authorId) => {
         const url = `status/${authorId}}`;

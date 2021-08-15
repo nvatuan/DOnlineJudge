@@ -44,7 +44,7 @@ function ProblemList(props) {
         update();
     }
     // -- paginate
-    const [maxPage, setMaxPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(0);
 
     // -- sorting
     const [sortBy, setSortBy] = useState('-id');

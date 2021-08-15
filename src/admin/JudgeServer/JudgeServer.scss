@@ -14,24 +14,28 @@
             flex-direction: row;
             justify-content: center;
         }
+        
+        table {
+            text-align: center;
+            .jserver-status-normal {
+                border-radius: 15px;
+                background: #83be30;
+                padding: 2px 0; 
+
+                font-weight: bold;
+                color: white;
+            }
+            .jserver-status-abnormal {
+                border-radius: 15px;
+                background: #be3030;
+                padding: 2px 0; 
+
+                font-weight: bold;
+                color: white;
+            }
+        }
     }
 
-    .jserver-status-normal {
-        border-radius: 15px;
-        background: #83be30;
-        padding: 2px 0; 
-
-        font-weight: bold;
-        color: white;
-    }
-    .jserver-status-abnormal {
-        border-radius: 15px;
-        background: #be3030;
-        padding: 2px 0; 
-
-        font-weight: bold;
-        color: white;
-    }
 }
 .form-submit-btn {
     float: right;
