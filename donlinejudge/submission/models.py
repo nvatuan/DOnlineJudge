@@ -88,13 +88,23 @@ class Submission(models.Model):
         self.time=None
         self.output={}
 
+    def revoke_and_update_solved_problems(self):
+        if self.verdict == SubmissionVerdict.AC:
+            remain_ac_sub_set = Submission.objects.filter(author=self.author).filter(problem=self.problem).filter(verdict=SubmissionVerdict.AC)
+            try:
+                if len(remain_ac_sub_set) == 1:
+                    self.author.solved_problem.remove(self.problem)
+                    self.author.save()
+            except:
+                pass
+
     def set_fields_reject(self):
-        remain_ac_sub_set = Submission.objects.filter(author=self.author).filter(verdict=SubmissionVerdict.AC)
-        if len(remain_ac_sub_set) == 1:
-            self.author.solved_problem.remove(self)
-            self.author.save()
+        self.revoke_and_update_solved_problems()
         self.verdict = SubmissionVerdict.REJECT
         self.save()
+    
+    def set_fields_delete(self):
+        self.revoke_and_update_solved_problems()
 
     class Meta:
         db_table = "submission"

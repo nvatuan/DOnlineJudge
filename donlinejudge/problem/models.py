@@ -128,7 +128,7 @@ class Problem(models.Model):
                  )
         except:
             # TODO handle exception for Problem.submission_got_rejected
-            raise
+            pass
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
