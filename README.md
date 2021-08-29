@@ -1,6 +1,4 @@
-# PBL_DOnlineJudge
-
-Version 1.0 is out! [Demo](http://1509.ddns.net:8080/)
+# DOJ's frontend
 
 ## Developement branches
 - Backend: [dev-backend](https://github.com/nvatuan/PBL_DOnlineJudge/tree/dev-backend)
