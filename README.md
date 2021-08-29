@@ -1,5 +1,9 @@
-# DOJ - DOnlineJudge (v1.0)
-A modern online judge that is developed using ReactJS and Django REST API Framework. Our motive is To further understand about Online Judges, so, albeit taking some inspirations and ideas from other OJ, we have built our own OJ, taking a different approach than others.
+# DOJ - DOnlineJudge
+<div align="center">
+<img src="https://user-images.githubusercontent.com/24392632/131251506-b7b54b9a-319e-4002-96bc-87122a3dadd7.png" alt="DOnlineJudge's Logo">
+</div>
+
+A modern online judge that is developed using ReactJS and Django REST API Framework. Our motive is To further understand about Online Judges, we have built our own OJ system, taking a different technical approach when compare to others.
 
 See it in action [here](http://45.117.171.223:8080/).
 
@@ -13,8 +17,8 @@ The current version consists of a small set of functionality, though very necess
 * Great Permission controls for staffs
 
 ## Screenshots
-### User-page
-Greeting message and the system's bulletin board.
+### Front Page
+* Greeting message and the system's bulletin board.
 
 ![Front page](https://raw.githubusercontent.com/nvatuan/PBL-DOnlineJudge/tmp/screenshots/front.png)
 
@@ -37,7 +41,8 @@ Greeting message and the system's bulletin board.
 ![Status Detail](https://raw.githubusercontent.com/nvatuan/PBL-DOnlineJudge/tmp/screenshots/status-de.png)
 
 
-### Staff-page
+### Staff Page
+The DOJ admin interface is versatile, and can be efficiently used for anything from managing users to authoring problem statements, auditting submissions,..
 * Admin dashboard with useful information and a Control Panel (on the left side)
 
 ![Admin Dash](https://raw.githubusercontent.com/nvatuan/PBL-DOnlineJudge/tmp/screenshots/admin-dash.png)
@@ -54,7 +59,6 @@ Greeting message and the system's bulletin board.
 
 ![Admin Submission](https://raw.githubusercontent.com/nvatuan/PBL-DOnlineJudge/tmp/screenshots/admin-submission-de.png)
 
-*The DOJ admin interface is versatile, and can be efficiently used for anything from managing users to authoring problem statements, auditting submissions,..*
 
 ## Technical/System Analysis
 For more information, (eg. how our system was built, and how it performs,...) you can check them [here (.PDF)](https://github.com/nvatuan/PBL-DOnlineJudge/raw/tmp/DOnlineJudge%20System%20Technical%20(Eng).pdf).
