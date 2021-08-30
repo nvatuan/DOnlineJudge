@@ -62,7 +62,7 @@ The DOJ admin interface is versatile, and can be efficiently used for anything f
 ## Installation
 Our project has 3 components that you will need to run separately:
 ### Web-server (`build` folder)
-This is our site, we will need to serve this folder. One simple way to do it is to [install npm module](https://www.npmjs.com/package/express) `express`, then place the following script `serve.js` in the same folder with the `build` folder. And start the server with `node script.js`. 
+This is our site, we will need to serve this folder. One simple way to do it is to [install npm module](https://www.npmjs.com/package/express) `express`, then place the following script `serve.js` in the same folder with the `build` folder. And start the server with `node serve.js`. 
 <details>
   <summary> serve.js </summary>
 
