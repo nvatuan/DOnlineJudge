@@ -59,6 +59,51 @@ The DOJ admin interface is versatile, and can be efficiently used for anything f
 
 ![Admin Submission](https://raw.githubusercontent.com/nvatuan/PBL-DOnlineJudge/tmp/screenshots/admin-submission-de.png)
 
+## Installation
+Our project has 3 components that you will need to run separately:
+### Web-server (`build` folder)
+This is our site, we will need to serve this folder. One simple way to do it is to [install npm module](https://www.npmjs.com/package/express) `express`, then place the following script `serve.js` in the same folder with the `build` folder. And start the server with `node script.js`. 
+<details>
+  <summary> serve.js </summary>
+
+  ```js
+  var path = require('path');
+  var express = require('express');
+  var app = express();
+
+  app.use(express.static(path.resolve(__dirname, 'build')));
+  app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  });
+
+  var server = app.listen(8080)
+  ```
+
+</details>
+
+### API Server (`donlinejudge` folder)
+For this, we need Python 3.8's `django` module. There are some more dependencies we have yet to note it down, but you can install them as you go because `django` will let you know what you are missing. Also, the backend uses `Postgresql` (version 13), make sure you install it as well.
+To start the backend, run the following commands:
+1. Migrate the database if you haven't:
+```python
+python manage.py makemigrations
+python manage.py migrate
+```
+2. Start the backend
+```python
+python manage.py runserver 0.0.0.0:5000
+```
+Will run the API server on port `5000`.
+
+### Judge Server (`dockerjudge` folder)
+We have yet to document the dependencies, some major ones you will need are:
+- Docker engine
+- `websockets` module
+Then download the `dockerjudge` folder and run this command from the **parent** directory:
+```python
+python -m dockerjudge 127.0.0.1:5001
+```
+This command will run it *as an module*, start the judge server and listening to port `5001`. Though the module needs some time to warm up first (initialize the Docker containers).
 
 ## Technical/System Analysis
 For more information, (eg. how our system was built, and how it performs,...) you can check them [here (.PDF)](https://github.com/nvatuan/PBL-DOnlineJudge/raw/tmp/DOnlineJudge%20System%20Technical%20(Eng).pdf).
