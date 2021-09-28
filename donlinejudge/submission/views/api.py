@@ -104,7 +104,7 @@ class SubmissionAPI(APIView):
             return response_internal_error("There is something wrong at the Server. Please notify the admin about this")
         finally:
             if submission != None:
-                submission.verdict = SubmissionVerdict.SE
+                submission.verdict = SubmissionVerdict.NEW
                 submission.save();
 
 class SubmissionDetailAPI(APIView):
@@ -314,7 +314,7 @@ class JudgeSubmissionTask:
             asyncio.get_event_loop().run_until_complete(self.send_and_receive())
         except:
             self.sub.verdict = SubmissionVerdict.SE
-            raise
+            # raise
         finally:
             self.prob.statistic_info[self.sub.verdict] = self.prob.statistic_info.get(self.sub.verdict, 0) + 1
             self.prob.total_submission += 1
