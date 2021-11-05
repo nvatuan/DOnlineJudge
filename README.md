@@ -5,7 +5,7 @@
 
 A modern online judge that is developed using ReactJS and Django REST API Framework. Our motive is To further understand about Online Judges, we have built our own OJ system, taking a different technical approach when compare to others.
 
-See it in action [here](http://45.117.171.223:8080/).
+See it in action [here](http://45.117.171.223:5080/).
 
 ## Features
 The current version consists of a small set of functionality, though very necessary and allows us to demonstrate the core features our system can do.
