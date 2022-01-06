@@ -1,4 +1,9 @@
 # DOJ - DOnlineJudge
+This project was developed mainly for educational/experimental purpose, if you want an OJ to set-up or for a more full-fledged and well-documented OJ, please refer to the followings: 
+1. [DMOJ](https://github.com/DMOJ) Suitable for system that will be public and will serve many user because of their great permission controls and optimization. Although to set up a running server there is some trouble you have to go through
+2. [CMS](http://cms-dev.github.io/), [DOMjudge](http://domjudge.org) Well-known and very stable system for contest creation/management such as IOI and ICPC.
+3. [QingdaoU Online Judge](https://github.com/QingdaoU/OnlineJudge) A simple OJ but very functional, can be run in production and set-up in seconds with Docker technology. Can be a good starting point to developing an OJ.
+
 <div align="center">
 <img src="https://user-images.githubusercontent.com/24392632/131251506-b7b54b9a-319e-4002-96bc-87122a3dadd7.png" alt="DOnlineJudge's Logo">
 </div>
